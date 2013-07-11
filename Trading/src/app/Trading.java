@@ -5,7 +5,7 @@
 package app;
 
 /**
- *
+ * Initial file
  * @author pdg
  */
 public class Trading {
