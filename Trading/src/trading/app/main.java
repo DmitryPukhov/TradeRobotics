@@ -8,9 +8,6 @@ import trading.data.BarFileLoader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ListIterator;
-import org.encog.neural.networks.BasicNetwork;
 import trading.common.Config;
 import trading.data.Bar;
 
