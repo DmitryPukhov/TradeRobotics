@@ -14,6 +14,7 @@ public class Config {
     private static final String smallBarsFileName = "SPFB.RTS_130708_130708_1min.csv";
     private static final String mediumBarsFileName = "SPFB.RTS_130708_130708_15min.csv";
     private static final String largeBarsFileName = "SPFB.RTS_130708_130708_1day.csv";
+
     
     private static int smallBarsWindowSize = 15;
     private static int mediumBarsWindowSize = 32;
