@@ -18,7 +18,7 @@ import trading.common.Config;
  */
 public class BarFileLoader {
 
-    private final static String CSV_DELIMITER = ";";
+    private final static String CSV_DELIMITER = ",";
 
  
     /**
