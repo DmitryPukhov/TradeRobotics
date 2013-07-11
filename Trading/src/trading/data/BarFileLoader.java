@@ -29,9 +29,11 @@ public class BarFileLoader {
      * @throws FileNotFoundException
      */
     public static void load(String csvPath, ArrayList<Bar> barData) throws FileNotFoundException, IOException {
+         String currentDir = new java.io.File( "." ).getCanonicalPath();
+         csvPath = currentDir + "/" + csvPath;
         // Read file
         try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
-            FileReader fr;
+    
             // Init from CSV header
             String barString = br.readLine();
             BarColumnPosition positions = getBarColumnPositions(barString);
