@@ -10,10 +10,10 @@ package trading.common;
  * @author pdg
  */
 public class Config {
-    private static final String dataDir = "C:\\Users\\pdg\\Downloads\\";
-    private static final String smallBarsFileName = "SPFB.RTS_130708_130708_1min.csv";
-    private static final String mediumBarsFileName = "SPFB.RTS_130708_130708_15min.csv";
-    private static final String largeBarsFileName = "SPFB.RTS_130708_130708_1day.csv";
+    private static final String dataDir = ".\\Trading\\data\\";
+    private static final String smallBarsFileName = "SPFB.RTS_130711_130711_M1.csv";
+    private static final String mediumBarsFileName = "SPFB.RTS_130711_130711_M15.csv";
+    private static final String largeBarsFileName = "SPFB.RTS_130711_130711_D1.csv";
 
     
     private static int smallBarsWindowSize = 15;
