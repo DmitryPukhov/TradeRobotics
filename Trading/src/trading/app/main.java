@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
 import trading.common.Config;
@@ -41,14 +42,16 @@ public class main {
                 Config.getOutputSize(),
                 false);
         // Backpropagation training
-        Backpropagation train = new Backpropagation(network, ds);
+        ResilientPropagation train = new ResilientPropagation(network, ds);
+        //Backpropagation train = new Backpropagation(network, ds);
         train.setThreadCount(10);
-        
-        for (int epoch = 0; epoch < 5; epoch++) {
+
+        System.out.println("Start training");
+        int epochCount = 3;
+        for (int epoch = 0; epoch < epochCount; epoch++) {
             // Print info
             watch.reset();
             watch.start();
-            System.out.println(String.format("Epoch %d", epoch));
             // Iteration
             train.iteration();
             
