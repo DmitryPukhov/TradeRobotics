@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
