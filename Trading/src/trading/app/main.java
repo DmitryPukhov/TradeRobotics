@@ -58,8 +58,5 @@ public class main {
          
             System.out.println(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
-
-
-
     }
 }
