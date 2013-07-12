@@ -19,6 +19,11 @@ public class Config {
     private static int smallBarsWindowSize = 15;
     private static int mediumBarsWindowSize = 32;
     private static int largeBarsWindowSize = 100;
+    private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
+
+    public static long getPredictionIntervalMillis() {
+        return predictionIntervalMillis;
+    }
     
     public static int getSmallBarsWindowSize() {
         return smallBarsWindowSize;
