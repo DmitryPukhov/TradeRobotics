@@ -163,18 +163,18 @@ public class MLDataSetLoader {
         // Bar with result data
         Bar resultDataBar = null;
         for(int i = pos; i < bars.size(); i++){
-            Bar bar = bars.get(pos);   
+            Bar bar = bars.get(i);   
             long intervalMillis = bar.getTime().getTimeInMillis() - currentMillis;
             
             // If bar after time interval
-            if(intervalMillis > predictionIntervalMillis){
+            if(intervalMillis >= predictionIntervalMillis){
                 resultDataBar = bar;
                 break;
             }
         }
         // Get ML data from next bar
         if(resultDataBar != null){
-            double[] data = new double[]{resultDataBar.getLow(), resultDataBar.getHigh()};
+            double[] data = new double[]{resultDataBar.getHigh(), resultDataBar.getLow()};
             result = new BasicMLData(data);
         }
         // Null if no bars after interval
