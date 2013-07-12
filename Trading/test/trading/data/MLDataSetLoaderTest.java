@@ -64,7 +64,9 @@ public class MLDataSetLoaderTest {
     @After
     public void tearDown() {
     }
-
+    /**
+     * Bars for loading to dataset
+     */
     private List<Bar> bars = new ArrayList<>();
     
     
