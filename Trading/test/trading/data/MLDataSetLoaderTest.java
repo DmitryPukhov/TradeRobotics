@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

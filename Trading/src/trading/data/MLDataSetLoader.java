@@ -56,8 +56,8 @@ public class MLDataSetLoader {
      * Load to dataset
      */
     public static MLDataSet createBufferedMLDataSet(List<Bar> smallBars, List<Bar> mediumBars, List<Bar> largeBars) throws FileNotFoundException, IOException {
-        final int barDataSize = 6; // 6 fields in bar (time, ohlc, vol)
-        int windowSize = (Config.getSmallBarsWindowSize() + Config.getMediumBarsWindowSize() + Config.getLargeBarsWindowSize()) * barDataSize;
+       
+        int inputSize = Config.getInputSize();
         
         // Get temp ml data file path
         String fileName = Config.getDataDir() + MLDataSetLoader.class.getName() + ".egb";
@@ -65,7 +65,7 @@ public class MLDataSetLoader {
         
         // Create new dataset
         BufferedMLDataSet ds = new BufferedMLDataSet(file);
-        ds.beginLoad(windowSize,2);
+        ds.beginLoad(inputSize,2);
         
         int mediumPos = mediumBars.size() - 1;
         int largePos = largeBars.size() - 1;

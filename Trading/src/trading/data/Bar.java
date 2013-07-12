@@ -19,6 +19,7 @@ public class Bar {
     private double high;
     private double close;
     private double volume;
+    public static final int FIELD_COUNT = 6; // time, ohlc, vol
     
     public Bar(Calendar theTime, double theOpen, double theLow, double theHigh, double theClose, double theVolume){
         time = theTime; open = theOpen; low = theLow; high = theHigh; close = theClose; volume = theVolume;

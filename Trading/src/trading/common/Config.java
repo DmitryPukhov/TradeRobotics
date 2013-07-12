@@ -4,6 +4,8 @@
  */
 package trading.common;
 
+import trading.data.Bar;
+
 /**
  * Application configuration data
  *
@@ -20,7 +22,41 @@ public class Config {
     private static int mediumBarsWindowSize = 32;
     private static int largeBarsWindowSize = 100;
     private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
+    private static int outputSize = 2;
+    private static int hidden1Count = getInputSize() * 3;
+    private static int hidden2Count = 0;
 
+    /**
+     * Neurons in first hidden layer
+     * @return 
+     */
+    public static int getHidden1Count() {
+        return hidden1Count;
+    }
+    /**
+     * Neurons in second hidden layer
+     * @return 
+     */
+    public static int getHidden2Count() {
+        return hidden2Count;
+    }
+    
+
+    /**
+     * Neural network output layer size
+     * @return 
+     */
+    public static int getOutputSize() {
+        return outputSize;
+    }
+  
+    /**
+     * Gets neural network input layer size
+     * @return 
+     */
+    public static int getInputSize(){
+        return (smallBarsWindowSize + mediumBarsWindowSize + largeBarsWindowSize) * Bar.FIELD_COUNT;
+    }
     public static long getPredictionIntervalMillis() {
         return predictionIntervalMillis;
     }
