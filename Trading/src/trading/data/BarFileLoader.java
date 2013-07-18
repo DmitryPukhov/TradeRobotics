@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -27,7 +27,7 @@ public class BarFileLoader {
      * @param csvPath path to *.csv file
      * @throws FileNotFoundException
      */
-    public static void load(String csvPath, ArrayList<Bar> barData) throws FileNotFoundException, IOException {
+    public static void load(String csvPath, List<Bar> barData) throws FileNotFoundException, IOException {
          String currentDir = new java.io.File( "." ).getCanonicalPath();
          csvPath = currentDir + "/" + csvPath;
         // Read file
@@ -144,7 +144,7 @@ public class BarFileLoader {
             /*singleBarData = new double[]{cal.get(cal.YEAR), cal.get(cal.MONTH), cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.DAY_OF_MONTH), 
              cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND),
              open, high, low, close, vol}*/
-            bar = new Bar(cal, open, low, high, close, vol);
+            bar = new Bar(cal, open, high, low, close, vol);
 
         } catch (Exception e) {
             // Log exception and continue
