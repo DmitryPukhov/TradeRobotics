@@ -39,9 +39,11 @@ public class MLDataSetLoaderTest {
     @Before
     public void setUp() throws Exception{
         // Create and transform bars
-        bars = createNewBars();      
+        bars = createLinearBars();      
         transformBars(bars);
     }
+    
+    
     
     /**
      * Util method transform bars from linear to change percent values
@@ -59,7 +61,7 @@ public class MLDataSetLoaderTest {
      * Create bar list for test.
      * Bars are not transformed
      */
-    private static List<Bar> createNewBars(){
+    private static List<Bar> createLinearBars(){
         ArrayList<Bar> newBars = new ArrayList();
         // Add test bars
         Date time0 = new Date();
@@ -99,11 +101,37 @@ public class MLDataSetLoaderTest {
      */
     private List<Bar> bars = new ArrayList<>();
 
-    
+    /**
+     * Transform bars from linear to change percentage test
+     * @throws Exception 
+     */
+    @Test 
+    public void testTransformBars() throws Exception{
+        List<Bar> originalBars = createLinearBars();
+        List<Bar> transformedBars = createLinearBars();
+
+        // Transform bars
+        Method method = MLDataSetLoader.class.getDeclaredMethod("transformBars", List.class);
+        method.setAccessible(true);
+        method.invoke(null, transformedBars);
+        assertEquals(originalBars.size()-1, transformedBars.size());
+        
+        for(int i = 1; i < transformedBars.size(); i++){
+            Bar original = originalBars.get(i+1);
+            Bar originalPrev = originalBars.get(i);
+            Bar transformed = transformedBars.get(i);
+            
+            assertEquals(original.getOpen()/originalPrev.getOpen()-1.0, transformed.getOpen(), 0.0001);
+            assertEquals(original.getHigh()/originalPrev.getHigh()-1.0, transformed.getHigh(), 0.0001);
+            assertEquals(original.getLow()/originalPrev.getLow()-1.0, transformed.getLow(), 0.0001);
+            assertEquals(original.getClose()/originalPrev.getClose()-1.0, transformed.getClose(), 0.0001);
+            assertEquals(original.getVolume()/originalPrev.getVolume()-1.0, transformed.getVolume(), 0.0001);
+        }
+    }
     
     @Test
     public void testGetOutputData() throws Exception{
-        System.out.println("getOutputData");
+        
         // Invoke private method using reflection
         Method method = MLDataSetLoader.class.getDeclaredMethod("getOutputData", List.class, Integer.TYPE, Calendar.class); //(List<Bar> bars, int pos, Calendar currentTime 
         method.setAccessible(true);
