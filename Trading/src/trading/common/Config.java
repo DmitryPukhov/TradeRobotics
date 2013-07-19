@@ -19,8 +19,8 @@ public class Config {
 
     
     private static int smallBarsWindowSize = 15;
-    private static int mediumBarsWindowSize = 32;
-    private static int largeBarsWindowSize = 100;
+    private static int mediumBarsWindowSize = 10;
+    private static int largeBarsWindowSize = 5;
     private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
     private static int outputSize = 2;
     private static int hidden1Count = getInputSize() * 3;

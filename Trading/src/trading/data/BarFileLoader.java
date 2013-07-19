@@ -51,6 +51,8 @@ public class BarFileLoader {
             }
         }
     }
+    
+    
 
     //<editor-fold desc="Utils">
     /**

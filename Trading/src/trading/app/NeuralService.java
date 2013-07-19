@@ -30,24 +30,6 @@ public class NeuralService {
        trainNetwork();
    }
    
-   public static BasicNetwork getNetwork2(){
- 		final FeedForwardPattern pattern = new FeedForwardPattern();
-		// Set layers
-                
-                pattern.setInputNeurons(5);
-                pattern.addHiddenLayer(3);
-                //pattern.addHiddenLayer(Config.getHidden2Count());
-		pattern.setOutputNeurons(2);
-                // Activation functioni
-                pattern.setActivationFunction(new ActivationLinear());
-                //pattern.setActivationFunction(new ActivationElliott());
-                
-                // Create network
-		final BasicNetwork network = (BasicNetwork)pattern.generate();
-		network.reset();
-		return network;      
-   }
-   
    /**
     * Creates and returns a trading network
     */
@@ -60,7 +42,8 @@ public class NeuralService {
                 //pattern.addHiddenLayer(Config.getHidden2Count());
 		pattern.setOutputNeurons(Config.getOutputSize());
                 // Activation functioni
-                pattern.setActivationFunction(new ActivationSigmoid());
+                //pattern.setActivationFunction(new ActivationTANH());
+                pattern.setActivationFunction(new ActivationLinear());
                 //pattern.setActivationFunction(new ActivationElliott());
                 
                 // Create network
