@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -26,13 +27,12 @@ import trading.common.Config;
  */
 public class MLDataSetLoader {
 
-    private int smallPos;
-    private int mediumPos;
-    private int largePos;
-    List<Bar> smallBars = new ArrayList<>();
-    List<Bar> mediumBars = new ArrayList<>();
-    List<Bar> largeBars = new ArrayList<>();
-
+//    private int smallPos;
+//    private int mediumPos;
+//    private int largePos;
+//    List<Bar> smallBars = new ArrayList<>();
+//    List<Bar> mediumBars = new ArrayList<>();
+//    List<Bar> largeBars = new ArrayList<>();
     /**
      * Create buffered ML data set from csv files for 3 bar periods Use file
      * name
@@ -43,57 +43,34 @@ public class MLDataSetLoader {
      */
     public MLDataSet createBufferedMLDataSetFromFile() throws FileNotFoundException, IOException {
         MLDataSet ds;
+        List<Bar> smallBars = new ArrayList<>();
+        List<Bar> mediumBars = new ArrayList<>();
+        List<Bar> largeBars = new ArrayList<>();
+        // Load from csv files to bar arrays
+        BarFileLoader.load(Config.getSmallBarsFilePath(), smallBars);
+        BarFileLoader.load(Config.getMediumBarsFilePath(), mediumBars);
+        BarFileLoader.load(Config.getLargeBarsFilePath(), largeBars);
+        // Bars dates validation
+        validateBars(smallBars, mediumBars, largeBars);
 
-            // Load from csv files to bar arrays
-            BarFileLoader.load(Config.getSmallBarsFilePath(), smallBars);
-            BarFileLoader.load(Config.getMediumBarsFilePath(), mediumBars);
-            BarFileLoader.load(Config.getLargeBarsFilePath(), largeBars);
-            
-            // Transform bars to change percents
-            transformBars(smallBars);
-            transformBars(mediumBars);
-            transformBars(largeBars);
-            // Create dataset for machine learning
-            ds = createBufferedMLDataSet();
-            // Clear arrays to not store in memory
-            smallBars.clear();
-            mediumBars.clear();
-            largeBars.clear();
+        // Transform bars to change percents
+        transformBars(smallBars);
+        transformBars(mediumBars);
+        transformBars(largeBars);
+        // Create dataset for machine learning
+        ds = createBufferedMLDataSet(smallBars, mediumBars, largeBars);
+        // Clear arrays to not store in memory
+        smallBars.clear();
+        mediumBars.clear();
+        largeBars.clear();
 
         return ds;
-    }
-    
-    /**
-     * Transform bars from OHLC absolute values to change percent
-     * @param bars 
-     */
-    private static void transformBars(List<Bar> bars){
-        Iterator<Bar> currentIterator = bars.iterator();
-        Iterator<Bar> prevIterator = bars.iterator();
-        
-        Bar prevBar = currentIterator.next();
-        // Transform all bars except first (we don't know prev bar for the first one)
-        while(currentIterator.hasNext()){
-            Bar curBar = currentIterator.next();
-            Bar originalCurBar = new Bar(curBar.getTime(), curBar.getOpen(), curBar.getHigh(), curBar.getLow(), curBar.getClose(), curBar.getVolume());
-
-            // Set bar prices to change percents rather than absolute price values
-            curBar.setOpen(curBar.getOpen()/prevBar.getOpen() - 1);
-            curBar.setHigh(curBar.getHigh()/prevBar.getHigh() - 1);
-            curBar.setLow(curBar.getLow()/prevBar.getLow() - 1);
-            curBar.setClose(curBar.getClose()/prevBar.getClose() - 1);
-            curBar.setVolume(curBar.getVolume()/prevBar.getVolume() - 1);
-            
-            prevBar = originalCurBar;
-        }
-        // Remove first bar because we can't calculate it's change percents
-        bars.remove(0);
     }
 
     /**
      * Load to dataset
      */
-    private MLDataSet createBufferedMLDataSet() throws FileNotFoundException, IOException {
+    private MLDataSet createBufferedMLDataSet(List<Bar> smallBars, List<Bar> mediumBars, List<Bar> largeBars) throws FileNotFoundException, IOException {
         int inputSize = Config.getInputSize();
 
         // Get temp ml data file path
@@ -103,17 +80,21 @@ public class MLDataSetLoader {
         // Create new dataset
         BufferedMLDataSet ds = new BufferedMLDataSet(file);
         ds.beginLoad(inputSize, Config.getOutputSize());
-
+        int smallPos, mediumPos, largePos;
         mediumPos = mediumBars.size() - 1;
         largePos = largeBars.size() - 1;
-        
+
         // Go through small pos
         for (smallPos = smallBars.size() - 1; smallPos > Config.getSmallBarsWindowSize(); smallPos--) {
             // Get window with last x small bars, last y medium bars, last z large bars
-            List<Bar> window = getWindow(smallPos);
+            Bar smallBar = smallBars.get(smallPos);
+            mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
+            largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos     
+            List<Bar> window = getWindow(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
 
 
             // Create actual and result data for ML
+       
             MLData inputData = barsToMLData(window);
             MLData outputData = getOutputData(mediumBars, mediumPos, smallBars.get(smallPos).getTime());
 
@@ -128,16 +109,70 @@ public class MLDataSetLoader {
     }
 
     /**
+     * Validate if medium and large bars matches
+     */
+    private void validateBars(List<Bar> smallBars, List<Bar> mediumBars, List<Bar> largeBars) {
+
+        for (Bar smallBar : smallBars) {
+            // Medium bars validation
+            int lastMediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumBars.size() - 1);
+            if (lastMediumPos == -1) {
+                throw new Error(String.format("Can't find medium bar for date %s", smallBar.getTime().getTime().toString()));
+            }
+            if (lastMediumPos - Config.getMediumBarsWindowSize() < 0) {
+                throw new Error(String.format("Can't find medium bars window with size: %d for date %s", Config.getMediumBarsWindowSize(), smallBar.getTime().getTime().toString()));
+            }
+
+            // Large bars validation
+            int lastLargePos = getLastPos(largeBars, smallBar.getTime(), largeBars.size() - 1);
+            if (lastLargePos == -1) {
+                throw new Error(String.format("Can't find large bar for date %s", smallBar.getTime().getTime().toString()));
+            }
+            if (lastLargePos - Config.getLargeBarsWindowSize() < 0) {
+                throw new Error(String.format("Can't find large bars window with size: %d for date %s", Config.getLargeBarsWindowSize(), smallBar.getTime().getTime().toString()));
+            }
+        }
+    }
+
+    /**
+     * Transform bars from OHLC absolute values to change percent
+     *
+     * @param bars
+     */
+    private static void transformBars(List<Bar> bars) {
+        Iterator<Bar> currentIterator = bars.iterator();
+        Iterator<Bar> prevIterator = bars.iterator();
+
+        Bar prevBar = currentIterator.next();
+        // Transform all bars except first (we don't know prev bar for the first one)
+        while (currentIterator.hasNext()) {
+            Bar curBar = currentIterator.next();
+            Bar originalCurBar = new Bar(curBar.getTime(), curBar.getOpen(), curBar.getHigh(), curBar.getLow(), curBar.getClose(), curBar.getVolume());
+
+            // Set bar prices to change percents rather than absolute price values
+            curBar.setOpen(curBar.getOpen() / prevBar.getOpen() - 1);
+            curBar.setHigh(curBar.getHigh() / prevBar.getHigh() - 1);
+            curBar.setLow(curBar.getLow() / prevBar.getLow() - 1);
+            curBar.setClose(curBar.getClose() / prevBar.getClose() - 1);
+            curBar.setVolume(curBar.getVolume() / prevBar.getVolume() - 1);
+
+            prevBar = originalCurBar;
+        }
+        // Remove first bar because we can't calculate it's change percents
+        bars.remove(0);
+    }
+
+    /**
      * Returns window which contains small, medium, large bars before current
      * time This function changes local small, medium, large pos
      *
      * @param smallPos position of small bar
      * @return
      */
-    private List<Bar> getWindow(int smallPos) {
+    private List<Bar> getWindow(List<Bar> smallBars, int smallPos, List<Bar> mediumBars, int mediumPos, List<Bar> largeBars, int largePos) {
         Bar smallBar = smallBars.get(smallPos);
-        mediumPos = getLastPos(mediumBars, smallBar.getTime(), this.mediumPos); // Medium pos
-        largePos = getLastPos(largeBars, smallBar.getTime(), this.largePos); // Large pos
+        mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
+        largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos
         // Get data windows for small, medium, large bars
         List<Bar> smallWindow = getInputBars(smallBars, smallPos, Config.getSmallBarsWindowSize());
         List<Bar> mediumWindow = getInputBars(mediumBars, mediumPos, Config.getMediumBarsWindowSize());
@@ -160,7 +195,7 @@ public class MLDataSetLoader {
      * @return
      */
     private static BasicMLData barsToMLData(List<Bar> bars) {
-        if (bars.size() == 0) {
+        if (bars.isEmpty()) {
             return null;
         }
         double[] array = new double[bars.size() * Bar.FIELD_COUNT];
@@ -191,7 +226,7 @@ public class MLDataSetLoader {
         if (endIndex - windowSize < 0) {
             return result;
         }
-        result = bars.subList(endIndex-windowSize, endIndex);
+        result = bars.subList(endIndex - windowSize, endIndex);
         return result;
     }
 

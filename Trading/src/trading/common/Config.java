@@ -16,11 +16,14 @@ public class Config {
     private static final String smallBarsFileName = "SPFB.RTS_130711_130711_M1.csv";
     private static final String mediumBarsFileName = "SPFB.RTS_130611_130711_M15.csv";
     private static final String largeBarsFileName = "SPFB.RTS_130611_130711_D1.csv";
-
+    
+    private static final String futureSmallBarsFileName = "SPFB.RTS_130715_130715_M1_future.csv";
+    private static final String futureMediumBarsFileName = "SPFB.RTS_130614_130715_M15_future.csv";
+    private static final String futureLargeBarsFileName = "SPFB.RTS_130614_130715_D1_future.csv";
     
     private static int smallBarsWindowSize = 15;
-    private static int mediumBarsWindowSize = 10;
-    private static int largeBarsWindowSize = 5;
+    private static int mediumBarsWindowSize = 40;
+    private static int largeBarsWindowSize = 10;
     private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
     private static int outputSize = 2;
     private static int hidden1Count = getInputSize() * 3;
@@ -101,5 +104,27 @@ public class Config {
      */
     public static String getLargeBarsFilePath() {
         return dataDir + largeBarsFileName;
+    }  
+    
+    /**
+     * Path of file with future small bars
+     * @return 
+     */
+    public static String getFutureSmallBarsFilePath() {
+        return dataDir + futureSmallBarsFileName;
+    }
+    /**
+     * Medium period future bars file (15 minutes)
+     * @return 
+     */
+    public static String getFutureMediumBarsFilePath() {
+        return dataDir + futureMediumBarsFileName;
     }   
+     /**
+     * Large period future bars file (1 hour)
+     * @return 
+     */
+    public static String getFutureLargeBarsFilePath() {
+        return dataDir + futureLargeBarsFileName;
+    }      
 }
