@@ -27,35 +27,44 @@ import trading.data.MLDataLoader;
  */
 public class NeuralService {
    public static void main(String[] args) throws FileNotFoundException, IOException {
-       trainNetwork();
+       // Create
+       BasicNetwork network = getNetwork();
+       // Train
+       trainNetwork(network);
    }
    
    /**
     * Creates and returns a trading network
     */
    public static BasicNetwork getNetwork(){
-		final FeedForwardPattern pattern = new FeedForwardPattern();
-		// Set layers
-                
-                pattern.setInputNeurons(Config.getInputSize());
-                pattern.addHiddenLayer(Config.getHidden1Count());
-                //pattern.addHiddenLayer(Config.getHidden2Count());
-		pattern.setOutputNeurons(Config.getOutputSize());
-                // Activation functioni
-                //pattern.setActivationFunction(new ActivationTANH());
-                pattern.setActivationFunction(new ActivationLinear());
-                //pattern.setActivationFunction(new ActivationElliott());
-                
-                // Create network
-		final BasicNetwork network = (BasicNetwork)pattern.generate();
-		network.reset();
-		return network;
+        Stopwatch watch = new Stopwatch();
+        final FeedForwardPattern pattern = new FeedForwardPattern();
+        // Set layers
+
+        pattern.setInputNeurons(Config.getInputSize());
+        pattern.addHiddenLayer(Config.getHidden1Count());
+        //pattern.addHiddenLayer(Config.getHidden2Count());
+        pattern.setOutputNeurons(Config.getOutputSize());
+        // Activation functioni
+        //pattern.setActivationFunction(new ActivationTANH());
+        pattern.setActivationFunction(new ActivationLinear());
+        //pattern.setActivationFunction(new ActivationElliott());
+
+        // Create network
+        final BasicNetwork network = (BasicNetwork)pattern.generate();
+        network.reset();
+
+        watch.stop();
+        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds()/1000));
+        watch.reset();
+
+        return network;
    }
    
     /**
-     * @param args the command line arguments
+     * Network learning
      */
-    public static void trainNetwork() throws FileNotFoundException, IOException {
+    public static void trainNetwork(BasicNetwork network) throws FileNotFoundException, IOException {
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
@@ -67,12 +76,6 @@ public class NeuralService {
         Logger.getLogger(NeuralService.class.getName()).info(String.format("Create dataset: %d sec.", watch.getElapsedMilliseconds() / 1000));
         watch.reset();
 
-        watch.start();
-        // Network
-        final BasicNetwork network = getNetwork();
-        watch.stop();
-        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds()/1000));
-        watch.reset();
         // Backpropagation training
         ResilientPropagation train = new ResilientPropagation(network, ds);
         //Backpropagation train = new Backpropagation(network, ds);
