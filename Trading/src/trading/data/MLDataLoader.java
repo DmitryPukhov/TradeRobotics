@@ -16,9 +16,9 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import trading.common.Config;
 import trading.data.model.Bar;
-import trading.data.model.DataPair;
-import trading.data.model.InputData;
-import trading.data.model.OutputData;
+import trading.data.model.EntityPair;
+import trading.data.model.InputEntity;
+import trading.data.model.OutputEntity;
 import trading.data.model.RelativeBar;
 
 /**
@@ -58,7 +58,7 @@ public class MLDataLoader {
         validateBars(smallBars, mediumBars, largeBars);
 
         // Transform bars to change percents
-        List<DataPair> dataPairs = getDataPairs(smallBars, mediumBars, largeBars);
+        List<EntityPair> dataPairs = getEntityPairs(smallBars, mediumBars, largeBars);
         
         // Create dataset for machine learning
         ds = getMLDataSet(dataPairs);
@@ -69,7 +69,7 @@ public class MLDataLoader {
      * Create BufferedMLDataSet from data entities
      * @param pairs 
      */
-    private MLDataSet getMLDataSet(List<DataPair> pairs){
+    private MLDataSet getMLDataSet(List<EntityPair> pairs){
        // Create buffered ml data set
         String fileName = Config.getDataDir() + MLDataLoader.class.getName() + ".egb";
         File file = new File(fileName);
@@ -77,8 +77,8 @@ public class MLDataLoader {
         
         // Add data pairs
         ds.beginLoad(Config.getInputSize(), Config.getOutputSize());
-        for(DataPair pair: pairs){
-           MLDataPair mlDataPair = MLDataConverter.DataPairToMLDataPair(pair);
+        for(EntityPair pair: pairs){
+           MLDataPair mlDataPair = MLDataConverter.EntityPairToMLDataPair(pair);
            ds.add(mlDataPair);
         }
         ds.endLoad();
@@ -93,8 +93,8 @@ public class MLDataLoader {
      * @param largeBars
      * @return 
      */
-    private List<DataPair> getDataPairs(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars){
-        List<DataPair> pairs = new ArrayList<>();
+    private List<EntityPair> getEntityPairs(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars){
+        List<EntityPair> pairs = new ArrayList<>();
 
         int smallPos, mediumPos, largePos;
         mediumPos = mediumBars.size() - 1;
@@ -107,12 +107,12 @@ public class MLDataLoader {
             mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
             largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos     
             
-            InputData input = getInputData(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
-            OutputData ideal = getOutputData(mediumBars, mediumPos, smallBar.getTime());
+            InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
+            OutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
 
             // Create input/ideal pair
             if (input != null && ideal != null) {
-                DataPair pair = new DataPair(input, ideal);
+                EntityPair pair = new EntityPair(input, ideal);
                 pairs.add(pair);
             }
         }
@@ -177,7 +177,7 @@ public class MLDataLoader {
      * @param smallPos position of small bar
      * @return
      */
-    private InputData getInputData(List<RelativeBar> smallBars, int smallPos, List<RelativeBar> mediumBars, int mediumPos, List<RelativeBar> largeBars, int largePos) {
+    private InputEntity getInputEntity(List<RelativeBar> smallBars, int smallPos, List<RelativeBar> mediumBars, int mediumPos, List<RelativeBar> largeBars, int largePos) {
         RelativeBar smallBar = smallBars.get(smallPos);
         mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
         largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos
@@ -186,7 +186,7 @@ public class MLDataLoader {
         List<RelativeBar> mediumWindow = getInputWindow(mediumBars, mediumPos, Config.getMediumBarsWindowSize());
         List<RelativeBar> largeWindow = getInputWindow(largeBars, largePos, Config.getLargeBarsWindowSize());
 
-        InputData input = new InputData(smallWindow, mediumWindow, largeWindow);
+        InputEntity input = new InputEntity(smallWindow, mediumWindow, largeWindow);
 
         return input;
     }
@@ -219,11 +219,11 @@ public class MLDataLoader {
      * @param currentTime
      * @return
      */
-    private static OutputData getOutputData(List<RelativeBar> bars, int pos, Calendar currentTime) {
+    private static OutputEntity getOutputEntity(List<RelativeBar> bars, int pos, Calendar currentTime) {
         if (pos >= bars.size() - 1) {
             return null;
         }
-        OutputData result = null;
+        OutputEntity result = null;
         RelativeBar inputBar = bars.get(pos);
         long currentMillis = currentTime.getTimeInMillis();
         long predictionIntervalMillis = Config.getPredictionIntervalMillis();
@@ -241,7 +241,7 @@ public class MLDataLoader {
         }
         // Get ML data from next bar
         if (outputBar != null) {
-            result = new OutputData(outputBar);
+            result = new OutputEntity(outputBar);
         }
         // Null if no bars after interval
         return result;

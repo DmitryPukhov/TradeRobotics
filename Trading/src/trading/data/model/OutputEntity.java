@@ -8,14 +8,14 @@ package trading.data.model;
  * Output entities
  * @author dima
  */
-public class OutputData {
+public class OutputEntity {
     private RelativeBar bar;
     
     /**
      * Construct from bar
      * @param bar 
      */
-    public OutputData(RelativeBar bar){
+    public OutputEntity(RelativeBar bar){
         this.bar = bar;
     }
     /**
