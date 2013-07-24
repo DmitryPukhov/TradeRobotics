@@ -27,8 +27,8 @@ public class MLDataConverter {
      */
     public static MLDataPair EntityPairToMLDataPair(EntityPair pair){
         // Get input and output
-        MLData inputData = inputEntityToMLData(pair.getInputData());
-        MLData outputData = outputEntityToMLData(pair.getOutputData());
+        MLData inputData = inputEntityToMLData(pair.getInputEntity());
+        MLData outputData = outputEntityToMLData(pair.getOutputEntity());
         // Create data pair
         BasicMLDataPair mlDataPair = new BasicMLDataPair(inputData, outputData);
         return mlDataPair;

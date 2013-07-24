@@ -59,8 +59,7 @@ public class NeuralService {
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
-        MLDataLoader loader = new MLDataLoader();
-        MLDataSet ds = loader.getMLDataSet();
+        MLDataSet ds = MLDataLoader.getMLDataSet();
         
         
         

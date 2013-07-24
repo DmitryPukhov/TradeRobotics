@@ -28,22 +28,11 @@ import trading.data.model.RelativeBar;
  */
 public class MLDataLoader {
 
-//    private int smallPos;
-//    private int mediumPos;
-//    private int largePos;
-//    List<Bar> smallBars = new ArrayList<>();
-//    List<Bar> mediumBars = new ArrayList<>();
-//    List<Bar> largeBars = new ArrayList<>();
     /**
-     * Create buffered ML data set from csv files for 3 bar periods Use file
-     * name
-     *
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
+     * Get entity pairs from csv file
+     * @return 
      */
-    public MLDataSet getMLDataSet() throws FileNotFoundException, IOException {
-        MLDataSet ds = null;
+    public static List<EntityPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
         // Load from csv files to bar arrays
         List<Bar> smallSimpleBars = BarFileLoader.load(Config.getSmallBarsFilePath());
         List<Bar> mediumSimpleBars = BarFileLoader.load(Config.getMediumBarsFilePath());
@@ -58,10 +47,27 @@ public class MLDataLoader {
         validateBars(smallBars, mediumBars, largeBars);
 
         // Transform bars to change percents
-        List<EntityPair> dataPairs = getEntityPairs(smallBars, mediumBars, largeBars);
+        List<EntityPair> pairs = getEntityPairs(smallBars, mediumBars, largeBars);
+        return pairs;
+        
+    }
+    
+    /**
+     * Create buffered ML data set from csv files for 3 bar periods Use file
+     * name
+     *
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static MLDataSet getMLDataSet() throws FileNotFoundException, IOException {
+
+
+        // Transform bars to change percents
+        List<EntityPair> dataPairs = getEntityPairs(Config.getSmallBarsFilePath(), Config.getMediumBarsFilePath(), Config.getLargeBarsFilePath());
         
         // Create dataset for machine learning
-        ds = getMLDataSet(dataPairs);
+        MLDataSet ds = getMLDataSet(dataPairs);
         return ds;
     }
 
@@ -69,7 +75,7 @@ public class MLDataLoader {
      * Create BufferedMLDataSet from data entities
      * @param pairs 
      */
-    private MLDataSet getMLDataSet(List<EntityPair> pairs){
+    private static MLDataSet getMLDataSet(List<EntityPair> pairs){
        // Create buffered ml data set
         String fileName = Config.getDataDir() + MLDataLoader.class.getName() + ".egb";
         File file = new File(fileName);
@@ -93,7 +99,7 @@ public class MLDataLoader {
      * @param largeBars
      * @return 
      */
-    private List<EntityPair> getEntityPairs(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars){
+    public static List<EntityPair> getEntityPairs(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars){
         List<EntityPair> pairs = new ArrayList<>();
 
         int smallPos, mediumPos, largePos;
@@ -123,7 +129,7 @@ public class MLDataLoader {
     /**
      * Validate if medium and large bars matches
      */
-    private void validateBars(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars) {
+    private static void validateBars(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars) {
 
         for (RelativeBar smallBar : smallBars) {
             // Medium bars validation
@@ -177,7 +183,7 @@ public class MLDataLoader {
      * @param smallPos position of small bar
      * @return
      */
-    private InputEntity getInputEntity(List<RelativeBar> smallBars, int smallPos, List<RelativeBar> mediumBars, int mediumPos, List<RelativeBar> largeBars, int largePos) {
+    private static InputEntity getInputEntity(List<RelativeBar> smallBars, int smallPos, List<RelativeBar> mediumBars, int mediumPos, List<RelativeBar> largeBars, int largePos) {
         RelativeBar smallBar = smallBars.get(smallPos);
         mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
         largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos

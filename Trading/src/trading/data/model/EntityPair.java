@@ -9,8 +9,8 @@ package trading.data.model;
  * @author dima
  */
 public class EntityPair {
-    private InputEntity inputData;
-    private OutputEntity outputData;
+    private InputEntity  inputEntity;
+    private OutputEntity outputEntity;
     
     /**
      * Construct pair from input and output data
@@ -18,15 +18,15 @@ public class EntityPair {
      * @param output 
      */
     public EntityPair(InputEntity input, OutputEntity output){
-        inputData = input;
-        outputData = output;
+       inputEntity = input;
+       outputEntity = output;
     }
 
-    public InputEntity getInputData() {
-        return inputData;
+    public InputEntity getInputEntity() {
+        return  inputEntity;
     }
 
-    public OutputEntity getOutputData() {
-        return outputData;
+    public OutputEntity getOutputEntity() {
+        return outputEntity;
     }
 }
