@@ -4,7 +4,7 @@
  */
 package trading.common;
 
-import trading.data.Bar;
+import trading.data.model.Bar;
 
 /**
  * Application configuration data

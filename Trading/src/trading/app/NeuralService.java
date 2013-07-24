@@ -19,7 +19,7 @@ import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
 import trading.common.Config;
-import trading.data.MLDataSetLoader;
+import trading.data.MLDataLoader;
 
 /**
  *
@@ -59,9 +59,11 @@ public class NeuralService {
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
-        MLDataSetLoader loader = new MLDataSetLoader();
-        MLDataSet ds = loader.createBufferedMLDataSetFromFile();
-
+        MLDataLoader loader = new MLDataLoader();
+        MLDataSet ds = loader.getMLDataSet();
+        
+        
+        
         watch.stop();
         Logger.getLogger(NeuralService.class.getName()).info(String.format("Create dataset: %d sec.", watch.getElapsedMilliseconds() / 1000));
         watch.reset();
@@ -76,7 +78,7 @@ public class NeuralService {
         ResilientPropagation train = new ResilientPropagation(network, ds);
         //Backpropagation train = new Backpropagation(network, ds);
         train.setThreadCount(10);
-
+ 
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
         int epochCount = 30;
         for (int epoch = 0; epoch < epochCount; epoch++) {
@@ -85,13 +87,15 @@ public class NeuralService {
             watch.start();
             // Iteration
             train.iteration();
-            
+
             // Print info
             watch.stop();
             float error = (float)train.getError();
             int errorInt = (int)error;
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
-            
         }
+        train.finishTraining();
+        
+
     }
 }

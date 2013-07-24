@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package trading.data;
+package trading.data.model;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,11 +14,11 @@ import java.util.GregorianCalendar;
  */
 public class Bar {
     private Calendar time;
-    private double open;
-    private double low;
-    private double high;
-    private double close;
-    private double volume;
+    private double open = -1;
+    private double low = -1;
+    private double high = -1;
+    private double close = -1;
+    private double volume = -1;
     public static final int FIELD_COUNT = 6; // time, ohlc, vol
     
     

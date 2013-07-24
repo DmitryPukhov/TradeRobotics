@@ -1,5 +1,6 @@
 package trading.data;
 
+import trading.data.model.Bar;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;

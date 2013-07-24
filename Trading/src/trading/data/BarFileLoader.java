@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import trading.data.model.Bar;
 
 /**
  * Load bars array from input files
@@ -27,7 +29,9 @@ public class BarFileLoader {
      * @param csvPath path to *.csv file
      * @throws FileNotFoundException
      */
-    public static void load(String csvPath, List<Bar> barData) throws FileNotFoundException, IOException {
+    public static List<Bar> load(String csvPath) throws FileNotFoundException, IOException {
+        List<Bar> bars = new ArrayList<>();
+        
          String currentDir = new java.io.File( "." ).getCanonicalPath();
          csvPath = currentDir + "/" + csvPath;
         // Read file
@@ -44,12 +48,13 @@ public class BarFileLoader {
                 Bar bar = readSingleBarData(barString, positions);
                 // Add to resulting array
                 if (bar != null) {
-                    barData.add(bar);
+                    bars.add(bar);
                 }
                 // Next line
                 barString = br.readLine();
             }
         }
+        return bars;
     }
     
     
