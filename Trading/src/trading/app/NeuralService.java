@@ -7,19 +7,20 @@ package trading.app;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
-import org.encog.engine.network.activation.ActivationElliott;
 import org.encog.engine.network.activation.ActivationLinear;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.util.Stopwatch;
-import org.encog.util.simple.EncogUtility;
 import trading.common.Config;
+import trading.data.MLDataConverter;
 import trading.data.MLDataLoader;
+import trading.data.model.EntityPair;
+import trading.data.model.OutputEntity;
 
 /**
  *
@@ -31,8 +32,28 @@ public class NeuralService {
        BasicNetwork network = getNetwork();
        // Train
        trainNetwork(network);
+       // Check
+       checkLearnedResults(network);
    }
-   
+
+  /**
+   * Predict results
+   */
+  public static void checkLearnedResults(BasicNetwork network) throws FileNotFoundException, IOException{
+      // Get entities from csv files
+      List<EntityPair> pairs = MLDataLoader.getEntityPairs(Config.getSmallBarsFilePath(), Config.getMediumBarsFilePath(), Config.getLargeBarsFilePath());
+      
+      // Go through every input/ideal pair
+      for(EntityPair pair: pairs){
+          MLData input = MLDataConverter.inputEntityToMLData(pair.getInputEntity());
+          // Compute network prediction
+          MLData output = network.compute(input);
+          // Compare with ideal
+          OutputEntity idealEntity = pair.getOutputEntity();
+          
+      }
+  }
+          
    /**
     * Creates and returns a trading network
     */
@@ -97,7 +118,5 @@ public class NeuralService {
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
         train.finishTraining();
-        
-
     }
 }

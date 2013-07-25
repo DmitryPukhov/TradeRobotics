@@ -25,4 +25,19 @@ public class OutputEntity {
     public RelativeBar getBar() {
         return bar;
     }
+    
+    /**
+     * Gets minimum price
+     * @return 
+     */
+    public double getAbsoluteLow(){
+        return bar.getAbsoluteValue().getLow();
+    }
+    /**
+     * Gets maximum price
+     * @return 
+     */
+    public double getAbsoluteHigh(){
+        return bar.getAbsoluteValue().getHigh();
+    }
 }
