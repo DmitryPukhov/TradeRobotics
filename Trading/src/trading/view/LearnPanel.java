@@ -6,6 +6,18 @@ package trading.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.general.Dataset;
+import org.jfree.data.general.SeriesDataset;
+import org.jfree.data.xy.DefaultTableXYDataset;
+import org.jfree.data.xy.TableXYDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import trading.common.NeuralContext;
 
 /**
@@ -18,11 +30,14 @@ public class LearnPanel extends javax.swing.JPanel {
      * Creates new form LearnPanel
      */
     public LearnPanel() {
+        createChart();
+        
         initComponents();
         
         init();
     }
-
+    JFreeChart errorChart;
+    XYSeries errorXYSeries;
     /**
      * Neural network related initialization
      */
@@ -44,10 +59,35 @@ public class LearnPanel extends javax.swing.JPanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 lastErrorLabel.setText("Error: " + evt.getNewValue().toString());
+                errorXYSeries.add(errorXYSeries.getItemCount()+1, (float)evt.getNewValue());
             }
         });
-    }
+        
 
+    }
+    
+    /**
+     * Init JFreeChart
+     */
+    private void createChart(){
+        // Create dataset and series
+        TableXYDataset ds = new DefaultTableXYDataset();
+        XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
+        errorXYSeries = new XYSeries("Error");
+        xySeriesCollection.addSeries(errorXYSeries);
+        
+ // final XYPlot plot = result.getXYPlot();
+//        ValueAxis domain = plot.getDomainAxis();
+//        domain.setAutoRange(true);
+//        ValueAxis range = plot.getRangeAxis();
+//        range.setRange(-MINMAX, MINMAX);
+//        return result;
+         // Create chart
+        errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true); 
+        XYPlot plot = (XYPlot)errorChart.getPlot();
+        plot.getRangeAxis().setAutoRange(true);
+        plot.getDomainAxis().setRange(1,NeuralContext.Training.getMaxEpochCount());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,10 +100,24 @@ public class LearnPanel extends javax.swing.JPanel {
         learnProgressBar = new javax.swing.JProgressBar();
         learnProgressLabel = new javax.swing.JLabel();
         lastErrorLabel = new javax.swing.JLabel();
+        chartPanel = new ChartPanel(errorChart);
+
+        setPreferredSize(new java.awt.Dimension(1024, 768));
 
         learnProgressLabel.setText("Epoch:");
 
         lastErrorLabel.setText("Last error:");
+
+        javax.swing.GroupLayout chartPanelLayout = new javax.swing.GroupLayout(chartPanel);
+        chartPanel.setLayout(chartPanelLayout);
+        chartPanelLayout.setHorizontalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartPanelLayout.setVerticalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 157, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,6 +133,7 @@ public class LearnPanel extends javax.swing.JPanel {
                             .addComponent(lastErrorLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,10 +144,12 @@ public class LearnPanel extends javax.swing.JPanel {
                 .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lastErrorLabel)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel chartPanel;
     private javax.swing.JLabel lastErrorLabel;
     private javax.swing.JProgressBar learnProgressBar;
     private javax.swing.JLabel learnProgressLabel;
