@@ -42,13 +42,13 @@ public class NeuralService {
        // Train
        trainNetwork();
        // Check
-       checkLearnedResults();
+       test();
    }
 
   /**
    * Predict results
    */
-  public static void checkLearnedResults() throws FileNotFoundException, IOException{
+  public static void test() throws FileNotFoundException, IOException{
       BasicNetwork network = NeuralContext.Network.getNetwork();
       
       // Get entities from csv files

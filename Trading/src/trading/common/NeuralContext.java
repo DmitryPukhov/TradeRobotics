@@ -11,6 +11,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import trading.app.NeuralService;
 import trading.data.model.Bar;
+import trading.data.model.OutputEntity;
 
 /**
  * Neural network related current context
@@ -248,5 +249,78 @@ public class NeuralContext {
         public static int getLargeBarsWindowSize() {
             return largeBarsWindowSize;
         }
+    }
+    
+    /**
+     * Neural network test
+     */
+    public static class Test{
+        private static PropertyChangeSupport pcs = new PropertyChangeSupport(Test.class);
+          /**
+         * Add property change listener for Network, Train properties
+         * @param propertyName
+         * @param listener 
+         */
+        public static void addPropertyChangeListener(String propertyName, PropertyChangeListener listener){
+            pcs.addPropertyChangeListener(propertyName, listener);
+        }        
+        private static int iteration;
+        private static double error;
+        private static OutputEntity idealEntity;
+        private static OutputEntity realEntity;
+        
+        /**
+         * Current iteration
+         * @return 
+         */
+        public static int getIteration() {
+            return iteration;
+        }
+        /**
+         * Set test iteration, fire change event
+         * @param iteration 
+         */
+        public static void setIteration(int iteration) {
+            int oldValue = Test.iteration;
+            // Set
+            Test.iteration = iteration;
+            pcs.firePropertyChange("Iteration", oldValue, Test.iteration);
+        }
+        /**
+         * Gets test error value
+         * @return 
+         */
+        public static double getError() {
+            return error;
+        }
+        /*
+         * Set test error value, fire change event
+         * @param error 
+         */
+        public static void setError(double error) {
+            double oldValue = error;
+            // Set value
+            Test.error = error;
+            pcs.firePropertyChange("Error", oldValue, Test.error);
+        }
+
+        public static OutputEntity getIdealEntity() {
+            return idealEntity;
+        }
+
+        public static void setIdealEntity(OutputEntity idealEntity) {
+            Test.idealEntity = idealEntity;
+        }
+
+        public static OutputEntity getRealEntity() {
+            return realEntity;
+        }
+
+        public static void setRealEntity(OutputEntity realEntity) {
+            Test.realEntity = realEntity;
+        }
+
+   
+        
     }
 }
