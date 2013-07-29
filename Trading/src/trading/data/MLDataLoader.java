@@ -14,7 +14,7 @@ import java.util.List;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
-import trading.common.Config;
+import trading.common.NeuralContext;
 import trading.data.model.Bar;
 import trading.data.model.EntityPair;
 import trading.data.model.InputEntity;
@@ -34,9 +34,9 @@ public class MLDataLoader {
      */
     public static List<EntityPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
         // Load from csv files to bar arrays
-        List<Bar> smallSimpleBars = BarFileLoader.load(Config.getSmallBarsFilePath());
-        List<Bar> mediumSimpleBars = BarFileLoader.load(Config.getMediumBarsFilePath());
-        List<Bar> largeSimpleBars = BarFileLoader.load(Config.getLargeBarsFilePath());
+        List<Bar> smallSimpleBars = BarFileLoader.load(NeuralContext.Files.getSmallBarsFilePath());
+        List<Bar> mediumSimpleBars = BarFileLoader.load(NeuralContext.Files.getMediumBarsFilePath());
+        List<Bar> largeSimpleBars = BarFileLoader.load(NeuralContext.Files.getLargeBarsFilePath());
 
         // Transform bars to relative bars
         List<RelativeBar> smallBars = getRelativeBars(smallSimpleBars);
@@ -64,7 +64,7 @@ public class MLDataLoader {
 
 
         // Transform bars to change percents
-        List<EntityPair> dataPairs = getEntityPairs(Config.getSmallBarsFilePath(), Config.getMediumBarsFilePath(), Config.getLargeBarsFilePath());
+        List<EntityPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         
         // Create dataset for machine learning
         MLDataSet ds = getMLDataSet(dataPairs);
@@ -77,12 +77,12 @@ public class MLDataLoader {
      */
     private static MLDataSet getMLDataSet(List<EntityPair> pairs){
        // Create buffered ml data set
-        String fileName = Config.getDataDir() + MLDataLoader.class.getName() + ".egb";
+        String fileName = NeuralContext.Files.getDataDir() + MLDataLoader.class.getName() + ".egb";
         File file = new File(fileName);
         BufferedMLDataSet ds = new BufferedMLDataSet(file);
         
         // Add data pairs
-        ds.beginLoad(Config.getInputSize(), Config.getOutputSize());
+        ds.beginLoad(NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getOutputSize());
         for(EntityPair pair: pairs){
            MLDataPair mlDataPair = MLDataConverter.EntityPairToMLDataPair(pair);
            ds.add(mlDataPair);
@@ -107,7 +107,7 @@ public class MLDataLoader {
         largePos = largeBars.size() - 1;
 
         // Go through small pos
-        for (smallPos = smallBars.size() - 1; smallPos > Config.getSmallBarsWindowSize(); smallPos--) {
+        for (smallPos = smallBars.size() - 1; smallPos > NeuralContext.NetworkSettings.getSmallBarsWindowSize(); smallPos--) {
             // Get window with last x small bars, last y medium bars, last z large bars
             RelativeBar smallBar = smallBars.get(smallPos);
             mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
@@ -137,8 +137,8 @@ public class MLDataLoader {
             if (lastMediumPos == -1) {
                 throw new Error(String.format("Can't find medium bar for date %s", smallBar.getTime().getTime().toString()));
             }
-            if (lastMediumPos - Config.getMediumBarsWindowSize() < 0) {
-                throw new Error(String.format("Can't find medium bars window with size: %d for date %s", Config.getMediumBarsWindowSize(), smallBar.getTime().getTime().toString()));
+            if (lastMediumPos - NeuralContext.NetworkSettings.getMediumBarsWindowSize() < 0) {
+                throw new Error(String.format("Can't find medium bars window with size: %d for date %s", NeuralContext.NetworkSettings.getMediumBarsWindowSize(), smallBar.getTime().getTime().toString()));
             }
 
             // Large bars validation
@@ -146,8 +146,8 @@ public class MLDataLoader {
             if (lastLargePos == -1) {
                 throw new Error(String.format("Can't find large bar for date %s", smallBar.getTime().getTime().toString()));
             }
-            if (lastLargePos - Config.getLargeBarsWindowSize() < 0) {
-                throw new Error(String.format("Can't find large bars window with size: %d for date %s", Config.getLargeBarsWindowSize(), smallBar.getTime().getTime().toString()));
+            if (lastLargePos - NeuralContext.NetworkSettings.getLargeBarsWindowSize() < 0) {
+                throw new Error(String.format("Can't find large bars window with size: %d for date %s", NeuralContext.NetworkSettings.getLargeBarsWindowSize(), smallBar.getTime().getTime().toString()));
             }
         }
     }
@@ -188,9 +188,9 @@ public class MLDataLoader {
         mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
         largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos
         // Get data windows for small, medium, large bars
-        List<RelativeBar> smallWindow = getInputWindow(smallBars, smallPos, Config.getSmallBarsWindowSize());
-        List<RelativeBar> mediumWindow = getInputWindow(mediumBars, mediumPos, Config.getMediumBarsWindowSize());
-        List<RelativeBar> largeWindow = getInputWindow(largeBars, largePos, Config.getLargeBarsWindowSize());
+        List<RelativeBar> smallWindow = getInputWindow(smallBars, smallPos, NeuralContext.NetworkSettings.getSmallBarsWindowSize());
+        List<RelativeBar> mediumWindow = getInputWindow(mediumBars, mediumPos, NeuralContext.NetworkSettings.getMediumBarsWindowSize());
+        List<RelativeBar> largeWindow = getInputWindow(largeBars, largePos, NeuralContext.NetworkSettings.getLargeBarsWindowSize());
 
         InputEntity input = new InputEntity(smallWindow, mediumWindow, largeWindow);
 
@@ -232,7 +232,7 @@ public class MLDataLoader {
         OutputEntity result = null;
         RelativeBar inputBar = bars.get(pos);
         long currentMillis = currentTime.getTimeInMillis();
-        long predictionIntervalMillis = Config.getPredictionIntervalMillis();
+        long predictionIntervalMillis = NeuralContext.NetworkSettings.getPredictionIntervalMillis();
         // Bar with result data
         RelativeBar outputBar = null;
         for (int i = pos; i < bars.size(); i++) {

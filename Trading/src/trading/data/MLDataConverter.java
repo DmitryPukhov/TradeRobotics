@@ -8,7 +8,7 @@ import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
-import trading.common.Config;
+import trading.common.NeuralContext;
 import trading.data.model.Bar;
 import trading.data.model.EntityPair;
 import trading.data.model.InputEntity;
@@ -63,7 +63,7 @@ public class MLDataConverter {
      */
     public static double[] outputEntityToArray(OutputEntity output){
       // Fill values array
-        double[] values = new double[Config.getOutputSize()];
+        double[] values = new double[NeuralContext.NetworkSettings.getOutputSize()];
         values[0] = output.getBar().getRelativeValue().getHigh();
         values[1] = output.getBar().getRelativeValue().getLow();
         return values;

@@ -5,9 +5,14 @@
 package trading.app;
 
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.ml.data.MLData;
@@ -16,32 +21,38 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.util.Stopwatch;
-import trading.common.Config;
+import trading.common.NeuralContext;
 import trading.data.MLDataConverter;
 import trading.data.MLDataLoader;
 import trading.data.model.EntityPair;
 import trading.data.model.OutputEntity;
 
 /**
- *
+ * Neural network service
  * @author pdg
  */
 public class NeuralService {
+
+    
+    
    public static void main(String[] args) throws FileNotFoundException, IOException {
-       // Create
-       BasicNetwork network = getNetwork();
+       // Create new network
+       BasicNetwork newNetwork = createNetwork();
+       NeuralContext.Network.setNetwork(createNetwork());
        // Train
-       trainNetwork(network);
+       trainNetwork();
        // Check
-       checkLearnedResults(network);
+       checkLearnedResults();
    }
 
   /**
    * Predict results
    */
-  public static void checkLearnedResults(BasicNetwork network) throws FileNotFoundException, IOException{
+  public static void checkLearnedResults() throws FileNotFoundException, IOException{
+      BasicNetwork network = NeuralContext.Network.getNetwork();
+      
       // Get entities from csv files
-      List<EntityPair> pairs = MLDataLoader.getEntityPairs(Config.getSmallBarsFilePath(), Config.getMediumBarsFilePath(), Config.getLargeBarsFilePath());
+      List<EntityPair> pairs = MLDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
       
       // Go through every input/ideal pair
       for(EntityPair pair: pairs){
@@ -57,15 +68,15 @@ public class NeuralService {
    /**
     * Creates and returns a trading network
     */
-   public static BasicNetwork getNetwork(){
+   public static BasicNetwork createNetwork(){
         Stopwatch watch = new Stopwatch();
         final FeedForwardPattern pattern = new FeedForwardPattern();
         // Set layers
 
-        pattern.setInputNeurons(Config.getInputSize());
-        pattern.addHiddenLayer(Config.getHidden1Count());
+        pattern.setInputNeurons(NeuralContext.NetworkSettings.getInputSize());
+        pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
         //pattern.addHiddenLayer(Config.getHidden2Count());
-        pattern.setOutputNeurons(Config.getOutputSize());
+        pattern.setOutputNeurons(NeuralContext.NetworkSettings.getOutputSize());
         // Activation functioni
         //pattern.setActivationFunction(new ActivationTANH());
         pattern.setActivationFunction(new ActivationLinear());
@@ -78,14 +89,18 @@ public class NeuralService {
         watch.stop();
         Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds()/1000));
         watch.reset();
-
+   
+        NeuralContext.Network.setNetwork(network);
+        
         return network;
    }
    
     /**
-     * Network learning
+     * NetworkSettings learning
      */
-    public static void trainNetwork(BasicNetwork network) throws FileNotFoundException, IOException {
+    public static void trainNetwork() throws FileNotFoundException, IOException {
+        BasicNetwork network = NeuralContext.Network.getNetwork();
+        
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
@@ -104,7 +119,11 @@ public class NeuralService {
  
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
         int epochCount = 30;
+
         for (int epoch = 0; epoch < epochCount; epoch++) {
+            // Epoch change event
+            NeuralContext.Training.setEpoch(epoch);
+       
             // Print info
             watch.reset();
             watch.start();
@@ -113,8 +132,11 @@ public class NeuralService {
 
             // Print info
             watch.stop();
+            // Calculate error
             float error = (float)train.getError();
-            int errorInt = (int)error;
+            //NeuralContext.Training.setError(error);
+            // Error change event
+            NeuralContext.Training.setError(error);
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
         train.finishTraining();
