@@ -109,9 +109,15 @@ public class NeuralContext {
         public static void addPropertyChangeListener(String propertyName, PropertyChangeListener listener){
             pcs.addPropertyChangeListener(propertyName, listener);
         }   
+  
         
         private static int epoch;
-        private static float error;        
+        private static float error; 
+        private static int maxEpochCount = 2;
+
+        public static int getMaxEpochCount() {
+            return maxEpochCount;
+        }
 
         public static int getEpoch() {
             return epoch;

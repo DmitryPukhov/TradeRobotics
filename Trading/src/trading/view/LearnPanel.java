@@ -4,6 +4,10 @@
  */
 package trading.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import trading.common.NeuralContext;
+
 /**
  *
  * @author pdg
@@ -15,6 +19,33 @@ public class LearnPanel extends javax.swing.JPanel {
      */
     public LearnPanel() {
         initComponents();
+        
+        init();
+    }
+
+    /**
+     * Neural network related initialization
+     */
+    private void init() {
+        // Init progress bar
+        learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());
+        learnProgressBar.setStringPainted(true);
+        // Epoch changed
+        NeuralContext.Training.addPropertyChangeListener("Epoch", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                int epoch = (int) evt.getNewValue();
+                learnProgressLabel.setText(String.format("Epoch: %d of %d", epoch, NeuralContext.Training.getMaxEpochCount()));
+                learnProgressBar.setValue(epoch);
+            }
+        });
+        // Error changed
+        NeuralContext.Training.addPropertyChangeListener("Error", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                lastErrorLabel.setText("Error: " + evt.getNewValue().toString());
+            }
+        });
     }
 
     /**
@@ -26,9 +57,13 @@ public class LearnPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        learnProgressBar = new javax.swing.JProgressBar();
+        learnProgressLabel = new javax.swing.JLabel();
+        lastErrorLabel = new javax.swing.JLabel();
 
-        jLabel1.setText("Learn");
+        learnProgressLabel.setText("Epoch:");
+
+        lastErrorLabel.setText("Last error:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -36,18 +71,30 @@ public class LearnPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(356, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(learnProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(learnProgressLabel)
+                            .addComponent(lastErrorLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(learnProgressLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lastErrorLabel)
+                .addContainerGap(161, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lastErrorLabel;
+    private javax.swing.JProgressBar learnProgressBar;
+    private javax.swing.JLabel learnProgressLabel;
     // End of variables declaration//GEN-END:variables
 }

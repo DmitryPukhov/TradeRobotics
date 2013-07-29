@@ -118,11 +118,9 @@ public class NeuralService {
         train.setThreadCount(10);
  
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
-        int epochCount = 30;
+ 
+        for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount(); epoch++) {
 
-        for (int epoch = 0; epoch < epochCount; epoch++) {
-            // Epoch change event
-            NeuralContext.Training.setEpoch(epoch);
        
             // Print info
             watch.reset();
@@ -136,6 +134,8 @@ public class NeuralService {
             float error = (float)train.getError();
             //NeuralContext.Training.setError(error);
             // Error change event
+            // Epoch change event
+            NeuralContext.Training.setEpoch(epoch);            
             NeuralContext.Training.setError(error);
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }

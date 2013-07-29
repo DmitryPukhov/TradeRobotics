@@ -7,6 +7,11 @@ package trading.view;
 import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import org.encog.neural.networks.BasicNetwork;
 import trading.app.NeuralService;
 import trading.common.NeuralContext;
@@ -105,9 +110,28 @@ public class NetworkPanel extends javax.swing.JPanel {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         // Create new network
         NeuralService.createNetwork();
-        //NeuralContext.Network.setNetwork(network);
-        
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        setCursor(Cursor.getDefaultCursor());
+ 
+        // Train network in separate process
+        //final NetworkPanel panel = this;
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+               try {
+                    //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    // Train
+                    NeuralService.trainNetwork();
+                    //panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(NetworkPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(NetworkPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }          }
+        }).start();
+    
+        //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
     }//GEN-LAST:event_createAndLearnButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
