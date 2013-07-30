@@ -4,7 +4,6 @@
  */
 package trading.app;
 
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
@@ -25,50 +24,30 @@ import trading.common.NeuralContext;
 import trading.data.MLDataConverter;
 import trading.data.MLDataLoader;
 import trading.data.model.EntityPair;
-import trading.data.model.OutputEntity;
+import trading.data.model.IdealOutputEntity;
+import trading.data.model.RealOutputEntity;
 
 /**
  * Neural network service
+ *
  * @author pdg
  */
 public class NeuralService {
 
-    
-    
-   public static void main(String[] args) throws FileNotFoundException, IOException {
-       // Create new network
-       BasicNetwork newNetwork = createNetwork();
-       NeuralContext.Network.setNetwork(createNetwork());
-       // Train
-       trainNetwork();
-       // Check
-       test();
-   }
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        // Create new network
+        BasicNetwork newNetwork = createNetwork();
+        NeuralContext.Network.setNetwork(createNetwork());
+        // Train
+        trainNetwork();
+        // Check
+        test();
+    }
 
-  /**
-   * Predict results
-   */
-  public static void test() throws FileNotFoundException, IOException{
-      BasicNetwork network = NeuralContext.Network.getNetwork();
-      
-      // Get entities from csv files
-      List<EntityPair> pairs = MLDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
-      
-      // Go through every input/ideal pair
-      for(EntityPair pair: pairs){
-          MLData input = MLDataConverter.inputEntityToMLData(pair.getInputEntity());
-          // Compute network prediction
-          MLData output = network.compute(input);
-          // Compare with ideal
-          OutputEntity idealEntity = pair.getOutputEntity();
-          
-      }
-  }
-          
-   /**
-    * Creates and returns a trading network
-    */
-   public static BasicNetwork createNetwork(){
+    /**
+     * Creates and returns a trading network
+     */
+    public static BasicNetwork createNetwork() {
         Stopwatch watch = new Stopwatch();
         final FeedForwardPattern pattern = new FeedForwardPattern();
         // Set layers
@@ -83,31 +62,31 @@ public class NeuralService {
         //pattern.setActivationFunction(new ActivationElliott());
 
         // Create network
-        final BasicNetwork network = (BasicNetwork)pattern.generate();
+        final BasicNetwork network = (BasicNetwork) pattern.generate();
         network.reset();
 
         watch.stop();
-        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds()/1000));
+        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds() / 1000));
         watch.reset();
-   
+
         NeuralContext.Network.setNetwork(network);
-        
+
         return network;
-   }
-   
+    }
+
     /**
      * NetworkSettings learning
      */
     public static void trainNetwork() throws FileNotFoundException, IOException {
         BasicNetwork network = NeuralContext.Network.getNetwork();
-        
+
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
         MLDataSet ds = MLDataLoader.getMLDataSet();
-        
-        
-        
+
+
+
         watch.stop();
         Logger.getLogger(NeuralService.class.getName()).info(String.format("Create dataset: %d sec.", watch.getElapsedMilliseconds() / 1000));
         watch.reset();
@@ -116,12 +95,10 @@ public class NeuralService {
         ResilientPropagation train = new ResilientPropagation(network, ds);
         //Backpropagation train = new Backpropagation(network, ds);
         train.setThreadCount(10);
- 
-        Logger.getLogger(NeuralService.class.getName()).info("Start training");
- 
-        for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount(); epoch++) {
 
-       
+        Logger.getLogger(NeuralService.class.getName()).info("Start training");
+
+        for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount(); epoch++) {
             // Print info
             watch.reset();
             watch.start();
@@ -131,14 +108,44 @@ public class NeuralService {
             // Print info
             watch.stop();
             // Calculate error
-            float error = (float)train.getError();
+            float error = (float) train.getError();
             //NeuralContext.Training.setError(error);
             // Error change event
             // Epoch change event
-            NeuralContext.Training.setEpoch(epoch);            
+            NeuralContext.Training.setEpoch(epoch);
             NeuralContext.Training.setError(error);
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
         train.finishTraining();
+    }
+
+    /**
+     * Predict results
+     */
+    public static void test() throws FileNotFoundException, IOException {
+        BasicNetwork network = NeuralContext.Network.getNetwork();
+
+        // Get entities from csv files
+        List<EntityPair> pairs = MLDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        NeuralContext.Test.setMaxIterationCount(pairs.size());
+        
+        int iteration = 1;
+        // Go through every input/ideal pair
+        for (EntityPair pair : pairs) {
+            MLData input = MLDataConverter.inputEntityToMLData(pair.getInputEntity());
+            // Compute network prediction
+            MLData output = network.compute(input);
+
+            // Get network output
+            IdealOutputEntity idealEntity = pair.getOutputEntity();
+            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBar().getAbsoluteValue(), idealEntity.getBar().getTime(), output.getData(0), output.getData(1));
+  
+            // Store values in context
+            NeuralContext.Test.setIteration(iteration);
+            NeuralContext.Test.setIdealEntity(idealEntity);
+            NeuralContext.Test.setRealEntity(realEntity);
+  
+            iteration ++;
+          }
     }
 }

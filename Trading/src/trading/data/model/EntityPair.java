@@ -10,14 +10,14 @@ package trading.data.model;
  */
 public class EntityPair {
     private InputEntity  inputEntity;
-    private OutputEntity outputEntity;
+    private IdealOutputEntity outputEntity;
     
     /**
      * Construct pair from input and output data
      * @param input
      * @param output 
      */
-    public EntityPair(InputEntity input, OutputEntity output){
+    public EntityPair(InputEntity input, IdealOutputEntity output){
        inputEntity = input;
        outputEntity = output;
     }
@@ -26,7 +26,7 @@ public class EntityPair {
         return  inputEntity;
     }
 
-    public OutputEntity getOutputEntity() {
+    public IdealOutputEntity getOutputEntity() {
         return outputEntity;
     }
 }

@@ -5,17 +5,17 @@
 package trading.data.model;
 
 /**
- * Output entities
+ * Output entity to form ideal MLData and compare with real output
  * @author dima
  */
-public class OutputEntity {
+public class IdealOutputEntity {
     private RelativeBar bar;
     
     /**
      * Construct from bar
      * @param bar 
      */
-    public OutputEntity(RelativeBar bar){
+    public IdealOutputEntity(RelativeBar bar){
         this.bar = bar;
     }
     /**

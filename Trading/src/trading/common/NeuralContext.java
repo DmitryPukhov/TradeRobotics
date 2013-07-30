@@ -11,7 +11,8 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import trading.app.NeuralService;
 import trading.data.model.Bar;
-import trading.data.model.OutputEntity;
+import trading.data.model.IdealOutputEntity;
+import trading.data.model.RealOutputEntity;
 
 /**
  * Neural network related current context
@@ -113,9 +114,9 @@ public class NeuralContext {
   
         
         private static int epoch;
-        private static float error; 
-        private static int maxEpochCount = 20;
-
+        private static double error; 
+        private static int maxEpochCount = 3;
+ 
         public static int getMaxEpochCount() {
             return maxEpochCount;
         }
@@ -124,22 +125,30 @@ public class NeuralContext {
             return epoch;
         }
 
+        /**
+         * Set current train epoch, fire property changed event
+         * @param epoch 
+         */
         public static void setEpoch(int epoch) {
             // Set and fire event
             int oldValue = Training.epoch;
             Training.epoch = epoch;
-            pcs.firePropertyChange("Epoch", oldValue, Training.epoch);
+            pcs.firePropertyChange(PropertyNames.EPOCH, oldValue, Training.epoch);
         }
 
-        public static float getError() {
+        public static double getError() {
             return error;
         }
-
-        public static void setError(float error) {
+        
+        /**
+         * Set current network error value, fire property change event
+         * @param error 
+         */
+        public static void setError(double error) {
             // Set and fire event
-            float oldError = Training.error;
+            double oldError = Training.error;
             Training.error = error;
-            pcs.firePropertyChange("Error", oldError, Training.error);
+            pcs.firePropertyChange(PropertyNames.ERROR, oldError, Training.error);
         }
 
     }
@@ -161,20 +170,34 @@ public class NeuralContext {
         private static BasicNetwork network;
         private static Train train;
 
+        /**
+         * Train object
+         * @return 
+         */
         public static Train getTrain() {
             return train;
         }
-
+        /**
+         * Set current Train object, fire property change event
+         * @param train 
+         */
         public static void setTrain(Train train) {
             Train oldTrain = Network.train;
             Network.train = train;
             pcs.firePropertyChange("Train", oldTrain, Network.train);
         }
-
+        
+        /**
+         * Gets network
+         * @return 
+         */
         public static BasicNetwork getNetwork() {
             return network;
         }
-
+        /**
+         * Set neural network, fire property change event
+         * @param network 
+         */
         public static void setNetwork(BasicNetwork network) {
             // Set network
             BasicNetwork oldNetwork = Network.network;
@@ -263,11 +286,31 @@ public class NeuralContext {
          */
         public static void addPropertyChangeListener(String propertyName, PropertyChangeListener listener){
             pcs.addPropertyChangeListener(propertyName, listener);
-        }        
+        }    
+        
         private static int iteration;
+        public static int maxIterationCount;
         private static double error;
-        private static OutputEntity idealEntity;
-        private static OutputEntity realEntity;
+        private static IdealOutputEntity idealEntity;
+        private static RealOutputEntity realEntity;
+        
+        /**
+         * Test iterations count
+         * @return 
+         */
+        public static int getMaxIterationCount() {
+            return maxIterationCount;
+        }
+        
+        /**
+         * Set max iterations count, fire property change event
+         * @param maxIterationCount 
+         */
+        public static void setMaxIterationCount(int maxIterationCount) {
+            int oldValue = maxIterationCount;
+            Test.maxIterationCount = maxIterationCount;
+            pcs.firePropertyChange(PropertyNames.MAX_ITERATION_COUNT, oldValue, Test.maxIterationCount);
+        }
         
         /**
          * Current iteration
@@ -284,43 +327,41 @@ public class NeuralContext {
             int oldValue = Test.iteration;
             // Set
             Test.iteration = iteration;
-            pcs.firePropertyChange("Iteration", oldValue, Test.iteration);
+            pcs.firePropertyChange(PropertyNames.ITERATION, oldValue, Test.iteration);
         }
+
         /**
-         * Gets test error value
+         * Gets output entity
          * @return 
          */
-        public static double getError() {
-            return error;
-        }
-        /*
-         * Set test error value, fire change event
-         * @param error 
-         */
-        public static void setError(double error) {
-            double oldValue = error;
-            // Set value
-            Test.error = error;
-            pcs.firePropertyChange("Error", oldValue, Test.error);
-        }
-
-        public static OutputEntity getIdealEntity() {
+        public static IdealOutputEntity getIdealEntity() {
             return idealEntity;
         }
-
-        public static void setIdealEntity(OutputEntity idealEntity) {
+        /**
+         * Sets ideal entity of current test iteration, fires property change event
+         * @param idealEntity 
+         */
+        public static void setIdealEntity(IdealOutputEntity idealEntity) {
+            IdealOutputEntity oldValue = Test.idealEntity;
             Test.idealEntity = idealEntity;
+            pcs.firePropertyChange(PropertyNames.IDEAL_OUTPUT_ENTITY, oldValue, Test.idealEntity);
         }
-
-        public static OutputEntity getRealEntity() {
+        /**
+         * Gets real entity of current iteration
+         * @return 
+         */
+        public static RealOutputEntity getRealEntity() {
             return realEntity;
         }
-
-        public static void setRealEntity(OutputEntity realEntity) {
-            Test.realEntity = realEntity;
-        }
-
-   
         
+        /**
+         * Sets real entity of current test iteration, fires property change event
+         * @param realEntity 
+         */
+        public static void setRealEntity(RealOutputEntity realEntity) {
+            RealOutputEntity oldValue = Test.realEntity;
+            Test.realEntity = realEntity;
+            pcs.firePropertyChange(PropertyNames.REAL_OUTPUT_ENTITY, oldValue, Test.realEntity);
+        }
     }
 }

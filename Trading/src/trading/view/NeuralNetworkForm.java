@@ -32,6 +32,7 @@ public class NeuralNetworkForm extends javax.swing.JFrame {
         testPanel = new trading.view.TestPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Trade Robotics Neural Network");
         setMinimumSize(new java.awt.Dimension(800, 600));
 
         mainPanel.setPreferredSize(new java.awt.Dimension(1024, 768));

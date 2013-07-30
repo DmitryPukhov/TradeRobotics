@@ -18,7 +18,7 @@ import trading.common.NeuralContext;
 import trading.data.model.Bar;
 import trading.data.model.EntityPair;
 import trading.data.model.InputEntity;
-import trading.data.model.OutputEntity;
+import trading.data.model.IdealOutputEntity;
 import trading.data.model.RelativeBar;
 
 /**
@@ -114,7 +114,7 @@ public class MLDataLoader {
             largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos     
             
             InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
-            OutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
+            IdealOutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
 
             // Create input/ideal pair
             if (input != null && ideal != null) {
@@ -225,11 +225,11 @@ public class MLDataLoader {
      * @param currentTime
      * @return
      */
-    private static OutputEntity getOutputEntity(List<RelativeBar> bars, int pos, Calendar currentTime) {
+    private static IdealOutputEntity getOutputEntity(List<RelativeBar> bars, int pos, Calendar currentTime) {
         if (pos >= bars.size() - 1) {
             return null;
         }
-        OutputEntity result = null;
+        IdealOutputEntity result = null;
         RelativeBar inputBar = bars.get(pos);
         long currentMillis = currentTime.getTimeInMillis();
         long predictionIntervalMillis = NeuralContext.NetworkSettings.getPredictionIntervalMillis();
@@ -247,7 +247,7 @@ public class MLDataLoader {
         }
         // Get ML data from next bar
         if (outputBar != null) {
-            result = new OutputEntity(outputBar);
+            result = new IdealOutputEntity(outputBar);
         }
         // Null if no bars after interval
         return result;

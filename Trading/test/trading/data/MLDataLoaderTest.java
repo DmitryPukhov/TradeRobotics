@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import trading.data.model.OutputEntity;
+import trading.data.model.IdealOutputEntity;
 import trading.data.model.RelativeBar;
 
 /**
@@ -136,7 +136,7 @@ public class MLDataLoaderTest {
         // Invoke private method using reflection
         Method method = MLDataLoader.class.getDeclaredMethod("getOutputEntity", List.class, Integer.TYPE, Calendar.class); //(List<Bar> bars, int pos, Calendar currentTime 
         method.setAccessible(true);
-        OutputEntity data = (OutputEntity) method.invoke(null, relativeBars, 0, relativeBars.get(0).getTime());
+        IdealOutputEntity data = (IdealOutputEntity) method.invoke(null, relativeBars, 0, relativeBars.get(0).getTime());
         // Check not null
         assertNotNull( data);
         assertEquals(relativeBars.get(1), data.getBar());

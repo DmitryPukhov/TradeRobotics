@@ -46,7 +46,7 @@ public class LearnPanel extends javax.swing.JPanel {
         learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());
         learnProgressBar.setStringPainted(true);
         // Epoch changed
-        NeuralContext.Training.addPropertyChangeListener("Epoch", new PropertyChangeListener() {
+        NeuralContext.Training.addPropertyChangeListener("epoch", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 int epoch = (int) evt.getNewValue();
@@ -55,11 +55,11 @@ public class LearnPanel extends javax.swing.JPanel {
             }
         });
         // Error changed
-        NeuralContext.Training.addPropertyChangeListener("Error", new PropertyChangeListener() {
+        NeuralContext.Training.addPropertyChangeListener("error", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 lastErrorLabel.setText("Error: " + evt.getNewValue().toString());
-                errorXYSeries.add(errorXYSeries.getItemCount()+1, (float)evt.getNewValue());
+                errorXYSeries.add(errorXYSeries.getItemCount()+1, (double)evt.getNewValue());
             }
         });
         

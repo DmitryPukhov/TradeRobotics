@@ -4,11 +4,16 @@
  */
 package trading.view;
 
+import java.awt.Cursor;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import trading.app.NeuralService;
+import trading.common.NeuralContext;
+import trading.common.PropertyNames;
 
 /**
  *
@@ -21,8 +26,34 @@ public class TestPanel extends javax.swing.JPanel {
      */
     public TestPanel() {
         initComponents();
+        
+        // Neural network related initialization
+        init();
     }
 
+    /**
+     * Neural network related initialization
+     */
+    public void init(){
+        
+        // Iteration listener
+        NeuralContext.Test.addPropertyChangeListener(PropertyNames.ITERATION, new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                iterationLabel.setText(String.format("Iteration %d of %d", NeuralContext.Test.getIteration(), NeuralContext.Test.getMaxIterationCount()));
+                iterationProgressBar.setMaximum(NeuralContext.Test.getMaxIterationCount());               
+                iterationProgressBar.setValue(NeuralContext.Test.getIteration());
+            }
+        });
+        
+        NeuralContext.Test.addPropertyChangeListener(PropertyNames.REAL_OUTPUT_ENTITY, new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                
+            }
+        });
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,6 +73,8 @@ public class TestPanel extends javax.swing.JPanel {
                 startButtonActionPerformed(evt);
             }
         });
+
+        iterationProgressBar.setStringPainted(true);
 
         iterationLabel.setText("Iteration");
 
@@ -80,7 +113,9 @@ public class TestPanel extends javax.swing.JPanel {
      * @param evt
      */
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        // Run test in new thread
+       final TestPanel form = this;
+       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+       // Run test in new thread
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -91,6 +126,9 @@ public class TestPanel extends javax.swing.JPanel {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    form.setCursor(Cursor.getDefaultCursor());
                 }
             }
         }).start();
