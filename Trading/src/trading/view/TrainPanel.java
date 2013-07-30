@@ -6,6 +6,10 @@ package trading.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -18,26 +22,29 @@ import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import trading.app.NeuralService;
 import trading.common.NeuralContext;
+import trading.common.PropertyNames;
 
 /**
  *
  * @author pdg
  */
-public class LearnPanel extends javax.swing.JPanel {
+public class TrainPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form LearnPanel
+     * Creates new form TrainPanel
      */
-    public LearnPanel() {
+    public TrainPanel() {
         createChart();
-        
+
         initComponents();
-        
+
         init();
     }
     JFreeChart errorChart;
     XYSeries errorXYSeries;
+
     /**
      * Neural network related initialization
      */
@@ -46,7 +53,7 @@ public class LearnPanel extends javax.swing.JPanel {
         learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());
         learnProgressBar.setStringPainted(true);
         // Epoch changed
-        NeuralContext.Training.addPropertyChangeListener("epoch", new PropertyChangeListener() {
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.EPOCH, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 int epoch = (int) evt.getNewValue();
@@ -55,39 +62,43 @@ public class LearnPanel extends javax.swing.JPanel {
             }
         });
         // Error changed
-        NeuralContext.Training.addPropertyChangeListener("error", new PropertyChangeListener() {
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.ERROR, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                lastErrorLabel.setText("Error: " + evt.getNewValue().toString());
-                errorXYSeries.add(errorXYSeries.getItemCount()+1, (double)evt.getNewValue());
+                // Double value = ((double)evt.getNewValue())/0.01;
+                Double value = ((double) evt.getNewValue()) / 0.01;
+                lastErrorLabel.setText(String.format("Error: %f%n %%", value));
+                errorXYSeries.add(errorXYSeries.getItemCount() + 1, value);
+
             }
         });
-        
+
 
     }
-    
+
     /**
      * Init JFreeChart
      */
-    private void createChart(){
+    private void createChart() {
         // Create dataset and series
         TableXYDataset ds = new DefaultTableXYDataset();
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
         errorXYSeries = new XYSeries("Error");
         xySeriesCollection.addSeries(errorXYSeries);
-        
- // final XYPlot plot = result.getXYPlot();
+
+        // final XYPlot plot = result.getXYPlot();
 //        ValueAxis domain = plot.getDomainAxis();
 //        domain.setAutoRange(true);
 //        ValueAxis range = plot.getRangeAxis();
 //        range.setRange(-MINMAX, MINMAX);
 //        return result;
-         // Create chart
-        errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true); 
-        XYPlot plot = (XYPlot)errorChart.getPlot();
+        // Create chart
+        errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
+        XYPlot plot = (XYPlot) errorChart.getPlot();
         plot.getRangeAxis().setAutoRange(true);
-        plot.getDomainAxis().setRange(1,NeuralContext.Training.getMaxEpochCount());
+        plot.getDomainAxis().setRange(1, NeuralContext.Training.getMaxEpochCount());
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -101,6 +112,7 @@ public class LearnPanel extends javax.swing.JPanel {
         learnProgressLabel = new javax.swing.JLabel();
         lastErrorLabel = new javax.swing.JLabel();
         chartPanel = new ChartPanel(errorChart);
+        trainButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1024, 768));
 
@@ -121,21 +133,31 @@ public class LearnPanel extends javax.swing.JPanel {
             .addGap(0, 143, Short.MAX_VALUE)
         );
 
+        trainButton.setText("Train");
+        trainButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                trainButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(learnProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(learnProgressLabel)
                             .addComponent(lastErrorLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,18 +165,40 @@ public class LearnPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(learnProgressLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(trainButton))
                 .addGap(18, 18, 18)
                 .addComponent(lastErrorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(523, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
+        // Run train in new thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Train
+                    NeuralService.trainNetwork();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TrainPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(TrainPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }).start();
+
+
+    }//GEN-LAST:event_trainButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel chartPanel;
     private javax.swing.JLabel lastErrorLabel;
     private javax.swing.JProgressBar learnProgressBar;
     private javax.swing.JLabel learnProgressLabel;
+    private javax.swing.JButton trainButton;
     // End of variables declaration//GEN-END:variables
 }

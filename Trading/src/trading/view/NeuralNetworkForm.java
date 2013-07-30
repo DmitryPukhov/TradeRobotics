@@ -28,7 +28,7 @@ public class NeuralNetworkForm extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JTabbedPane();
         networkPanel = new trading.view.NetworkPanel();
-        learnPanel = new trading.view.LearnPanel();
+        learnPanel = new trading.view.TrainPanel();
         testPanel = new trading.view.TestPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -89,7 +89,7 @@ public class NeuralNetworkForm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private trading.view.LearnPanel learnPanel;
+    private trading.view.TrainPanel learnPanel;
     private javax.swing.JTabbedPane mainPanel;
     private trading.view.NetworkPanel networkPanel;
     private trading.view.TestPanel testPanel;

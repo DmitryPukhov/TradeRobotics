@@ -6,6 +6,7 @@ package trading.app;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
@@ -13,13 +14,16 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
+import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
+import org.encog.util.simple.EncogUtility;
 import trading.common.NeuralContext;
 import trading.data.MLDataConverter;
 import trading.data.MLDataLoader;
@@ -41,7 +45,7 @@ public class NeuralService {
         // Train
         trainNetwork();
         // Check
-        test();
+        testNetwork();
     }
 
     /**
@@ -70,7 +74,7 @@ public class NeuralService {
         watch.reset();
 
         NeuralContext.Network.setNetwork(network);
-
+        
         return network;
     }
 
@@ -122,7 +126,7 @@ public class NeuralService {
     /**
      * Predict results
      */
-    public static void test() throws FileNotFoundException, IOException {
+    public static void testNetwork() throws FileNotFoundException, IOException {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         // Get entities from csv files
@@ -148,4 +152,29 @@ public class NeuralService {
             iteration ++;
           }
     }
+    
+    /**
+     * Saves current network to file
+     * @param fileName 
+     */
+    public static void saveNetwork(File file){
+        EncogDirectoryPersistence.saveObject(file, NeuralContext.Network.getNetwork());
+    }
+    
+    /**
+     * Load network from file
+     * @param fileName 
+     */
+    public static void loadNetwork(File file){
+        BasicNetwork network = (BasicNetwork)EncogDirectoryPersistence.loadObject(file);
+        NeuralContext.Network.setNetwork(network);
+    }
+    
+    /**
+     * Reset network weights
+     */
+    public static void resetNetwork(){
+        NeuralContext.Network.getNetwork().reset();
+    }
+    
 }

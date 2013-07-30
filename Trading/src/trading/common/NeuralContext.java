@@ -27,12 +27,21 @@ public class NeuralContext {
     public static class Files {
 
         private static final String dataDir = "data/";
+        private static final String networkDir = "network/";
         private static final String smallBarsFileName = "SPFB.RTS_130711_130711_M1.csv";
         private static final String mediumBarsFileName = "SPFB.RTS_130611_130711_M15.csv";
         private static final String largeBarsFileName = "SPFB.RTS_130611_130711_D1.csv";
         private static final String futureSmallBarsFileName = "SPFB.RTS_130715_130715_M1_future.csv";
         private static final String futureMediumBarsFileName = "SPFB.RTS_130614_130715_M15_future.csv";
         private static final String futureLargeBarsFileName = "SPFB.RTS_130614_130715_D1_future.csv";
+
+        /**
+         * Saved network files directory
+         * @return 
+         */
+        public static String getNetworkDir() {
+            return networkDir;
+        }
 
         /**
          * Directory with csv files
@@ -115,7 +124,7 @@ public class NeuralContext {
         
         private static int epoch;
         private static double error; 
-        private static int maxEpochCount = 30;
+        private static int maxEpochCount = 100;
  
         public static int getMaxEpochCount() {
             return maxEpochCount;

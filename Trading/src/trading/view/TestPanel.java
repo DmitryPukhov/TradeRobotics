@@ -28,7 +28,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.xy.XYDataItem;
 
 /**
- * Neural network test panel
+ * Neural network testNetwork panel
  *
  * @author pdg
  */
@@ -197,13 +197,13 @@ public class TestPanel extends javax.swing.JPanel {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         final TestPanel form = this;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        // Run test in new thread
+        // Run testNetwork in new thread
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    // Run test
-                    NeuralService.test();
+                    // Run testNetwork
+                    NeuralService.testNetwork();
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
