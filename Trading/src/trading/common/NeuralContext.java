@@ -289,7 +289,7 @@ public class NeuralContext {
         }    
         
         private static int iteration;
-        public static int maxIterationCount;
+        private static int maxIterationCount;
         private static double error;
         private static IdealOutputEntity idealEntity;
         private static RealOutputEntity realEntity;
@@ -307,7 +307,7 @@ public class NeuralContext {
          * @param maxIterationCount 
          */
         public static void setMaxIterationCount(int maxIterationCount) {
-            int oldValue = maxIterationCount;
+            int oldValue = Test.maxIterationCount;
             Test.maxIterationCount = maxIterationCount;
             pcs.firePropertyChange(PropertyNames.MAX_ITERATION_COUNT, oldValue, Test.maxIterationCount);
         }

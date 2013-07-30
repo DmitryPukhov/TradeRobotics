@@ -4,6 +4,7 @@
  */
 package trading.view;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,49 +12,115 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.DefaultTableXYDataset;
+import org.jfree.data.xy.TableXYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import trading.app.NeuralService;
 import trading.common.NeuralContext;
 import trading.common.PropertyNames;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.data.xy.XYDataItem;
 
 /**
+ * Neural network test panel
  *
  * @author pdg
  */
 public class TestPanel extends javax.swing.JPanel {
 
+    JFreeChart chart;
+    XYSeries idealHighSeries;
+    XYSeries idealLowSeries;
+    XYSeries realHighSeries;
+    XYSeries realLowSeries;
+
     /**
      * Creates new form TestPanel
      */
     public TestPanel() {
+        // Test results chart creation
+        createChart();
+
         initComponents();
-        
+
         // Neural network related initialization
         init();
     }
 
     /**
+     * Init JFreeChart
+     */
+    private void createChart() {
+        // Create dataset and series
+        TableXYDataset ds = new DefaultTableXYDataset();
+        XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
+        idealHighSeries = new XYSeries("Ideal High");
+        idealLowSeries = new XYSeries("Ideal Low");
+        realHighSeries = new XYSeries("Real High");
+        realLowSeries = new XYSeries("Real Low");
+        xySeriesCollection.addSeries(idealHighSeries);
+        xySeriesCollection.addSeries(idealLowSeries);
+        xySeriesCollection.addSeries(realHighSeries);
+        xySeriesCollection.addSeries(realLowSeries);
+        // Create chart
+        chart = ChartFactory.createXYLineChart("Price values", "Iteration", "Price", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.getRangeAxis().setAutoRange(true);
+        // Auto range
+        NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
+        valueAxis.setAutoRangeIncludesZero(false);
+        // Set line colors
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(1, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(2, Color.BLUE);
+        plot.getRenderer().setSeriesPaint(3, Color.BLUE);
+
+        //plot.getDomainAxis().setRange(1, (double)NeuralContext.Test.getMaxIterationCount());
+    }
+
+    /**
      * Neural network related initialization
      */
-    public void init(){
-        
+    public final void init() {
+        // Max iterations listener
+        NeuralContext.Test.addPropertyChangeListener(PropertyNames.MAX_ITERATION_COUNT, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Set chart x range
+                XYPlot plot = (XYPlot) chart.getPlot();
+                plot.getDomainAxis().setRange(1, (double) NeuralContext.Test.getMaxIterationCount());
+            }
+        });
         // Iteration listener
-        NeuralContext.Test.addPropertyChangeListener(PropertyNames.ITERATION, new PropertyChangeListener(){
+        NeuralContext.Test.addPropertyChangeListener(PropertyNames.ITERATION, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 iterationLabel.setText(String.format("Iteration %d of %d", NeuralContext.Test.getIteration(), NeuralContext.Test.getMaxIterationCount()));
-                iterationProgressBar.setMaximum(NeuralContext.Test.getMaxIterationCount());               
+                iterationProgressBar.setMaximum(NeuralContext.Test.getMaxIterationCount());
                 iterationProgressBar.setValue(NeuralContext.Test.getIteration());
             }
         });
-        
-        NeuralContext.Test.addPropertyChangeListener(PropertyNames.REAL_OUTPUT_ENTITY, new PropertyChangeListener(){
+        // Output entity listener
+        NeuralContext.Test.addPropertyChangeListener(PropertyNames.REAL_OUTPUT_ENTITY, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                
+                // Add values to the charat
+                int iteration = NeuralContext.Test.getIteration();
+                idealHighSeries.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteHigh());
+                idealLowSeries.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteLow());
+                realHighSeries.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteHigh());
+                realLowSeries.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteLow());
             }
         });
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,6 +133,7 @@ public class TestPanel extends javax.swing.JPanel {
         startButton = new javax.swing.JButton();
         iterationProgressBar = new javax.swing.JProgressBar();
         iterationLabel = new javax.swing.JLabel();
+        chartPanel = new ChartPanel(chart);
 
         startButton.setText("Start test");
         startButton.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +145,17 @@ public class TestPanel extends javax.swing.JPanel {
         iterationProgressBar.setStringPainted(true);
 
         iterationLabel.setText("Iteration");
+
+        javax.swing.GroupLayout chartPanelLayout = new javax.swing.GroupLayout(chartPanel);
+        chartPanel.setLayout(chartPanelLayout);
+        chartPanelLayout.setHorizontalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        chartPanelLayout.setVerticalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 193, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -93,6 +172,7 @@ public class TestPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(iterationProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
                         .addGap(34, 34, 34))))
+            .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,7 +183,9 @@ public class TestPanel extends javax.swing.JPanel {
                     .addComponent(iterationLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(iterationProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -113,9 +195,9 @@ public class TestPanel extends javax.swing.JPanel {
      * @param evt
      */
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-       final TestPanel form = this;
-       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-       // Run test in new thread
+        final TestPanel form = this;
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // Run test in new thread
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -126,8 +208,7 @@ public class TestPanel extends javax.swing.JPanel {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                finally{
+                } finally {
                     form.setCursor(Cursor.getDefaultCursor());
                 }
             }
@@ -135,6 +216,7 @@ public class TestPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_startButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel chartPanel;
     private javax.swing.JLabel iterationLabel;
     private javax.swing.JProgressBar iterationProgressBar;
     private javax.swing.JButton startButton;
