@@ -40,4 +40,18 @@ public class IdealOutputEntity {
     public double getAbsoluteHigh(){
         return bar.getAbsoluteValue().getHigh();
     }
+    /**
+     * Gets minimum price change percent
+     * @return 
+     */
+    public double getRelativeLow(){
+        return bar.getRelativeValue().getLow();
+    }
+    /**
+     * Gets high price change percent
+     * @return 
+     */
+    public double getRelativeHigh(){
+        return bar.getRelativeValue().getHigh();
+    }
 }

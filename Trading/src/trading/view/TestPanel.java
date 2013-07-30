@@ -34,43 +34,79 @@ import org.jfree.data.xy.XYDataItem;
  */
 public class TestPanel extends javax.swing.JPanel {
 
-    JFreeChart chart;
-    XYSeries idealHighSeries;
-    XYSeries idealLowSeries;
-    XYSeries realHighSeries;
-    XYSeries realLowSeries;
-
+    JFreeChart chartAbsolute;
+    XYSeries idealHighSeriesAbsolute;
+    XYSeries idealLowSeriesAbsolute;
+    XYSeries realHighSeriesAbsolute;
+    XYSeries realLowSeriesAbsolute;
+    JFreeChart chartRelative;
+    XYSeries idealHighSeriesRelative;
+    XYSeries idealLowSeriesRelative;
+    XYSeries realHighSeriesRelative;
+    XYSeries realLowSeriesRelative;
     /**
      * Creates new form TestPanel
      */
     public TestPanel() {
-        // Test results chart creation
-        createChart();
-
+        // Test results chartAbsolute creation
+        createChartAbsolute();
+        createChartRelative();
+                
         initComponents();
 
         // Neural network related initialization
         init();
     }
 
-    /**
+   /**
      * Init JFreeChart
      */
-    private void createChart() {
+    private void createChartRelative() {
         // Create dataset and series
         TableXYDataset ds = new DefaultTableXYDataset();
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
-        idealHighSeries = new XYSeries("Ideal High");
-        idealLowSeries = new XYSeries("Ideal Low");
-        realHighSeries = new XYSeries("Real High");
-        realLowSeries = new XYSeries("Real Low");
-        xySeriesCollection.addSeries(idealHighSeries);
-        xySeriesCollection.addSeries(idealLowSeries);
-        xySeriesCollection.addSeries(realHighSeries);
-        xySeriesCollection.addSeries(realLowSeries);
-        // Create chart
-        chart = ChartFactory.createXYLineChart("Price values", "Iteration", "Price", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
-        XYPlot plot = (XYPlot) chart.getPlot();
+        idealHighSeriesRelative = new XYSeries("Ideal High");
+        idealLowSeriesRelative = new XYSeries("Ideal Low");
+        realHighSeriesRelative = new XYSeries("Real High");
+        realLowSeriesRelative = new XYSeries("Real Low");
+        xySeriesCollection.addSeries(idealHighSeriesRelative);
+        xySeriesCollection.addSeries(idealLowSeriesRelative);
+        xySeriesCollection.addSeries(realHighSeriesRelative);
+        xySeriesCollection.addSeries(realLowSeriesRelative);
+        // Create chartAbsolute
+        chartRelative = ChartFactory.createXYLineChart("Price change %", "Iteration", "Change %", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
+        XYPlot plot = (XYPlot) chartRelative.getPlot();
+        plot.getRangeAxis().setAutoRange(true);
+        // Auto range
+        NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
+        valueAxis.setAutoRangeIncludesZero(false);
+        // Set line colors
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(1, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(2, Color.BLUE);
+        plot.getRenderer().setSeriesPaint(3, Color.BLUE);
+
+        //plot.getDomainAxis().setRange(1, (double)NeuralContext.Test.getMaxIterationCount());
+    }
+    
+    /**
+     * Init JFreeChart
+     */
+    private void createChartAbsolute() {
+        // Create dataset and series
+        TableXYDataset ds = new DefaultTableXYDataset();
+        XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
+        idealHighSeriesAbsolute = new XYSeries("Ideal High");
+        idealLowSeriesAbsolute = new XYSeries("Ideal Low");
+        realHighSeriesAbsolute = new XYSeries("Real High");
+        realLowSeriesAbsolute = new XYSeries("Real Low");
+        xySeriesCollection.addSeries(idealHighSeriesAbsolute);
+        xySeriesCollection.addSeries(idealLowSeriesAbsolute);
+        xySeriesCollection.addSeries(realHighSeriesAbsolute);
+        xySeriesCollection.addSeries(realLowSeriesAbsolute);
+        // Create chartAbsolute
+        chartAbsolute = ChartFactory.createXYLineChart("Price values", "Iteration", "Price", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
+        XYPlot plot = (XYPlot) chartAbsolute.getPlot();
         plot.getRangeAxis().setAutoRange(true);
         // Auto range
         NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
@@ -92,9 +128,12 @@ public class TestPanel extends javax.swing.JPanel {
         NeuralContext.Test.addPropertyChangeListener(PropertyNames.MAX_ITERATION_COUNT, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                // Set chart x range
-                XYPlot plot = (XYPlot) chart.getPlot();
+                // Set charts x range
+                XYPlot plot = (XYPlot) chartAbsolute.getPlot();
                 plot.getDomainAxis().setRange(1, (double) NeuralContext.Test.getMaxIterationCount());
+                plot = (XYPlot) chartRelative.getPlot();
+                plot.getDomainAxis().setRange(1, (double) NeuralContext.Test.getMaxIterationCount());
+                
             }
         });
         // Iteration listener
@@ -112,13 +151,18 @@ public class TestPanel extends javax.swing.JPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 // Add values to the charat
                 int iteration = NeuralContext.Test.getIteration();
-                idealHighSeries.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteHigh());
-                idealLowSeries.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteLow());
-                realHighSeries.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteHigh());
-                realLowSeries.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteLow());
+                // Add values to absolute chart
+                idealHighSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteHigh());
+                idealLowSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteLow());
+                realHighSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteHigh());
+                realLowSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteLow());
+                // Add values to relative chart
+                idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeHigh());
+                idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeLow());
+                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeHigh());
+                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeLow());
             }
         });
-
     }
 
     /**
@@ -133,7 +177,9 @@ public class TestPanel extends javax.swing.JPanel {
         startButton = new javax.swing.JButton();
         iterationProgressBar = new javax.swing.JProgressBar();
         iterationLabel = new javax.swing.JLabel();
-        chartPanel = new ChartPanel(chart);
+        chartsPanel = new javax.swing.JSplitPane();
+        absoluteChartPanel = new ChartPanel(chartAbsolute);
+        relativeChartPanel = new ChartPanel(chartRelative);
 
         startButton.setText("Start test");
         startButton.addActionListener(new java.awt.event.ActionListener() {
@@ -146,16 +192,34 @@ public class TestPanel extends javax.swing.JPanel {
 
         iterationLabel.setText("Iteration");
 
-        javax.swing.GroupLayout chartPanelLayout = new javax.swing.GroupLayout(chartPanel);
-        chartPanel.setLayout(chartPanelLayout);
-        chartPanelLayout.setHorizontalGroup(
-            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        chartsPanel.setDividerLocation(200);
+        chartsPanel.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        javax.swing.GroupLayout absoluteChartPanelLayout = new javax.swing.GroupLayout(absoluteChartPanel);
+        absoluteChartPanel.setLayout(absoluteChartPanelLayout);
+        absoluteChartPanelLayout.setHorizontalGroup(
+            absoluteChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 949, Short.MAX_VALUE)
         );
-        chartPanelLayout.setVerticalGroup(
-            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 193, Short.MAX_VALUE)
+        absoluteChartPanelLayout.setVerticalGroup(
+            absoluteChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 199, Short.MAX_VALUE)
         );
+
+        chartsPanel.setTopComponent(absoluteChartPanel);
+
+        javax.swing.GroupLayout relativeChartPanelLayout = new javax.swing.GroupLayout(relativeChartPanel);
+        relativeChartPanel.setLayout(relativeChartPanelLayout);
+        relativeChartPanelLayout.setHorizontalGroup(
+            relativeChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 949, Short.MAX_VALUE)
+        );
+        relativeChartPanelLayout.setVerticalGroup(
+            relativeChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 256, Short.MAX_VALUE)
+        );
+
+        chartsPanel.setBottomComponent(relativeChartPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -170,9 +234,11 @@ public class TestPanel extends javax.swing.JPanel {
                         .addComponent(startButton)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(iterationProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                        .addComponent(iterationProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(34, 34, 34))))
-            .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(chartsPanel)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,8 +250,7 @@ public class TestPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(iterationProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(chartsPanel))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -216,9 +281,11 @@ public class TestPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_startButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel chartPanel;
+    private javax.swing.JPanel absoluteChartPanel;
+    private javax.swing.JSplitPane chartsPanel;
     private javax.swing.JLabel iterationLabel;
     private javax.swing.JProgressBar iterationProgressBar;
+    private javax.swing.JPanel relativeChartPanel;
     private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
 }
