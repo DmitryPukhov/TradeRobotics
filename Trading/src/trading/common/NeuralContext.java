@@ -115,7 +115,7 @@ public class NeuralContext {
         
         private static int epoch;
         private static double error; 
-        private static int maxEpochCount = 3;
+        private static int maxEpochCount = 30;
  
         public static int getMaxEpochCount() {
             return maxEpochCount;
