@@ -61,6 +61,14 @@ public class TrainPanel extends javax.swing.JPanel {
                 learnProgressBar.setValue(epoch);
             }
         });
+        // Epoch lifetime in milliseconds changed
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.EPOCH_MILLISECONDS, new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+               long milliseconds = (long)evt.getNewValue();
+               epochLifetimeLabel.setText(String.format("Epoch lifetime: %d sec", (int)milliseconds/1000));
+            }
+        });
         // Error changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.ERROR, new PropertyChangeListener() {
             @Override
@@ -113,6 +121,7 @@ public class TrainPanel extends javax.swing.JPanel {
         lastErrorLabel = new javax.swing.JLabel();
         chartPanel = new ChartPanel(errorChart);
         trainButton = new javax.swing.JButton();
+        epochLifetimeLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1024, 768));
 
@@ -140,6 +149,8 @@ public class TrainPanel extends javax.swing.JPanel {
             }
         });
 
+        epochLifetimeLabel.setText("Epoch lifetime:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,7 +166,8 @@ public class TrainPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(learnProgressLabel)
-                            .addComponent(lastErrorLabel))
+                            .addComponent(lastErrorLabel)
+                            .addComponent(epochLifetimeLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -166,13 +178,15 @@ public class TrainPanel extends javax.swing.JPanel {
                 .addComponent(learnProgressLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(trainButton))
-                .addGap(18, 18, 18)
+                    .addComponent(trainButton)
+                    .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(epochLifetimeLabel)
+                .addGap(3, 3, 3)
                 .addComponent(lastErrorLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(523, Short.MAX_VALUE))
+                .addContainerGap(503, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -196,6 +210,7 @@ public class TrainPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_trainButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel chartPanel;
+    private javax.swing.JLabel epochLifetimeLabel;
     private javax.swing.JLabel lastErrorLabel;
     private javax.swing.JProgressBar learnProgressBar;
     private javax.swing.JLabel learnProgressLabel;

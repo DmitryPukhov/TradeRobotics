@@ -116,7 +116,9 @@ public class NeuralService {
             //NeuralContext.Training.setError(error);
             // Error change event
             // Epoch change event
+            
             NeuralContext.Training.setEpoch(epoch);
+            NeuralContext.Training.setEpochMilliseconds(watch.getElapsedMilliseconds());
             NeuralContext.Training.setError(error);
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }

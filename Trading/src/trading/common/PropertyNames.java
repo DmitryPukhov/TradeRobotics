@@ -14,6 +14,7 @@ public class PropertyNames {
     public static final String TRAIN = "train";
     public static final String ITERATION = "iteration";
     public static final String MAX_ITERATION_COUNT = "maxIterationCount";
-    public static final String IDEAL_OUTPUT_ENTITY = "IDEAL_OUTPUT_ENTITY";
-    public static final String REAL_OUTPUT_ENTITY = "REAL_OUTPUT_ENTITY";
+    public static final String IDEAL_OUTPUT_ENTITY = "IdealOutputEntity";
+    public static final String REAL_OUTPUT_ENTITY = "RealOuputEntity";
+    public static final String EPOCH_MILLISECONDS = "EpochMilliseconds";
 }
