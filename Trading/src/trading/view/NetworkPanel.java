@@ -58,7 +58,7 @@ public class NetworkPanel extends javax.swing.JPanel {
         JFileChooser chooser = new JFileChooser();
         // Select files, not directories
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setCurrentDirectory(new File("network"));
+        chooser.setCurrentDirectory(new File(".\\network"));
         // Set file filter
         chooser.setFileFilter(new FileFilter(){
             private static final String extension = ".network";
