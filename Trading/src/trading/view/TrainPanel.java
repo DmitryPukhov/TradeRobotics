@@ -101,7 +101,7 @@ public class TrainPanel extends javax.swing.JPanel {
 //        range.setRange(-MINMAX, MINMAX);
 //        return result;
         // Create chart
-        errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
+        errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error, %", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
         XYPlot plot = (XYPlot) errorChart.getPlot();
         plot.getRangeAxis().setAutoRange(true);
         plot.getDomainAxis().setRange(1, NeuralContext.Training.getMaxEpochCount());
