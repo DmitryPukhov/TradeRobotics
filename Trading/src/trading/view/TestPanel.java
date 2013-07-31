@@ -164,6 +164,21 @@ public class TestPanel extends javax.swing.JPanel {
             }
         });
     }
+    
+    /**
+     * Clear both charts from data
+     */
+    private void clearCharts(){
+                this.idealHighSeriesAbsolute.clear();
+        this.idealLowSeriesAbsolute.clear();
+        this.realHighSeriesAbsolute.clear();
+        this.realLowSeriesAbsolute.clear();
+        
+        this.idealHighSeriesRelative.clear();
+        this.idealLowSeriesRelative.clear();
+        this.realHighSeriesRelative.clear();
+        this.realLowSeriesRelative.clear();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -262,6 +277,7 @@ public class TestPanel extends javax.swing.JPanel {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         final TestPanel form = this;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        clearCharts();
         // Run testNetwork in new thread
         new Thread(new Runnable() {
             @Override
