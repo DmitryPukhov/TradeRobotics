@@ -14,6 +14,7 @@ import java.util.List;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
+import org.encog.neural.data.basic.BasicNeuralDataSet;
 import trading.common.NeuralContext;
 import trading.data.model.Bar;
 import trading.data.model.DataPair;
@@ -52,6 +53,7 @@ public class MLBarDataLoader {
         
     }
     
+   
     /**
      * Create buffered ML data set from csv files for 3 bar periods Use file
      * name
