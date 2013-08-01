@@ -124,7 +124,7 @@ public class NeuralContext {
         
         private static int epoch;
         private static double error; 
-        private static int maxEpochCount = 100;
+        private static int maxEpochCount = 10;
         private static long epochMilliseconds = 0;
         
         /**
@@ -147,6 +147,15 @@ public class NeuralContext {
  
         public static int getMaxEpochCount() {
             return maxEpochCount;
+        }
+        /**
+         * Max epoches
+         * @param maxEpochCount 
+         */
+        public static void setMaxEpochCount(int maxEpochCount) {
+            int oldValue = maxEpochCount;
+            Training.maxEpochCount = maxEpochCount;
+            pcs.firePropertyChange(PropertyNames.MAX_EPOCH_COUNT, oldValue, Training.maxEpochCount);
         }
 
         public static int getEpoch() {

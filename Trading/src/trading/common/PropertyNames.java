@@ -17,4 +17,5 @@ public class PropertyNames {
     public static final String IDEAL_OUTPUT_ENTITY = "IdealOutputEntity";
     public static final String REAL_OUTPUT_ENTITY = "RealOuputEntity";
     public static final String EPOCH_MILLISECONDS = "EpochMilliseconds";
+    public static final String MAX_EPOCH_COUNT = "MaxEpochCount";
 }

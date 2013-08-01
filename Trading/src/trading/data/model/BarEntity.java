@@ -13,6 +13,7 @@ import java.util.Calendar;
 public class BarEntity  {
     private Bar relativeBar;
     private Bar absoluteBar;
+    private Bar previousAbsoluteBar;
     
 
     /**
@@ -30,6 +31,7 @@ public class BarEntity  {
                 absoluteBar.getClose()/previous.getClose() - 1,
                 absoluteBar.getVolume()/previous.getVolume() - 1
                 );
+        previousAbsoluteBar = previous;
     }
     
     /**
@@ -39,6 +41,15 @@ public class BarEntity  {
     public Calendar getTime(){
         return absoluteBar.getTime();
     }
+    
+    /**
+     * Gets previous absolute bar
+     * @return 
+     */
+    public Bar getPreviousAbsoluteBar() {
+        return previousAbsoluteBar;
+    }
+    
     
     /**
      * Get bar with percentages
