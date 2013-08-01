@@ -11,10 +11,10 @@ import java.util.List;
  * Input data entities for network
  * @author dima
  */
-public class InputEntity {
-    private List<RelativeBar> smallBars = new ArrayList<>();
-    private List<RelativeBar> mediumBars = new ArrayList<>();
-    private List<RelativeBar> largeBars = new ArrayList<>();
+public class BarInputEntity {
+    private List<BarEntity> smallBars = new ArrayList<>();
+    private List<BarEntity> mediumBars = new ArrayList<>();
+    private List<BarEntity> largeBars = new ArrayList<>();
     
     /**
      * Construct input data from small, medium, large bars
@@ -22,7 +22,7 @@ public class InputEntity {
      * @param mediumBars
      * @param largeBars 
      */
-    public InputEntity(List<RelativeBar> smallBars, List<RelativeBar> mediumBars, List<RelativeBar> largeBars){
+    public BarInputEntity(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
         this.smallBars = smallBars;
         this.mediumBars = mediumBars;
         this.largeBars = largeBars;
@@ -32,7 +32,7 @@ public class InputEntity {
      * Small period bars
      * @return 
      */
-    public List<RelativeBar> getSmallBars() {
+    public List<BarEntity> getSmallBars() {
         return smallBars;
     }
 
@@ -40,7 +40,7 @@ public class InputEntity {
      * Medium period bars
      * @return 
      */
-    public List<RelativeBar> getMediumBars() {
+    public List<BarEntity> getMediumBars() {
         return mediumBars;
     }
 
@@ -48,7 +48,7 @@ public class InputEntity {
      * Large period bars
      * @return 
      */
-    public List<RelativeBar> getLargeBars() {
+    public List<BarEntity> getLargeBars() {
         return largeBars;
     }
 }

@@ -8,22 +8,22 @@ package trading.data.model;
  * Output entity to form ideal MLData and compare with real output
  * @author dima
  */
-public class IdealOutputEntity {
-    private RelativeBar bar;
+public class BarIdealOutputEntity {
+    private BarEntity barEntity;
     
     /**
      * Construct from bar
-     * @param bar 
+     * @param entity 
      */
-    public IdealOutputEntity(RelativeBar bar){
-        this.bar = bar;
+    public BarIdealOutputEntity(BarEntity entity){
+        this.barEntity = entity;
     }
     /**
      * Bar to get prediction values from.
      * @return 
      */
-    public RelativeBar getBar() {
-        return bar;
+    public BarEntity getBarEntity() {
+        return barEntity;
     }
     
     /**
@@ -31,27 +31,27 @@ public class IdealOutputEntity {
      * @return 
      */
     public double getAbsoluteLow(){
-        return bar.getAbsoluteValue().getLow();
+        return barEntity.getAbsoluteBar().getLow();
     }
     /**
      * Gets maximum price
      * @return 
      */
     public double getAbsoluteHigh(){
-        return bar.getAbsoluteValue().getHigh();
+        return barEntity.getAbsoluteBar().getHigh();
     }
     /**
      * Gets minimum price change percent
      * @return 
      */
     public double getRelativeLow(){
-        return bar.getRelativeValue().getLow();
+        return barEntity.getRelativeBar().getLow();
     }
     /**
      * Gets high price change percent
      * @return 
      */
     public double getRelativeHigh(){
-        return bar.getRelativeValue().getHigh();
+        return barEntity.getRelativeBar().getHigh();
     }
 }

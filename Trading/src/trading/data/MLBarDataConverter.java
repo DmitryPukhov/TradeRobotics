@@ -10,22 +10,22 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import trading.common.NeuralContext;
 import trading.data.model.Bar;
-import trading.data.model.EntityPair;
-import trading.data.model.InputEntity;
-import trading.data.model.IdealOutputEntity;
-import trading.data.model.RelativeBar;
+import trading.data.model.BarDataPair;
+import trading.data.model.BarInputEntity;
+import trading.data.model.BarIdealOutputEntity;
+import trading.data.model.BarEntity;
 
 /**
  * Convert entities to MLData values
  * @author dima
  */
-public class MLDataConverter {
+public class MLBarDataConverter {
     /**
      * Convert entity data pair to MLDataPair
      * @param pair
      * @return 
      */
-    public static MLDataPair EntityPairToMLDataPair(EntityPair pair){
+    public static MLDataPair EntityPairToMLDataPair(BarDataPair pair){
         // Get input and output
         MLData inputData = inputEntityToMLData(pair.getInputEntity());
         MLData outputData = outputEntityToMLData(pair.getOutputEntity());
@@ -39,7 +39,7 @@ public class MLDataConverter {
      * @param output
      * @return 
      */
-    public static MLData outputEntityToMLData(IdealOutputEntity output){
+    public static MLData outputEntityToMLData(BarIdealOutputEntity output){
         double[] values = outputEntityToArray(output);
         // Create ml data from values
         MLData result = new BasicMLData(values);
@@ -51,7 +51,7 @@ public class MLDataConverter {
      * @param input
      * @return 
      */
-    public static MLData inputEntityToMLData(InputEntity input){
+    public static MLData inputEntityToMLData(BarInputEntity input){
         MLData data = new BasicMLData(inputEntityToArray(input));
         return data;
     }
@@ -61,11 +61,11 @@ public class MLDataConverter {
      * @param output
      * @return 
      */
-    public static double[] outputEntityToArray(IdealOutputEntity output){
+    public static double[] outputEntityToArray(BarIdealOutputEntity output){
       // Fill values array
         double[] values = new double[NeuralContext.NetworkSettings.getOutputSize()];
-        values[0] = output.getBar().getRelativeValue().getHigh();
-        values[1] = output.getBar().getRelativeValue().getLow();
+        values[0] = output.getBarEntity().getRelativeBar().getHigh();
+        values[1] = output.getBarEntity().getRelativeBar().getLow();
         return values;
     }
     
@@ -76,23 +76,23 @@ public class MLDataConverter {
      * @param prevBars bar list like 3 bars: M1, M15, H1
      * @return
      */
-    public static double[] inputEntityToArray(InputEntity input) {
+    public static double[] inputEntityToArray(BarInputEntity input) {
         // Resulting array
         int arraySize = (input.getSmallBars().size() + input.getMediumBars().size() + input.getLargeBars().size()) * Bar.FIELD_COUNT;
         double[] result = new double[arraySize];
         
         int pos = 0;
         // insert small bars
-        for (RelativeBar bar : input.getSmallBars()) {
-            pos = insertBar(result, bar.getRelativeValue(), pos);
+        for (BarEntity bar : input.getSmallBars()) {
+            pos = insertBar(result, bar.getRelativeBar(), pos);
         }
         // insert medium bars
-        for (RelativeBar bar : input.getMediumBars()) {
-            pos = insertBar(result, bar.getRelativeValue(), pos);
+        for (BarEntity bar : input.getMediumBars()) {
+            pos = insertBar(result, bar.getRelativeBar(), pos);
         }
         // insert large bars
-        for (RelativeBar bar : input.getLargeBars()) {
-            pos = insertBar(result, bar.getRelativeValue(), pos);
+        for (BarEntity bar : input.getLargeBars()) {
+            pos = insertBar(result, bar.getRelativeBar(), pos);
         }
         return result;
     }

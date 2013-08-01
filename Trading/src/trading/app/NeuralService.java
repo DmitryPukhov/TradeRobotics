@@ -25,11 +25,11 @@ import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
 import trading.common.NeuralContext;
-import trading.data.MLDataConverter;
-import trading.data.MLDataLoader;
-import trading.data.model.EntityPair;
-import trading.data.model.IdealOutputEntity;
-import trading.data.model.RealOutputEntity;
+import trading.data.MLBarDataConverter;
+import trading.data.MLBarDataLoader;
+import trading.data.model.BarDataPair;
+import trading.data.model.BarIdealOutputEntity;
+import trading.data.model.BarRealOutputEntity;
 
 /**
  * Neural network service
@@ -87,7 +87,7 @@ public class NeuralService {
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
-        MLDataSet ds = MLDataLoader.getMLDataSet();
+        MLDataSet ds = MLBarDataLoader.getMLDataSet();
 
 
 
@@ -132,19 +132,19 @@ public class NeuralService {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         // Get entities from csv files
-        List<EntityPair> pairs = MLDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        List<BarDataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         NeuralContext.Test.setMaxIterationCount(pairs.size());
         
         int iteration = 1;
         // Go through every input/ideal pair
-        for (EntityPair pair : pairs) {
-            MLData input = MLDataConverter.inputEntityToMLData(pair.getInputEntity());
+        for (BarDataPair pair : pairs) {
+            MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
             // Compute network prediction
             MLData output = network.compute(input);
 
             // Get network output
-            IdealOutputEntity idealEntity = pair.getOutputEntity();
-            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBar().getAbsoluteValue(), idealEntity.getBar().getTime(), output.getData(0), output.getData(1));
+            BarIdealOutputEntity idealEntity = pair.getOutputEntity();
+            BarRealOutputEntity realEntity = new BarRealOutputEntity(idealEntity.getBarEntity().getAbsoluteBar(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
   
             // Store values in context
             NeuralContext.Test.setIteration(iteration);
