@@ -11,7 +11,7 @@ import java.util.List;
  * Input data entities for network
  * @author dima
  */
-public class BarInputEntity {
+public class InputEntity {
     private List<BarEntity> smallBars = new ArrayList<>();
     private List<BarEntity> mediumBars = new ArrayList<>();
     private List<BarEntity> largeBars = new ArrayList<>();
@@ -22,7 +22,7 @@ public class BarInputEntity {
      * @param mediumBars
      * @param largeBars 
      */
-    public BarInputEntity(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
+    public InputEntity(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
         this.smallBars = smallBars;
         this.mediumBars = mediumBars;
         this.largeBars = largeBars;

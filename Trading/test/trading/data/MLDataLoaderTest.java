@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import trading.data.model.BarIdealOutputEntity;
+import trading.data.model.IdealOutputEntity;
 import trading.data.model.BarEntity;
 
 /**
@@ -42,56 +42,11 @@ public class MLDataLoaderTest {
     @Before
     public void setUp() throws Exception{
         // Create and transform bars
-        bars = createLinearBars();      
-        relativeBars = getRelativeBars(bars);
+        bars = TestUtilities.createLinearBars();      
+        barEntities = MLBarDataConverter.barsToEntities(bars);
     }
     
-    
-    
-    /**
-     * Util method transform bars from linear to change percent values
-     * @param bars 
-     */
-    private static List<BarEntity> getRelativeBars(List<Bar> bars) throws Exception{
-        // Call data seet loader transform method
-        Method method = MLBarDataLoader.class.getDeclaredMethod("getRelativeBars", List.class); 
-        method.setAccessible(true);
-        List<BarEntity> result = (List)method.invoke(null, bars);      
-        return result;
-    }
-    
-    /**
-     * Util method
-     * Create bar list for test.
-     * Bars are not transformed
-     */
-    private static List<Bar> createLinearBars(){
-        ArrayList<Bar> newBars = new ArrayList();
-        // Add test bars
-        Date time0 = new Date();
-        
-        // 15 min
-        Calendar time = GregorianCalendar.getInstance();
-        time.setTime(time0); time.add(Calendar.MINUTE, 15);
-        newBars.add(new Bar(time,2,1,4,3,10));
-        
-        // 30 min
-        time = GregorianCalendar.getInstance();
-        time.setTime(time0); time.add(Calendar.MINUTE, 30);
-        newBars.add(new Bar(time,12,11,14,13,110));
-        
-        // 45 min
-        time = GregorianCalendar.getInstance();
-        time.setTime(time0); time.add(Calendar.MINUTE, 45);
-        newBars.add(new Bar(time,22,21,24,23,210));     
-        
-        // 60 min
-        time = GregorianCalendar.getInstance();
-        time.setTime(time0); time.add(Calendar.MINUTE, 45);
-        newBars.add(new Bar(time,32,31,34,33,310));   
-        
-        return newBars;
-    }
+
             
     
     @After
@@ -104,31 +59,31 @@ public class MLDataLoaderTest {
      * Bars for loading to dataset
      */
     private List<Bar> bars = new ArrayList<>();
-    private List<BarEntity> relativeBars = new ArrayList<>();
-
-    /**
-     * Transform bars from linear to change percentage test
-     * @throws Exception 
-     */
-    @Test 
-    public void testGetRelativeBars() throws Exception{
-        // Transform bars
-        Method method = MLBarDataLoader.class.getDeclaredMethod("getRelativeBars", List.class);
-        method.setAccessible(true);
-        List<BarEntity> relativeBars = (List)method.invoke(null, bars);
-        assertEquals(bars.size() - 1, relativeBars.size());
-        
-        for(int i = 1; i < relativeBars.size(); i++){
-            Bar prev = bars.get(i-1);
-            Bar current = bars.get(i);
-            BarEntity relative = relativeBars.get(i-1);
-            assertEquals(current.getOpen()/prev.getOpen()-1.0, relative.getRelativeBar().getOpen(), 0.0001);
-            assertEquals(current.getHigh()/prev.getHigh()-1.0, relative.getRelativeBar().getHigh(), 0.0001);
-            assertEquals(current.getLow()/prev.getLow()-1.0, relative.getRelativeBar().getLow(), 0.0001);
-            assertEquals(current.getClose()/prev.getClose()-1.0, relative.getRelativeBar().getClose(), 0.0001);
-            assertEquals(current.getVolume()/prev.getVolume()-1.0, relative.getRelativeBar().getVolume(), 0.0001);
-        }
-    }
+    private List<BarEntity> barEntities = new ArrayList<>();
+//
+//    /**
+//     * Transform bars from linear to change percentage test
+//     * @throws Exception 
+//     */
+//    @Test 
+//    public void testGetRelativeBars() throws Exception{
+//        // Transform bars
+//        Method method = MLBarDataLoader.class.getDeclaredMethod("getBarEntities", List.class);
+//        method.setAccessible(true);
+//        List<BarEntity> relativeBars = (List)method.invoke(null, bars);
+//        assertEquals(bars.size() - 1, relativeBars.size());
+//        
+//        for(int i = 1; i < relativeBars.size(); i++){
+//            Bar prev = bars.get(i-1);
+//            Bar current = bars.get(i);
+//            BarEntity relative = relativeBars.get(i-1);
+//            assertEquals(current.getOpen()/prev.getOpen()-1.0, relative.getRelativeBar().getOpen(), 0.0001);
+//            assertEquals(current.getHigh()/prev.getHigh()-1.0, relative.getRelativeBar().getHigh(), 0.0001);
+//            assertEquals(current.getLow()/prev.getLow()-1.0, relative.getRelativeBar().getLow(), 0.0001);
+//            assertEquals(current.getClose()/prev.getClose()-1.0, relative.getRelativeBar().getClose(), 0.0001);
+//            assertEquals(current.getVolume()/prev.getVolume()-1.0, relative.getRelativeBar().getVolume(), 0.0001);
+//        }
+//    }
     
     @Test
     public void testGetOutputEntity() throws Exception{
@@ -136,10 +91,10 @@ public class MLDataLoaderTest {
         // Invoke private method using reflection
         Method method = MLBarDataLoader.class.getDeclaredMethod("getOutputEntity", List.class, Integer.TYPE, Calendar.class); //(List<Bar> bars, int pos, Calendar currentTime 
         method.setAccessible(true);
-        BarIdealOutputEntity data = (BarIdealOutputEntity) method.invoke(null, relativeBars, 0, relativeBars.get(0).getTime());
+        IdealOutputEntity data = (IdealOutputEntity) method.invoke(null, barEntities, 0, barEntities.get(0).getTime());
         // Check not null
         assertNotNull( data);
-        assertEquals(relativeBars.get(1), data.getBarEntity());
+        assertEquals(barEntities.get(1), data.getBarEntity());
         
     }
     
@@ -178,7 +133,7 @@ public class MLDataLoaderTest {
         MLBarDataLoader dsl = new MLBarDataLoader();
         Method method = MLBarDataLoader.class.getDeclaredMethod("getLastPos", List.class, Calendar.class, Integer.TYPE);
         method.setAccessible(true); 
-        int pos = (int)method.invoke(dsl,relativeBars, relativeBars.get(1).getTime(),1);
+        int pos = (int)method.invoke(dsl,barEntities, barEntities.get(1).getTime(),1);
         assertEquals(pos,1);
         
     }    

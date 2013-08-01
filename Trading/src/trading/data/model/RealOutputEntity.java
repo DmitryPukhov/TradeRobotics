@@ -10,7 +10,7 @@ import java.util.Calendar;
  * Output of neural network
  * @author pdg
  */
-public class BarRealOutputEntity {
+public class RealOutputEntity {
     private Bar previousBar;
     private Calendar time;
     private double relativeHigh;
@@ -23,7 +23,7 @@ public class BarRealOutputEntity {
      * @param relativeHigh
      * @param relativeLow 
      */
-    public BarRealOutputEntity(Bar previousBar, Calendar time, double relativeHigh, double relativeLow) {
+    public RealOutputEntity(Bar previousBar, Calendar time, double relativeHigh, double relativeLow) {
         this.previousBar = previousBar;
         this.time = time;
         this.relativeHigh = relativeHigh;

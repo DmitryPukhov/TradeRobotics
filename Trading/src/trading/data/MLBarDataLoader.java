@@ -16,9 +16,9 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import trading.common.NeuralContext;
 import trading.data.model.Bar;
-import trading.data.model.BarDataPair;
-import trading.data.model.BarInputEntity;
-import trading.data.model.BarIdealOutputEntity;
+import trading.data.model.DataPair;
+import trading.data.model.InputEntity;
+import trading.data.model.IdealOutputEntity;
 import trading.data.model.BarEntity;
 
 /**
@@ -32,7 +32,7 @@ public class MLBarDataLoader {
      * Get entity pairs from csv file
      * @return 
      */
-    public static List<BarDataPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
+    public static List<DataPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
         // Load from csv files to bar arrays
         List<Bar> smallSimpleBars = BarFileLoader.load(NeuralContext.Files.getSmallBarsFilePath());
         List<Bar> mediumSimpleBars = BarFileLoader.load(NeuralContext.Files.getMediumBarsFilePath());
@@ -47,7 +47,7 @@ public class MLBarDataLoader {
         validateBars(smallBars, mediumBars, largeBars);
 
         // Transform bars to change percents
-        List<BarDataPair> pairs = getEntityPairs(smallBars, mediumBars, largeBars);
+        List<DataPair> pairs = getEntityPairs(smallBars, mediumBars, largeBars);
         return pairs;
         
     }
@@ -64,7 +64,7 @@ public class MLBarDataLoader {
 
 
         // Transform bars to change percents
-        List<BarDataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        List<DataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         
         // Create dataset for machine learning
         MLDataSet ds = getMLDataSet(dataPairs);
@@ -75,7 +75,7 @@ public class MLBarDataLoader {
      * Create BufferedMLDataSet from data entities
      * @param pairs 
      */
-    private static MLDataSet getMLDataSet(List<BarDataPair> pairs){
+    private static MLDataSet getMLDataSet(List<DataPair> pairs){
        // Create buffered ml data set
         String fileName = NeuralContext.Files.getDataDir() + MLBarDataLoader.class.getName() + ".egb";
         File file = new File(fileName);
@@ -83,7 +83,7 @@ public class MLBarDataLoader {
         
         // Add data pairs
         ds.beginLoad(NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getOutputSize());
-        for(BarDataPair pair: pairs){
+        for(DataPair pair: pairs){
            MLDataPair mlDataPair = MLBarDataConverter.entityPairToMLDataPair(pair);
            ds.add(mlDataPair);
         }
@@ -99,8 +99,8 @@ public class MLBarDataLoader {
      * @param largeBars
      * @return 
      */
-    public static List<BarDataPair> getEntityPairs(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
-        List<BarDataPair> pairs = new ArrayList<>();
+    public static List<DataPair> getEntityPairs(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
+        List<DataPair> pairs = new ArrayList<>();
 
         int smallPos, mediumPos, largePos;
         mediumPos = mediumBars.size() - 1;
@@ -113,12 +113,12 @@ public class MLBarDataLoader {
             mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
             largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos     
             
-            BarInputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
-            BarIdealOutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
+            InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
+            IdealOutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
 
             // Create input/ideal pair
             if (input != null && ideal != null) {
-                BarDataPair pair = new BarDataPair(input, ideal);
+                DataPair pair = new DataPair(input, ideal);
                 pairs.add(pair);
             }
         }
@@ -161,7 +161,7 @@ public class MLBarDataLoader {
      * @param smallPos position of small bar
      * @return
      */
-    private static BarInputEntity getInputEntity(List<BarEntity> smallBars, int smallPos, List<BarEntity> mediumBars, int mediumPos, List<BarEntity> largeBars, int largePos) {
+    private static InputEntity getInputEntity(List<BarEntity> smallBars, int smallPos, List<BarEntity> mediumBars, int mediumPos, List<BarEntity> largeBars, int largePos) {
         BarEntity smallBar = smallBars.get(smallPos);
         mediumPos = getLastPos(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
         largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos
@@ -170,7 +170,7 @@ public class MLBarDataLoader {
         List<BarEntity> mediumWindow = getInputWindow(mediumBars, mediumPos, NeuralContext.NetworkSettings.getMediumBarsWindowSize());
         List<BarEntity> largeWindow = getInputWindow(largeBars, largePos, NeuralContext.NetworkSettings.getLargeBarsWindowSize());
 
-        BarInputEntity input = new BarInputEntity(smallWindow, mediumWindow, largeWindow);
+        InputEntity input = new InputEntity(smallWindow, mediumWindow, largeWindow);
 
         return input;
     }
@@ -203,11 +203,11 @@ public class MLBarDataLoader {
      * @param currentTime
      * @return
      */
-    private static BarIdealOutputEntity getOutputEntity(List<BarEntity> bars, int pos, Calendar currentTime) {
+    private static IdealOutputEntity getOutputEntity(List<BarEntity> bars, int pos, Calendar currentTime) {
         if (pos >= bars.size() - 1) {
             return null;
         }
-        BarIdealOutputEntity result = null;
+        IdealOutputEntity result = null;
         BarEntity inputBar = bars.get(pos);
         long currentMillis = currentTime.getTimeInMillis();
         long predictionIntervalMillis = NeuralContext.NetworkSettings.getPredictionIntervalMillis();
@@ -225,7 +225,7 @@ public class MLBarDataLoader {
         }
         // Get ML data from next bar
         if (outputBar != null) {
-            result = new BarIdealOutputEntity(outputBar);
+            result = new IdealOutputEntity(outputBar);
         }
         // Null if no bars after interval
         return result;

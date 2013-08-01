@@ -27,9 +27,9 @@ import org.encog.util.simple.EncogUtility;
 import trading.common.NeuralContext;
 import trading.data.MLBarDataConverter;
 import trading.data.MLBarDataLoader;
-import trading.data.model.BarDataPair;
-import trading.data.model.BarIdealOutputEntity;
-import trading.data.model.BarRealOutputEntity;
+import trading.data.model.DataPair;
+import trading.data.model.IdealOutputEntity;
+import trading.data.model.RealOutputEntity;
 
 /**
  * Neural network service
@@ -134,19 +134,19 @@ public class NeuralService {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         // Get entities from csv files
-        List<BarDataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        List<DataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         NeuralContext.Test.setMaxIterationCount(pairs.size());
         
         int iteration = 1;
         // Go through every input/ideal pair
-        for (BarDataPair pair : pairs) {
+        for (DataPair pair : pairs) {
             MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
             // Compute network prediction
             MLData output = network.compute(input);
 
             // Get network output
-            BarIdealOutputEntity idealEntity = pair.getOutputEntity();
-            BarRealOutputEntity realEntity = new BarRealOutputEntity(idealEntity.getBarEntity().getPreviousAbsoluteBar(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
+            IdealOutputEntity idealEntity = pair.getOutputEntity();
+            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBarEntity().getPreviousAbsoluteBar(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
   
             // Store values in context
             NeuralContext.Test.setIteration(iteration);

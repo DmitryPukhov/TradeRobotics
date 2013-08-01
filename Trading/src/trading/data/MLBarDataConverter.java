@@ -13,9 +13,9 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import trading.common.NeuralContext;
 import trading.data.model.Bar;
-import trading.data.model.BarDataPair;
-import trading.data.model.BarInputEntity;
-import trading.data.model.BarIdealOutputEntity;
+import trading.data.model.DataPair;
+import trading.data.model.InputEntity;
+import trading.data.model.IdealOutputEntity;
 import trading.data.model.BarEntity;
 
 /**
@@ -52,7 +52,7 @@ public class MLBarDataConverter {
      * @param pair
      * @return 
      */
-    public static MLDataPair entityPairToMLDataPair(BarDataPair pair){
+    public static MLDataPair entityPairToMLDataPair(DataPair pair){
         // Get input and output
         MLData inputData = inputEntityToMLData(pair.getInputEntity());
         MLData outputData = outputEntityToMLData(pair.getOutputEntity());
@@ -66,7 +66,7 @@ public class MLBarDataConverter {
      * @param output
      * @return 
      */
-    public static MLData outputEntityToMLData(BarIdealOutputEntity output){
+    public static MLData outputEntityToMLData(IdealOutputEntity output){
         double[] values = outputEntityToArray(output);
         // Create ml data from values
         MLData result = new BasicMLData(values);
@@ -78,7 +78,7 @@ public class MLBarDataConverter {
      * @param input
      * @return 
      */
-    public static MLData inputEntityToMLData(BarInputEntity input){
+    public static MLData inputEntityToMLData(InputEntity input){
         MLData data = new BasicMLData(inputEntityToArray(input));
         return data;
     }
@@ -88,7 +88,7 @@ public class MLBarDataConverter {
      * @param output
      * @return 
      */
-    public static double[] outputEntityToArray(BarIdealOutputEntity output){
+    public static double[] outputEntityToArray(IdealOutputEntity output){
       // Fill values array
         double[] values = new double[NeuralContext.NetworkSettings.getOutputSize()];
         values[0] = output.getBarEntity().getRelativeBar().getHigh();
@@ -103,7 +103,7 @@ public class MLBarDataConverter {
      * @param prevBars bar list like 3 bars: M1, M15, H1
      * @return
      */
-    public static double[] inputEntityToArray(BarInputEntity input) {
+    public static double[] inputEntityToArray(InputEntity input) {
         // Resulting array
         int arraySize = (input.getSmallBars().size() + input.getMediumBars().size() + input.getLargeBars().size()) * Bar.FIELD_COUNT;
         double[] result = new double[arraySize];
@@ -130,12 +130,12 @@ public class MLBarDataConverter {
      */
     private static int insertBar(double[] array, Bar bar, int pos){
             // Add bar to array. Use percentage instead of absolute values
-            array[pos++] = (double) bar.getTime().getTimeInMillis();
+            array[pos++] = bar.getTime().getTimeInMillis();
             array[pos++] = bar.getOpen();
             array[pos++] = bar.getHigh();
             array[pos++] = bar.getLow();
             array[pos++] = bar.getClose();
-            array[pos++] = bar.getVolume();
+            array[pos++] = bar.getVolume();//bar.getVolume();
             return pos;
     }    
 }

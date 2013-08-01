@@ -8,25 +8,25 @@ package trading.data.model;
  * Pair of input and ideal output data
  * @author dima
  */
-public class BarDataPair {
-    private BarInputEntity  inputEntity;
-    private BarIdealOutputEntity outputEntity;
+public class DataPair {
+    private InputEntity  inputEntity;
+    private IdealOutputEntity outputEntity;
     
     /**
      * Construct pair from input and output data
      * @param input
      * @param output 
      */
-    public BarDataPair(BarInputEntity input, BarIdealOutputEntity output){
+    public DataPair(InputEntity input, IdealOutputEntity output){
        inputEntity = input;
        outputEntity = output;
     }
 
-    public BarInputEntity getInputEntity() {
+    public InputEntity getInputEntity() {
         return  inputEntity;
     }
 
-    public BarIdealOutputEntity getOutputEntity() {
+    public IdealOutputEntity getOutputEntity() {
         return outputEntity;
     }
 }
