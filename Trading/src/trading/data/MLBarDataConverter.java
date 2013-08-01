@@ -4,6 +4,9 @@
  */
 package trading.data;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLData;
@@ -20,12 +23,36 @@ import trading.data.model.BarEntity;
  * @author dima
  */
 public class MLBarDataConverter {
+    
+    /**
+     * Transform bars from OHLC absolute values to change percent
+     *
+     * @param bars
+     */
+    public static List<BarEntity> barsToEntities(List<Bar> bars) {
+        List<BarEntity> relativeBars = new ArrayList<>();
+        
+        Iterator<Bar> currentIterator = bars.iterator();
+        Iterator<Bar> prevIterator = bars.iterator();
+
+        Bar prevBar = currentIterator.next();
+        // Transform all bars except first (we don't know prev bar for the first one)
+        while (currentIterator.hasNext()) {
+            Bar curBar = currentIterator.next();
+            // Create relative bar from current and previous
+            BarEntity relativeBar = new BarEntity(curBar, prevBar);
+            relativeBars.add(relativeBar);
+            // Current bar becomes previous
+            prevBar = curBar;
+        }
+        return relativeBars;
+    }    
     /**
      * Convert entity data pair to MLDataPair
      * @param pair
      * @return 
      */
-    public static MLDataPair EntityPairToMLDataPair(BarDataPair pair){
+    public static MLDataPair entityPairToMLDataPair(BarDataPair pair){
         // Get input and output
         MLData inputData = inputEntityToMLData(pair.getInputEntity());
         MLData outputData = outputEntityToMLData(pair.getOutputEntity());

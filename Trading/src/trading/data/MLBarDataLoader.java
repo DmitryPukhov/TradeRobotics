@@ -39,9 +39,9 @@ public class MLBarDataLoader {
         List<Bar> largeSimpleBars = BarFileLoader.load(NeuralContext.Files.getLargeBarsFilePath());
 
         // Transform bars to relative bars
-        List<BarEntity> smallBars = getRelativeBars(smallSimpleBars);
-        List<BarEntity> mediumBars = getRelativeBars(mediumSimpleBars);
-        List<BarEntity> largeBars = getRelativeBars(largeSimpleBars);
+        List<BarEntity> smallBars = MLBarDataConverter.barsToEntities(smallSimpleBars);
+        List<BarEntity> mediumBars = MLBarDataConverter.barsToEntities(mediumSimpleBars);
+        List<BarEntity> largeBars = MLBarDataConverter.barsToEntities(largeSimpleBars);
         
         // Bars dates validation
         validateBars(smallBars, mediumBars, largeBars);
@@ -84,7 +84,7 @@ public class MLBarDataLoader {
         // Add data pairs
         ds.beginLoad(NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getOutputSize());
         for(BarDataPair pair: pairs){
-           MLDataPair mlDataPair = MLBarDataConverter.EntityPairToMLDataPair(pair);
+           MLDataPair mlDataPair = MLBarDataConverter.entityPairToMLDataPair(pair);
            ds.add(mlDataPair);
         }
         ds.endLoad();
@@ -152,29 +152,7 @@ public class MLBarDataLoader {
         }
     }
 
-    /**
-     * Transform bars from OHLC absolute values to change percent
-     *
-     * @param bars
-     */
-    private static List<BarEntity> getRelativeBars(List<Bar> bars) {
-        List<BarEntity> relativeBars = new ArrayList<>();
-        
-        Iterator<Bar> currentIterator = bars.iterator();
-        Iterator<Bar> prevIterator = bars.iterator();
 
-        Bar prevBar = currentIterator.next();
-        // Transform all bars except first (we don't know prev bar for the first one)
-        while (currentIterator.hasNext()) {
-            Bar curBar = currentIterator.next();
-            // Create relative bar from current and previous
-            BarEntity relativeBar = new BarEntity(curBar, prevBar);
-            relativeBars.add(relativeBar);
-            // Current bar becomes previous
-            prevBar = curBar;
-        }
-        return relativeBars;
-    }
 
     /**
      * Returns window which contains small, medium, large bars before current

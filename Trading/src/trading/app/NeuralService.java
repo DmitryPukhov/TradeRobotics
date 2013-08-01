@@ -112,7 +112,8 @@ public class NeuralService {
             // Print info
             watch.stop();
             // Calculate error
-            float error = (float) train.getError();
+            double error = train.getError();
+   
             //NeuralContext.Training.setError(error);
             // Error change event
             // Epoch change event
@@ -123,6 +124,7 @@ public class NeuralService {
             Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
         train.finishTraining();
+
     }
 
     /**

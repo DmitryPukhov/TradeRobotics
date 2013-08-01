@@ -25,11 +25,11 @@ public class BarEntity  {
         absoluteBar = current;
         // Calculate relative value from current and previous bar
         relativeBar = new Bar(absoluteBar.getTime(), 
-                absoluteBar.getOpen()/previous.getOpen() - 1,
-                absoluteBar.getHigh()/previous.getHigh() - 1,
-                absoluteBar.getLow()/previous.getLow() - 1,
-                absoluteBar.getClose()/previous.getClose() - 1,
-                absoluteBar.getVolume()/previous.getVolume() - 1
+                (absoluteBar.getOpen() - previous.getOpen())/previous.getOpen(),
+                (absoluteBar.getHigh() - previous.getHigh())/previous.getHigh(),
+                (absoluteBar.getLow() - previous.getLow())/previous.getLow(),
+                (absoluteBar.getClose() - previous.getClose())/previous.getClose(),
+                (absoluteBar.getVolume() - previous.getVolume())/previous.getVolume()
                 );
         previousAbsoluteBar = previous;
     }
