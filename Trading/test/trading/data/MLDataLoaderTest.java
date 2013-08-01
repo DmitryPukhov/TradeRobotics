@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import trading.common.NeuralContext;
 import trading.data.model.IdealOutputEntity;
 import trading.data.model.BarEntity;
 
@@ -42,8 +43,8 @@ public class MLDataLoaderTest {
     @Before
     public void setUp() throws Exception{
         // Create and transform bars
-        bars = TestUtilities.createLinearBars();      
-        barEntities = MLBarDataConverter.barsToEntities(bars);
+        smallBars = TestUtilities.createLinearBars();
+        barEntities = MLBarDataConverter.barsToEntities(smallBars);
     }
     
 
@@ -58,32 +59,9 @@ public class MLDataLoaderTest {
     /**
      * Bars for loading to dataset
      */
-    private List<Bar> bars = new ArrayList<>();
+    private List<Bar> smallBars = new ArrayList<>();
     private List<BarEntity> barEntities = new ArrayList<>();
-//
-//    /**
-//     * Transform bars from linear to change percentage test
-//     * @throws Exception 
-//     */
-//    @Test 
-//    public void testGetRelativeBars() throws Exception{
-//        // Transform bars
-//        Method method = MLBarDataLoader.class.getDeclaredMethod("getBarEntities", List.class);
-//        method.setAccessible(true);
-//        List<BarEntity> relativeBars = (List)method.invoke(null, bars);
-//        assertEquals(bars.size() - 1, relativeBars.size());
-//        
-//        for(int i = 1; i < relativeBars.size(); i++){
-//            Bar prev = bars.get(i-1);
-//            Bar current = bars.get(i);
-//            BarEntity relative = relativeBars.get(i-1);
-//            assertEquals(current.getOpen()/prev.getOpen()-1.0, relative.getRelativeBar().getOpen(), 0.0001);
-//            assertEquals(current.getHigh()/prev.getHigh()-1.0, relative.getRelativeBar().getHigh(), 0.0001);
-//            assertEquals(current.getLow()/prev.getLow()-1.0, relative.getRelativeBar().getLow(), 0.0001);
-//            assertEquals(current.getClose()/prev.getClose()-1.0, relative.getRelativeBar().getClose(), 0.0001);
-//            assertEquals(current.getVolume()/prev.getVolume()-1.0, relative.getRelativeBar().getVolume(), 0.0001);
-//        }
-//    }
+
     
     @Test
     public void testGetOutputEntity() throws Exception{
