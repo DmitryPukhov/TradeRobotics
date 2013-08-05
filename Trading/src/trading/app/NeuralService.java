@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -49,7 +50,36 @@ public class NeuralService {
         // Check
         testNetwork();
     }
-
+    
+    /**
+     * Create network with layers
+     * @param layers
+     * @return 
+     */
+    public static BasicNetwork createNetwork(List<Integer> layers){
+        if(layers.size() < 2 ){
+            throw new IllegalArgumentException("Wrong network layers count");
+        }
+        final FeedForwardPattern pattern = new FeedForwardPattern();
+        // Input neurons
+        int input = layers.get(0);
+        pattern.setInputNeurons(input);
+        // Hidden neurons
+        for(int i = 1; ((i < layers.size() - 1)); i++){
+            pattern.addHiddenLayer(layers.get(i));
+        }
+        // Output neurons
+        int output = layers.get(layers.size()-1);
+        pattern.setOutputNeurons(output);
+       
+        // Create network
+       final BasicNetwork network = (BasicNetwork) pattern.generate();
+       NeuralContext.Network.setNetwork(network);
+       
+       return network;
+        
+        
+    }
     /**
      * Creates and returns a trading network
      */

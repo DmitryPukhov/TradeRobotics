@@ -10,7 +10,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import java.io.FileNotFoundException;
+import java.lang.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -39,6 +42,8 @@ public class NetworkPanel extends javax.swing.JPanel {
      * Neural network specific init
      */
     public final void init() {
+        networkLayersText.setText(String.format("%s,%s,%s", NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getHidden1Count(), NeuralContext.NetworkSettings.getOutputSize()));
+        
         // Network property change
         NeuralContext.Network.addPropertyChangeListener("Network", new PropertyChangeListener() {
             @Override
@@ -93,6 +98,7 @@ public class NetworkPanel extends javax.swing.JPanel {
         loadButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
+        networkLayersText = new javax.swing.JTextField();
 
         networkLayersLabel.setText("Layers:");
 
@@ -129,6 +135,13 @@ public class NetworkPanel extends javax.swing.JPanel {
             }
         });
 
+        networkLayersText.setText("0,0,0");
+        networkLayersText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                networkLayersTextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,9 +149,12 @@ public class NetworkPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(networkLayersLabel)
                     .addComponent(neuronsLabel)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(networkLayersLabel))
+                    .addComponent(networkLayersText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,30 +166,33 @@ public class NetworkPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(createButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(networkLayersLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(neuronsLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(loadButton)))
-                .addGap(10, 10, 10)
-                .addComponent(saveButton)
-                .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(createButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(networkLayersLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(neuronsLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(38, 38, 38)
+                                .addComponent(loadButton)))
+                        .addGap(10, 10, 10)
+                        .addComponent(saveButton))
+                    .addComponent(networkLayersText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetButton)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        // Create a new one
-        NeuralService.createNetwork();
+        List<Integer> layers = getNetworkLayers();
+        NeuralService.createNetwork(layers);
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
@@ -198,11 +217,16 @@ public class NetworkPanel extends javax.swing.JPanel {
         NeuralService.resetNetwork();
     }//GEN-LAST:event_resetButtonActionPerformed
 
+    private void networkLayersTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_networkLayersTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_networkLayersTextActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loadButton;
     private javax.swing.JLabel networkLayersLabel;
+    private javax.swing.JTextField networkLayersText;
     private javax.swing.JLabel neuronsLabel;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton saveButton;
@@ -232,8 +256,26 @@ public class NetworkPanel extends javax.swing.JPanel {
             if (i < network.getLayerCount() - 1) {
                 sb.append(",");
             }
-        }
+            // Add neurons to text area
+         }
         // Set neurons label
         neuronsLabel.setText(neuronsLabel.getText() + sb.toString());
+        networkLayersText.setText(sb.toString());
+    }
+    
+    /**
+     * Get neurons in network
+     * @return 
+     */
+    private List<Integer> getNetworkLayers(){
+        // Fill values from string
+        String[] splittedString = networkLayersText.getText().split(",");
+        List<Integer> neurons = new ArrayList<>();
+        int i = 0;
+        for(String stringVal : splittedString){
+            int val = Integer.parseInt(stringVal);
+            neurons.add(val);
+        }
+        return neurons;
     }
 }
