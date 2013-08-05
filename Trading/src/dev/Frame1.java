@@ -23,25 +23,20 @@ import trading.common.NeuralContext.Training;
  * @author pdg
  */
 public class Frame1 extends javax.swing.JFrame {
-       final int inputSize = 10;
-        final int outputSize = 1;
-        final int hiddenSize = 5;
-        final int samples = 10;  
-        final int epochCount = 10;
-        
-        final int testSamples = 10;
-        
+
         
    /**
     * Create a new network
     * @return 
     */
    public  BasicNetwork createNetwork() {
+      
+       
         final FeedForwardPattern pattern = new FeedForwardPattern();
         // Set layers
 
         pattern.setInputNeurons(Data.testInput[0].length);
-        pattern.addHiddenLayer(Data.testInput[0].length*2);
+       // pattern.addHiddenLayer(Data.testInput[0].length);
         //pattern.addHiddenLayer(Config.getHidden2Count());
         pattern.setOutputNeurons(Data.testIdealOutput[0].length);
         // Activation functioni
@@ -70,7 +65,7 @@ public class Frame1 extends javax.swing.JFrame {
 
            // train the neural network
 
-        
+ 
         ResilientPropagation train = new ResilientPropagation(network, ds);
        // train.setThreadCount(10);
         for (int epoch = 0; epoch < 1000; epoch++) {
@@ -78,31 +73,30 @@ public class Frame1 extends javax.swing.JFrame {
                  // Iteration
             train.iteration();
             String weights = network.dumpWeights();
+            weightsTextArea.setText(weights);
             // Print info
             // Calculate error
             double error = train.getError();
    
-            Logger.getLogger(Form1.class.getName()).info(String.format("Epoch %d. Error %s", epoch, Double.toString(error)));
+            Logger.getLogger(Frame1.class.getName()).info(String.format("Epoch %d. Error %s", epoch, Double.toString(error)));
         }
         String resultWeights = network.dumpWeights();
-        train.finishTraining();     
 
-        
    }
    /**
     * Test with test data
     * @param network 
     */
-   public void testNetwork(BasicNetwork network){
+   public void testNetwork(BasicNetwork network, MLDataSet ds){
+       //Data.getTestMLDataSet();
        int base = 101;
-       for(int i = 0; i < Data.testInput.length; i++){
-           double[] input = Data.testInput[i];
+       for(int i = 0; i < ds.size(); i++){
+           double[] input = ds.get(i).getInputArray();
            MLData inputData = new BasicMLData(input);
-           double[] ideal = Data.testIdealOutput[i];
+           double[] ideal = ds.get(i).getIdealArray();
            MLData outputData = network.compute(inputData);
            double value = outputData.getData(0);
-           Logger.getLogger(Form1.class.getName()).info(String.format("Iteration %d. output %s", i, Double.toString(value)));           
-           
+           Logger.getLogger(Frame1.class.getName()).info(String.format("Iteration %d. output %s", i, Double.toString(value)));           
        }
    }
    
@@ -125,6 +119,8 @@ public class Frame1 extends javax.swing.JFrame {
     private void initComponents() {
 
         trainButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        weightsTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,13 +131,21 @@ public class Frame1 extends javax.swing.JFrame {
             }
         });
 
+        weightsTextArea.setColumns(20);
+        weightsTextArea.setRows(5);
+        jScrollPane1.setViewportView(weightsTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(304, Short.MAX_VALUE)
-                .addComponent(trainButton)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(0, 292, Short.MAX_VALUE)
+                        .addComponent(trainButton)))
                 .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
@@ -149,17 +153,23 @@ public class Frame1 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(trainButton)
-                .addContainerGap(262, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(183, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
+        Data.initRandomData();
+        
         MLDataSet ds = Data.getTrainMLDataSet();
+        MLDataSet testDs = Data.getTestMLDataSet(Context.testSamples);
+
         BasicNetwork network =  createNetwork();
         trainNetwork(network, ds);
-        testNetwork(network);
+        testNetwork(network, testDs);
     }//GEN-LAST:event_trainButtonActionPerformed
 
     /**
@@ -197,6 +207,8 @@ public class Frame1 extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton trainButton;
+    private javax.swing.JTextArea weightsTextArea;
     // End of variables declaration//GEN-END:variables
 }

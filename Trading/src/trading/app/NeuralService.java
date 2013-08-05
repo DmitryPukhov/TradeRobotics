@@ -56,12 +56,23 @@ public class NeuralService {
     public static BasicNetwork createNetwork() {
         Stopwatch watch = new Stopwatch();
         final FeedForwardPattern pattern = new FeedForwardPattern();
-        // Set layers
-
+        // Input layer
         pattern.setInputNeurons(NeuralContext.NetworkSettings.getInputSize());
-        pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
-        //pattern.addHiddenLayer(Config.getHidden2Count());
+
+        // Hidden layer 1
+        int hidden1Count = NeuralContext.NetworkSettings.getHidden1Count();
+        if (hidden1Count > 0) {
+            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
+        }
+        // Hidden layer 2
+        int hidden2Count = NeuralContext.NetworkSettings.getHidden2Count();
+        if (hidden2Count > 0) {
+            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden2Count());
+        }
+        // Output layer
         pattern.setOutputNeurons(NeuralContext.NetworkSettings.getOutputSize());
+
+
         // Activation functioni
         //pattern.setActivationFunction(new ActivationTANH());
         pattern.setActivationFunction(new ActivationLinear());
@@ -76,7 +87,7 @@ public class NeuralService {
         watch.reset();
 
         NeuralContext.Network.setNetwork(network);
-        
+
         return network;
     }
 
@@ -99,7 +110,7 @@ public class NeuralService {
 
         // Backpropagation training
         ResilientPropagation train = new ResilientPropagation(network, ds);
-        
+
         //Backpropagation train = new Backpropagation(network, ds);
         train.setThreadCount(10);
 
@@ -116,11 +127,11 @@ public class NeuralService {
             watch.stop();
             // Calculate error
             double error = train.getError();
-   
+
             //NeuralContext.Training.setError(error);
             // Error change event
             // Epoch change event
-            
+
             NeuralContext.Training.setEpoch(epoch);
             NeuralContext.Training.setEpochMilliseconds(watch.getElapsedMilliseconds());
             NeuralContext.Training.setError(error);
@@ -139,7 +150,7 @@ public class NeuralService {
         // Get entities from csv files
         List<DataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         NeuralContext.Test.setMaxIterationCount(pairs.size());
-        
+
         int iteration = 1;
         // Go through every input/ideal pair
         for (DataPair pair : pairs) {
@@ -150,38 +161,39 @@ public class NeuralService {
             // Get network output
             IdealOutputEntity idealEntity = pair.getOutputEntity();
             RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBarEntity().getPreviousAbsoluteBar(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
-  
+
             // Store values in context
             NeuralContext.Test.setIteration(iteration);
             NeuralContext.Test.setIdealEntity(idealEntity);
             NeuralContext.Test.setRealEntity(realEntity);
-  
-            iteration ++;
-          }
+
+            iteration++;
+        }
     }
-    
+
     /**
      * Saves current network to file
-     * @param fileName 
+     *
+     * @param fileName
      */
-    public static void saveNetwork(File file){
+    public static void saveNetwork(File file) {
         EncogDirectoryPersistence.saveObject(file, NeuralContext.Network.getNetwork());
     }
-    
+
     /**
      * Load network from file
-     * @param fileName 
+     *
+     * @param fileName
      */
-    public static void loadNetwork(File file){
-        BasicNetwork network = (BasicNetwork)EncogDirectoryPersistence.loadObject(file);
+    public static void loadNetwork(File file) {
+        BasicNetwork network = (BasicNetwork) EncogDirectoryPersistence.loadObject(file);
         NeuralContext.Network.setNetwork(network);
     }
-    
+
     /**
      * Reset network weights
      */
-    public static void resetNetwork(){
+    public static void resetNetwork() {
         NeuralContext.Network.getNetwork().reset();
     }
-    
 }
