@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.encog.util.simple.EncogUtility;
 import trading.common.NeuralContext;
 import trading.data.MLBarDataConverter;
 import trading.data.MLBarDataLoader;
+import trading.data.model.BarEntity;
 import trading.data.model.DataPair;
 import trading.data.model.IdealOutputEntity;
 import trading.data.model.RealOutputEntity;
@@ -42,14 +44,14 @@ import trading.data.model.RealOutputEntity;
  */
 public class NeuralService {
 
-     
     /**
      * Create network with layers
+     *
      * @param layers
-     * @return 
+     * @return
      */
-    public static BasicNetwork createNetwork(List<Integer> layers){
-        if(layers.size() < 2 ){
+    public static BasicNetwork createNetwork(List<Integer> layers) {
+        if (layers.size() < 2) {
             throw new IllegalArgumentException("Wrong network layers count");
         }
         final FeedForwardPattern pattern = new FeedForwardPattern();
@@ -57,28 +59,32 @@ public class NeuralService {
         int input = layers.get(0);
         pattern.setInputNeurons(input);
         // Hidden neurons
-        for(int i = 1; ((i < layers.size() - 1)); i++){
-            pattern.addHiddenLayer(layers.get(i));
+        for (int i = 1; ((i < layers.size() - 1)); i++) {
+            int neurons = layers.get(i);
+            if (neurons > 0) {
+                pattern.addHiddenLayer(layers.get(i));
+            }
         }
         // Output neurons
-        int output = layers.get(layers.size()-1);
+        int output = layers.get(layers.size() - 1);
         pattern.setOutputNeurons(output);
-        
+
 //        // Activation functioni
 //        pattern.setActivationFunction(new ActivationTANH());
         pattern.setActivationFunction(new ActivationLinear());
 //        //pattern.setActivationFunction(new ActivationElliott()); 
-        
+
         // Create network
-       final BasicNetwork network = (BasicNetwork) pattern.generate();
-       // Randomize the network
-       (new ConsistentRandomizer(-1,1,100)).randomize(network);       
-       NeuralContext.Network.setNetwork(network);
-       
-       return network;
-        
-        
+        final BasicNetwork network = (BasicNetwork) pattern.generate();
+        // Randomize the network
+        (new ConsistentRandomizer(-1, 1, 100)).randomize(network);
+        NeuralContext.Network.setNetwork(network);
+
+        return network;
+
+
     }
+
     /**
      * Creates and returns a trading network
      */
@@ -119,7 +125,6 @@ public class NeuralService {
 //
 //        return network;
 //    }
-
     /**
      * NetworkSettings learning
      */
@@ -184,6 +189,12 @@ public class NeuralService {
         int iteration = 1;
         // Go through every input/ideal pair
         for (DataPair pair : pairs) {
+            // Process every 15 min
+//            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
+//            if(lastSmallBar.getTime().get(Calendar.MINUTE)%15 != 0){
+//                continue;
+//            }
+                
             MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
             // Compute network prediction
             MLData output = network.compute(input);

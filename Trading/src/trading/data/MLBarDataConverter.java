@@ -5,6 +5,7 @@
 package trading.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import org.encog.ml.data.MLData;
@@ -130,7 +131,13 @@ public class MLBarDataConverter {
      */
     private static int insertRelativeBar(double[] array, BarEntity entity, int pos){
             // Add bar to array. Use percentage instead of absolute values
-            array[pos++] = entity.getRelativeBar().getTime().getTimeInMillis()/entity.getPreviousAbsoluteBar().getTime().getTimeInMillis();
+            //array[pos++] = entity.getRelativeBar().getTime().getTimeInMillis()/entity.getPreviousAbsoluteBar().getTime().getTimeInMillis();
+//            Calendar cal = entity.getRelativeBar().getTime();
+//            array[pos++] =  cal.get(Calendar.DAY_OF_MONTH)/cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//            array[pos++] = cal.get(Calendar.DAY_OF_WEEK)/cal.getActualMaximum(Calendar.DAY_OF_WEEK);
+//            array[pos++] = cal.get(Calendar.HOUR)/cal.getActualMaximum(Calendar.HOUR);
+//            array[pos++] = cal.get(Calendar.MINUTE)/cal.getActualMaximum(Calendar.MINUTE);
+        
             array[pos++] = entity.getRelativeBar().getOpen();
             array[pos++] = entity.getRelativeBar().getHigh();
             array[pos++] = entity.getRelativeBar().getLow();
