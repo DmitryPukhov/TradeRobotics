@@ -75,20 +75,26 @@ public class TestPanel extends javax.swing.JPanel {
         xySeriesCollection.addSeries(realLowSeriesRelative);
         // Create chartAbsolute
         chartRelative = ChartFactory.createXYLineChart("Price change %", "Iteration", "Change %", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
-        XYPlot plot = (XYPlot) chartRelative.getPlot();
+        initChart(chartRelative);
+
+        //plot.getDomainAxis().setRange(1, (double)NeuralContext.Test.getMaxIterationCount());
+    }
+    /**
+     * Initialization, common for both charts
+     * @param chart 
+     */
+    private void initChart(JFreeChart chart){
+   XYPlot plot = (XYPlot) chart.getPlot();
         plot.getRangeAxis().setAutoRange(true);
         // Auto range
         NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
         valueAxis.setAutoRangeIncludesZero(false);
         // Set line colors
-        plot.getRenderer().setSeriesPaint(0, Color.GREEN);
-        plot.getRenderer().setSeriesPaint(1, Color.GREEN);
-        plot.getRenderer().setSeriesPaint(2, Color.BLUE);
-        plot.getRenderer().setSeriesPaint(3, Color.BLUE);
-
-        //plot.getDomainAxis().setRange(1, (double)NeuralContext.Test.getMaxIterationCount());
+        plot.getRenderer().setSeriesPaint(0, Color.CYAN);
+        plot.getRenderer().setSeriesPaint(1, Color.BLUE);
+        plot.getRenderer().setSeriesPaint(2, Color.MAGENTA);
+        plot.getRenderer().setSeriesPaint(3, Color.RED);       
     }
-    
     /**
      * Init JFreeChart
      */
@@ -106,18 +112,8 @@ public class TestPanel extends javax.swing.JPanel {
         xySeriesCollection.addSeries(realLowSeriesAbsolute);
         // Create chartAbsolute
         chartAbsolute = ChartFactory.createXYLineChart("Price values", "Iteration", "Price", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
-        XYPlot plot = (XYPlot) chartAbsolute.getPlot();
-        plot.getRangeAxis().setAutoRange(true);
-        // Auto range
-        NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
-        valueAxis.setAutoRangeIncludesZero(false);
-        // Set line colors
-        plot.getRenderer().setSeriesPaint(0, Color.GREEN);
-        plot.getRenderer().setSeriesPaint(1, Color.GREEN);
-        plot.getRenderer().setSeriesPaint(2, Color.BLUE);
-        plot.getRenderer().setSeriesPaint(3, Color.BLUE);
-
-        //plot.getDomainAxis().setRange(1, (double)NeuralContext.Test.getMaxIterationCount());
+        
+        initChart(chartAbsolute);
     }
 
     /**

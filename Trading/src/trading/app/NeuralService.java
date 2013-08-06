@@ -178,7 +178,7 @@ public class NeuralService {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         // Get entities from csv files
-        List<DataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        List<DataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getFutureSmallBarsFilePath(), NeuralContext.Files.getFutureMediumBarsFilePath(), NeuralContext.Files.getFutureLargeBarsFilePath());
         NeuralContext.Test.setMaxIterationCount(pairs.size());
 
         int iteration = 1;
