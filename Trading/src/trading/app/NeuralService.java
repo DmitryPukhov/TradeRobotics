@@ -24,6 +24,7 @@ import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.persist.EncogDirectoryPersistence;
@@ -143,7 +144,7 @@ public class NeuralService {
         watch.reset();
 
         // Backpropagation training
-        ResilientPropagation train = new ResilientPropagation(network, ds);
+        ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
 
 
         //Backpropagation train = new Backpropagation(network, ds);
