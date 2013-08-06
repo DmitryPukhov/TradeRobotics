@@ -157,10 +157,10 @@ public class TestPanel extends javax.swing.JPanel {
                 realHighSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteHigh());
                 realLowSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteLow());
                 // Add values to relative chart
-                idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeHigh());
-                idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeLow());
-                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeHigh());
-                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeLow());
+                idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeHigh()/0.01);
+                idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeLow()/0.01);
+                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeHigh()/0.01);
+                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeLow()/0.01);
             }
         });
     }

@@ -140,6 +140,7 @@ public class NeuralService {
         // Backpropagation training
         ResilientPropagation train = new ResilientPropagation(network, ds);
 
+
         //Backpropagation train = new Backpropagation(network, ds);
         //train.setThreadCount(10);
 

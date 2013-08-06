@@ -261,9 +261,9 @@ public class NeuralContext {
      */
     public static class NetworkSettings {
 
-        private static int smallBarsWindowSize = 1;
-        private static int mediumBarsWindowSize = 1;
-        private static int largeBarsWindowSize = 1;
+        private static int smallBarsWindowSize = 12;
+        private static int mediumBarsWindowSize = 40;
+        private static int largeBarsWindowSize = 7;
         private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
         private static int outputSize = 2;
         private static int hidden1Count = getInputSize();
