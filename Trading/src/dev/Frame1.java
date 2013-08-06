@@ -113,6 +113,7 @@ public class Frame1 extends javax.swing.JFrame {
             // Print info
             // Calculate error
             double error = train.getError();
+            lastErrorLabel.setText(Double.toString(error));
    
             Logger.getLogger(Frame1.class.getName()).info(String.format("Epoch %d. Error %s", epoch, Double.toString(error)));
         }
@@ -142,6 +143,7 @@ public class Frame1 extends javax.swing.JFrame {
            MLData inputData = new BasicMLData(input);
            double[] ideal = ds.get(i).getIdealArray();
            MLData outputData = network.compute(inputData);
+          
            double value = outputData.getData(0);
            double idealValue = ideal[0];
            addChartValue(idealValue, false);
@@ -255,6 +257,7 @@ public class Frame1 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         weightsTextArea = new javax.swing.JTextArea();
         createButton = new javax.swing.JButton();
+        lastErrorLabel = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -305,6 +308,8 @@ public class Frame1 extends javax.swing.JFrame {
             }
         });
 
+        lastErrorLabel.setText("Last error:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -314,7 +319,7 @@ public class Frame1 extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(layersTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(epochCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,9 +334,11 @@ public class Frame1 extends javax.swing.JFrame {
                         .addComponent(notZeroWeightsLabel)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
+                        .addComponent(lastErrorLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(509, 509, 509)
@@ -356,7 +363,9 @@ public class Frame1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(createButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(trainButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(trainButton)
+                            .addComponent(lastErrorLabel))
                         .addGap(18, 18, 18)))
                 .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -430,6 +439,7 @@ public class Frame1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lastErrorLabel;
     private javax.swing.JTextField layersTextField;
     private javax.swing.JLabel notZeroWeightsLabel;
     private javax.swing.JButton trainButton;

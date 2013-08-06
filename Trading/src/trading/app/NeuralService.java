@@ -67,8 +67,8 @@ public class NeuralService {
 //        // Activation functioni
 //        pattern.setActivationFunction(new ActivationTANH());
         pattern.setActivationFunction(new ActivationLinear());
-//        //pattern.setActivationFunction(new ActivationElliott());        
-       
+//        //pattern.setActivationFunction(new ActivationElliott()); 
+        
         // Create network
        final BasicNetwork network = (BasicNetwork) pattern.generate();
        // Randomize the network
@@ -141,7 +141,7 @@ public class NeuralService {
         ResilientPropagation train = new ResilientPropagation(network, ds);
 
         //Backpropagation train = new Backpropagation(network, ds);
-        train.setThreadCount(10);
+        //train.setThreadCount(10);
 
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
 
