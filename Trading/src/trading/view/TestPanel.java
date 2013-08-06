@@ -90,10 +90,10 @@ public class TestPanel extends javax.swing.JPanel {
         NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
         valueAxis.setAutoRangeIncludesZero(false);
         // Set line colors
-        plot.getRenderer().setSeriesPaint(0, Color.CYAN);
-        plot.getRenderer().setSeriesPaint(1, Color.BLUE);
-        plot.getRenderer().setSeriesPaint(2, Color.MAGENTA);
-        plot.getRenderer().setSeriesPaint(3, Color.RED);       
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(1, Color.GREEN);
+        plot.getRenderer().setSeriesPaint(2, Color.BLUE);
+        plot.getRenderer().setSeriesPaint(3, Color.BLUE);       
     }
     /**
      * Init JFreeChart

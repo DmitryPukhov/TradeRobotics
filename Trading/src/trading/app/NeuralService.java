@@ -201,7 +201,7 @@ public class NeuralService {
 
             // Get network output
             IdealOutputEntity idealEntity = pair.getOutputEntity();
-            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBarEntity().getPreviousAbsoluteBar(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
+            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBarEntity(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
 
             // Store values in context
             NeuralContext.Test.setIteration(iteration);

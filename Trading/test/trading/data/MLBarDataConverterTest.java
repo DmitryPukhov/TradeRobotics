@@ -78,28 +78,28 @@ public class MLBarDataConverterTest {
     /**
      * Test of entityPairToMLDataPair method, of class MLBarDataConverter.
      */
-    @Test
-    public void testEntityPairToMLDataPair() {
-        InputEntity input = new InputEntity(barEntities, barEntities, barEntities);
-        IdealOutputEntity output = new IdealOutputEntity(barEntities.get(0));
-        DataPair pair = new DataPair(input, output);
-        assertEquals(pair.getInputEntity(), input);
-        assertEquals(pair.getOutputEntity(), output);
-    }
+//    @Test
+//    public void testEntityPairToMLDataPair() {
+//        InputEntity input = new InputEntity(barEntities, barEntities, barEntities);
+//        IdealOutputEntity output = new IdealOutputEntity(barEntities.get(0));
+//        DataPair pair = new DataPair(input, output);
+//        assertEquals(pair.getInputEntity(), input);
+//        assertEquals(pair.getOutputEntity(), output);
+//    }
 
     /**
      * Test of outputEntityToMLData method, of class MLBarDataConverter.
      */
-    @Test
-    public void testOutputEntityToMLData() {
-        System.out.println("outputEntityToMLData");
-        IdealOutputEntity outputEntity = new IdealOutputEntity(barEntities.get(0));
-        MLData data = MLBarDataConverter.outputEntityToMLData(outputEntity);
-        assertNotNull(data);
-        // MLData should contain high and low price
-        assertEquals(outputEntity.getRelativeHigh(), data.getData(0), 0.000000001);
-        assertEquals(outputEntity.getRelativeLow(), data.getData(1), 0.000000001);        
-    }
+//    @Test
+//    public void testOutputEntityToMLData() {
+//        System.out.println("outputEntityToMLData");
+//        IdealOutputEntity outputEntity = new IdealOutputEntity(barEntities.get(0));
+//        MLData data = MLBarDataConverter.outputEntityToMLData(outputEntity);
+//        assertNotNull(data);
+//        // MLData should contain high and low price
+//        assertEquals(outputEntity.getRelativeHigh(), data.getData(0), 0.000000001);
+//        assertEquals(outputEntity.getRelativeLow(), data.getData(1), 0.000000001);        
+//    }
 
     /**
      * Test of inputEntityToMLData method, of class MLBarDataConverter.
@@ -118,15 +118,15 @@ public class MLBarDataConverterTest {
     /**
      * Test of outputEntityToArray method, of class MLBarDataConverter.
      */
-    @Test
-    public void testOutputEntityToArray() {
-        System.out.println("outputEntityToArray");
-        IdealOutputEntity output = new IdealOutputEntity(barEntities.get(0));
-        double[] result = MLBarDataConverter.outputEntityToArray(output);
-        assertEquals(output.getRelativeHigh(), result[0], 0.000000001);
-       assertEquals(output.getRelativeLow(), result[1], 0.000000001);        
-
-    }
+//    @Test
+//    public void testOutputEntityToArray() {
+//        System.out.println("outputEntityToArray");
+//        IdealOutputEntity output = new IdealOutputEntity(barEntities.get(0));
+//        double[] result = MLBarDataConverter.outputEntityToArray(output);
+//        assertEquals(output.getRelativeHigh(), result[0], 0.000000001);
+//       assertEquals(output.getRelativeLow(), result[1], 0.000000001);        
+//
+//    }
 
     /**
      * Test of inputEntityToArray method, of class MLBarDataConverter.

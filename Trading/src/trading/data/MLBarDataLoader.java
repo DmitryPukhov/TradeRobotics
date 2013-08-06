@@ -119,7 +119,7 @@ public class MLBarDataLoader {
             largePos = getLastPos(largeBars, smallBar.getTime(), largePos); // Large pos     
             
             InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
-            IdealOutputEntity ideal = getOutputEntity(mediumBars, mediumPos, smallBar.getTime());
+            IdealOutputEntity ideal = getOutputEntity(smallBars, smallBar);
 
             // Create input/ideal pair
             if (input != null && ideal != null) {
@@ -208,30 +208,32 @@ public class MLBarDataLoader {
      * @param currentTime
      * @return
      */
-    private static IdealOutputEntity getOutputEntity(List<BarEntity> bars, int pos, Calendar currentTime) {
-        if (pos >= bars.size() - 1) {
+    private static IdealOutputEntity getOutputEntity(List<BarEntity> bars, BarEntity bar) {
+        int startIndex = bars.indexOf(bar);
+        if (startIndex == -1) {
             return null;
         }
         IdealOutputEntity result = null;
-        BarEntity inputBar = bars.get(pos);
-        long currentMillis = currentTime.getTimeInMillis();
+        
+        long currentMillis = bar.getTime().getTimeInMillis();
         long predictionIntervalMillis = NeuralContext.NetworkSettings.getPredictionIntervalMillis();
-        // Bar with result data
-        BarEntity outputBar = null;
-        for (int i = pos; i < bars.size(); i++) {
-            BarEntity bar = bars.get(i);
-            long intervalMillis = bar.getTime().getTimeInMillis() - currentMillis;
+        double highBoundAbsolute = 0;
+        double lowBoundAbsolute = Double.MAX_VALUE;
+        
+        // Get high and low boundds within interval
+        for (int i = startIndex; i < bars.size(); i++) {
+            BarEntity currentBar = bars.get(i);
+            long intervalMillis = currentBar.getTime().getTimeInMillis() - currentMillis;
 
             // If bar after time interval
             if (intervalMillis >= predictionIntervalMillis) {
-                outputBar = bar;
+                //outputBar = bar;
                 break;
             }
+            highBoundAbsolute = Math.max(highBoundAbsolute, currentBar.getAbsoluteBar().getHigh());
+            lowBoundAbsolute = Math.min(lowBoundAbsolute, currentBar.getAbsoluteBar().getLow());
         }
-        // Get ML data from next bar
-        if (outputBar != null) {
-            result = new IdealOutputEntity(outputBar);
-        }
+        result = new IdealOutputEntity(bar, highBoundAbsolute, lowBoundAbsolute);
         // Null if no bars after interval
         return result;
     }

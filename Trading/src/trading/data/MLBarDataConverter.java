@@ -92,8 +92,8 @@ public class MLBarDataConverter {
     public static double[] outputEntityToArray(IdealOutputEntity output){
       // Fill values array
         double[] values = new double[NeuralContext.NetworkSettings.getOutputSize()];
-        values[0] = output.getBarEntity().getRelativeBar().getHigh();
-        values[1] = output.getBarEntity().getRelativeBar().getLow();
+        values[0] = output.getRelativeHigh();
+        values[1] = output.getRelativeLow();
         return values;
     }
     

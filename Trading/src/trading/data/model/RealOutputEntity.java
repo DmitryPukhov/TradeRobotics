@@ -11,20 +11,20 @@ import java.util.Calendar;
  * @author pdg
  */
 public class RealOutputEntity {
-    private Bar previousBar;
+    private BarEntity bar;
     private Calendar time;
     private double relativeHigh;
     private double relativeLow;
 
     /**
      * Construct from values
-     * @param previousBar
+     * @param bar
      * @param time
      * @param relativeHigh
      * @param relativeLow 
      */
-    public RealOutputEntity(Bar previousBar, Calendar time, double relativeHigh, double relativeLow) {
-        this.previousBar = previousBar;
+    public RealOutputEntity(BarEntity bar, Calendar time, double relativeHigh, double relativeLow) {
+        this.bar = bar;
         this.time = time;
         this.relativeHigh = relativeHigh;
         this.relativeLow = relativeLow;
@@ -43,9 +43,9 @@ public class RealOutputEntity {
      * Bar before this. Relative value is change percent from this bar.
      * @return 
      */
-    public Bar getPreviousBar() {
-        return previousBar;
-    }
+//    public Bar getBar() {
+//        return bar;
+//    }
     
     /**
      * High change percent
@@ -67,13 +67,13 @@ public class RealOutputEntity {
      * @return 
      */
     public double getAbsoluteHigh(){
-        return previousBar.getHigh() * (1.0+relativeHigh);
+        return bar.getAbsoluteBar().getHigh() * (1.0+relativeHigh);
     }
      /**
      * Gets absolute value of Low price
      * @return 
      */
     public double getAbsoluteLow(){
-        return previousBar.getLow() * (1.0+relativeLow);
+        return bar.getAbsoluteBar().getLow() * (1.0+relativeLow);
     }   
 }

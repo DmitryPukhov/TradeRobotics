@@ -10,13 +10,17 @@ package trading.data.model;
  */
 public class IdealOutputEntity {
     private BarEntity barEntity;
+    private double relativeHigh;
+    private double relativeLow;
     
     /**
      * Construct from bar
      * @param entity 
      */
-    public IdealOutputEntity(BarEntity entity){
+    public IdealOutputEntity(BarEntity entity, double absoluteHigh, double absoluteLow){
         this.barEntity = entity;
+        this.relativeHigh =  (absoluteHigh/entity.getAbsoluteBar().getHigh()) -1;
+        this.relativeLow =  (absoluteLow/entity.getAbsoluteBar().getLow()) -1;        
     }
     /**
      * Bar to get prediction values from.
@@ -26,32 +30,33 @@ public class IdealOutputEntity {
         return barEntity;
     }
     
+    
     /**
      * Gets minimum price
      * @return 
      */
     public double getAbsoluteLow(){
-        return barEntity.getAbsoluteBar().getLow();
+        return barEntity.getAbsoluteBar().getLow() * (1+relativeLow);
     }
     /**
      * Gets maximum price
      * @return 
      */
     public double getAbsoluteHigh(){
-        return barEntity.getAbsoluteBar().getHigh();
+      return barEntity.getAbsoluteBar().getHigh() * (1+relativeHigh);
     }
     /**
      * Gets minimum price change percent
      * @return 
      */
     public double getRelativeLow(){
-        return barEntity.getRelativeBar().getLow();
+        return relativeLow;
     }
     /**
      * Gets high price change percent
      * @return 
      */
     public double getRelativeHigh(){
-        return barEntity.getRelativeBar().getHigh();
+        return relativeHigh;
     }
 }
