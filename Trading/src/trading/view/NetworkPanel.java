@@ -20,8 +20,10 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.structure.AnalyzeNetwork;
 import trading.app.NeuralService;
 import trading.common.NeuralContext;
+import trading.common.PropertyNames;
 
 /**
  *
@@ -42,18 +44,26 @@ public class NetworkPanel extends javax.swing.JPanel {
      * Neural network specific init
      */
     public final void init() {
-        networkLayersText.setText(String.format("%s,%s,%s", NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getHidden1Count(), NeuralContext.NetworkSettings.getOutputSize()));
+        neuronsInLayersText.setText(String.format("%s,%s,%s", NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getHidden1Count(), NeuralContext.NetworkSettings.getOutputSize()));
         
         // Network property change
-        NeuralContext.Network.addPropertyChangeListener("Network", new PropertyChangeListener() {
+        NeuralContext.Network.addPropertyChangeListener(PropertyNames.NETWORK, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 BasicNetwork network = (BasicNetwork) evt.getNewValue();
                 updateNetworkView(network);
             }
         });
+        NeuralContext.Network.addPropertyChangeListener(PropertyNames.EPOCH, new PropertyChangeListener(){
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateNetworkView(NeuralContext.Network.getNetwork());
+            }
+        });
     }
 
+    
     /**
      * Create and init file chooser
      *
@@ -92,17 +102,15 @@ public class NetworkPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         networkLayersLabel = new javax.swing.JLabel();
-        neuronsLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         resetButton = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
-        networkLayersText = new javax.swing.JTextField();
+        neuronsInLayersText = new javax.swing.JTextField();
+        weightsLabel = new javax.swing.JLabel();
 
         networkLayersLabel.setText("Layers:");
-
-        neuronsLabel.setText("Neurons: ");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Neural network summary");
@@ -135,12 +143,14 @@ public class NetworkPanel extends javax.swing.JPanel {
             }
         });
 
-        networkLayersText.setText("0,0,0");
-        networkLayersText.addActionListener(new java.awt.event.ActionListener() {
+        neuronsInLayersText.setText("0,0,0");
+        neuronsInLayersText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                networkLayersTextActionPerformed(evt);
+                neuronsInLayersTextActionPerformed(evt);
             }
         });
+
+        weightsLabel.setText("Total weigths:0, non zero: 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -149,12 +159,12 @@ public class NetworkPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(neuronsLabel)
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(networkLayersLabel))
-                    .addComponent(networkLayersText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(networkLayersLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(neuronsInLayersText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(weightsLabel))
                 .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,24 +179,24 @@ public class NetworkPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(createButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(networkLayersLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(neuronsLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addComponent(loadButton)))
-                        .addGap(10, 10, 10)
-                        .addComponent(saveButton))
-                    .addComponent(networkLayersText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetButton)
-                .addContainerGap(149, Short.MAX_VALUE))
+                        .addGap(38, 38, 38)
+                        .addComponent(loadButton)
+                        .addGap(33, 33, 33)
+                        .addComponent(saveButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resetButton)
+                        .addContainerGap(134, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(createButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(neuronsInLayersText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(networkLayersLabel))
+                        .addGap(30, 30, 30)
+                        .addComponent(weightsLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -217,19 +227,19 @@ public class NetworkPanel extends javax.swing.JPanel {
         NeuralService.resetNetwork();
     }//GEN-LAST:event_resetButtonActionPerformed
 
-    private void networkLayersTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_networkLayersTextActionPerformed
+    private void neuronsInLayersTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neuronsInLayersTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_networkLayersTextActionPerformed
+    }//GEN-LAST:event_neuronsInLayersTextActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loadButton;
     private javax.swing.JLabel networkLayersLabel;
-    private javax.swing.JTextField networkLayersText;
-    private javax.swing.JLabel neuronsLabel;
+    private javax.swing.JTextField neuronsInLayersText;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton saveButton;
+    private javax.swing.JLabel weightsLabel;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -238,17 +248,24 @@ public class NetworkPanel extends javax.swing.JPanel {
      * @param network
      */
     private void updateNetworkView(BasicNetwork network) {
-        // Set first part of the texts
-        networkLayersLabel.setText("Network layers: ");
-        neuronsLabel.setText("Neurons: ");
+        // Display neurons in layers in text field
+        updateNetworkLayersText(network);
+        updateNetworkWeights(network);;
+
+        
+
+                
+    }
+    /**
+     * Display neurons in layers count
+     * @param network 
+     */
+    private void updateNetworkLayersText(BasicNetwork network){
+        neuronsInLayersText.setText("0");
         if (network == null) {
             return;
-        }
-
-        // Set layers label
-        networkLayersLabel.setText(networkLayersLabel.getText() + network.getLayerCount());
-
-        // Neurons in layers string like 13, 24, 34...
+        }      
+         // Neurons in layers string like 13, 24, 34...
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < network.getLayerCount(); i++) {
             // Add neurons count to the string
@@ -257,10 +274,32 @@ public class NetworkPanel extends javax.swing.JPanel {
                 sb.append(",");
             }
             // Add neurons to text area
-         }
-        // Set neurons label
-        neuronsLabel.setText(neuronsLabel.getText() + sb.toString());
-        networkLayersText.setText(sb.toString());
+         }  
+        neuronsInLayersText.setText(sb.toString());
+        
+    }
+    
+    /**
+     * Update network configuration text with current neurons in layers
+     * @param network
+     * @return 
+     */
+    private void updateNetworkWeights(BasicNetwork network){
+        final String testTemplate = "Weights total:%d, non zero: %d";
+        weightsLabel.setText(String.format(testTemplate, 0,0));
+        
+        // Calculate non zero weights
+        AnalyzeNetwork analyze = new AnalyzeNetwork(network);
+        int totalWeights = analyze.getWeightValues().length;
+        int nonZeroWeights = 0;
+        for(double weight: analyze.getWeightValues()){
+            if(weight< -0.00000000001 || weight > 0.00000000001){
+                nonZeroWeights++;
+            }
+        }
+        // Display
+        weightsLabel.setText(String.format(testTemplate, totalWeights, nonZeroWeights));
+        
     }
     
     /**
@@ -269,7 +308,7 @@ public class NetworkPanel extends javax.swing.JPanel {
      */
     private List<Integer> getNetworkLayers(){
         // Fill values from string
-        String[] splittedString = networkLayersText.getText().split(",");
+        String[] splittedString = neuronsInLayersText.getText().split(",");
         List<Integer> neurons = new ArrayList<>();
         int i = 0;
         for(String stringVal : splittedString){

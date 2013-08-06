@@ -7,6 +7,7 @@ package dev;
 import java.awt.Color;
 import java.util.logging.Logger;
 import org.encog.engine.network.activation.ActivationLinear;
+import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
@@ -71,7 +72,7 @@ public class Frame1 extends javax.swing.JFrame {
         // Create network
         final BasicNetwork network = (BasicNetwork) pattern.generate();
         network.reset();
-        
+ 	(new ConsistentRandomizer(-1,1,100)).randomize(network);       
         updateNetworkInfo(network);
         
         return network;
@@ -107,6 +108,7 @@ public class Frame1 extends javax.swing.JFrame {
             // Print info
                  // Iteration
             train.iteration();
+
             updateNetworkInfo(network);
             // Print info
             // Calculate error
@@ -114,7 +116,7 @@ public class Frame1 extends javax.swing.JFrame {
    
             Logger.getLogger(Frame1.class.getName()).info(String.format("Epoch %d. Error %s", epoch, Double.toString(error)));
         }
-        train.finishTraining();
+        //train.finishTraining();
         
         updateNetworkInfo(network);
 

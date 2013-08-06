@@ -19,6 +19,7 @@ import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationElliott;
 import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -41,16 +42,7 @@ import trading.data.model.RealOutputEntity;
  */
 public class NeuralService {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        // Create new network
-        BasicNetwork newNetwork = createNetwork();
-        NeuralContext.Network.setNetwork(createNetwork());
-        // Train
-        trainNetwork();
-        // Check
-        testNetwork();
-    }
-    
+     
     /**
      * Create network with layers
      * @param layers
@@ -71,9 +63,16 @@ public class NeuralService {
         // Output neurons
         int output = layers.get(layers.size()-1);
         pattern.setOutputNeurons(output);
+        
+//        // Activation functioni
+//        pattern.setActivationFunction(new ActivationTANH());
+        pattern.setActivationFunction(new ActivationLinear());
+//        //pattern.setActivationFunction(new ActivationElliott());        
        
         // Create network
        final BasicNetwork network = (BasicNetwork) pattern.generate();
+       // Randomize the network
+       (new ConsistentRandomizer(-1,1,100)).randomize(network);       
        NeuralContext.Network.setNetwork(network);
        
        return network;
@@ -83,43 +82,43 @@ public class NeuralService {
     /**
      * Creates and returns a trading network
      */
-    public static BasicNetwork createNetwork() {
-        Stopwatch watch = new Stopwatch();
-        final FeedForwardPattern pattern = new FeedForwardPattern();
-        // Input layer
-        pattern.setInputNeurons(NeuralContext.NetworkSettings.getInputSize());
-
-        // Hidden layer 1
-        int hidden1Count = NeuralContext.NetworkSettings.getHidden1Count();
-        if (hidden1Count > 0) {
-            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
-        }
-        // Hidden layer 2
-        int hidden2Count = NeuralContext.NetworkSettings.getHidden2Count();
-        if (hidden2Count > 0) {
-            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden2Count());
-        }
-        // Output layer
-        pattern.setOutputNeurons(NeuralContext.NetworkSettings.getOutputSize());
-
-
-        // Activation functioni
-        //pattern.setActivationFunction(new ActivationTANH());
-        pattern.setActivationFunction(new ActivationLinear());
-        //pattern.setActivationFunction(new ActivationElliott());
-
-        // Create network
-        final BasicNetwork network = (BasicNetwork) pattern.generate();
-        network.reset();
-
-        watch.stop();
-        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds() / 1000));
-        watch.reset();
-
-        NeuralContext.Network.setNetwork(network);
-
-        return network;
-    }
+//    public static BasicNetwork createNetwork() {
+//        Stopwatch watch = new Stopwatch();
+//        final FeedForwardPattern pattern = new FeedForwardPattern();
+//        // Input layer
+//        pattern.setInputNeurons(NeuralContext.NetworkSettings.getInputSize());
+//
+//        // Hidden layer 1
+//        int hidden1Count = NeuralContext.NetworkSettings.getHidden1Count();
+//        if (hidden1Count > 0) {
+//            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
+//        }
+//        // Hidden layer 2
+//        int hidden2Count = NeuralContext.NetworkSettings.getHidden2Count();
+//        if (hidden2Count > 0) {
+//            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden2Count());
+//        }
+//        // Output layer
+//        pattern.setOutputNeurons(NeuralContext.NetworkSettings.getOutputSize());
+//
+//
+//        // Activation functioni
+//        //pattern.setActivationFunction(new ActivationTANH());
+//        pattern.setActivationFunction(new ActivationLinear());
+//        //pattern.setActivationFunction(new ActivationElliott());
+//
+//        // Create network
+//        final BasicNetwork network = (BasicNetwork) pattern.generate();
+//        network.reset();
+//
+//        watch.stop();
+//        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds() / 1000));
+//        watch.reset();
+//
+//        NeuralContext.Network.setNetwork(network);
+//
+//        return network;
+//    }
 
     /**
      * NetworkSettings learning

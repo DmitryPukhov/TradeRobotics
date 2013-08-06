@@ -16,16 +16,16 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="neuronsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                       <Component id="networkLayersLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="neuronsInLayersText" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="networkLayersText" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="weightsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -43,31 +43,30 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="createButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="networkLayersLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="neuronsLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                              <Component id="loadButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="loadButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                       <Component id="saveButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="resetButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="134" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="networkLayersText" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="createButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="neuronsInLayersText" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="networkLayersLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="weightsLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="resetButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="149" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,11 +75,6 @@
     <Component class="javax.swing.JLabel" name="networkLayersLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Layers:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="neuronsLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Neurons: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -123,13 +117,18 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="networkLayersText">
+    <Component class="javax.swing.JTextField" name="neuronsInLayersText">
       <Properties>
         <Property name="text" type="java.lang.String" value="0,0,0"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="networkLayersTextActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="neuronsInLayersTextActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="weightsLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Total weigths:0, non zero: 0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

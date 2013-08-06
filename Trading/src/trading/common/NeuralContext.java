@@ -221,7 +221,7 @@ public class NeuralContext {
         public static void setTrain(Train train) {
             Train oldTrain = Network.train;
             Network.train = train;
-            pcs.firePropertyChange("Train", oldTrain, Network.train);
+            pcs.firePropertyChange(PropertyNames.TRAIN, oldTrain, Network.train);
         }
         
         /**
@@ -239,7 +239,7 @@ public class NeuralContext {
             // Set network
             BasicNetwork oldNetwork = Network.network;
             Network.network = network;
-            pcs.firePropertyChange("Network",oldNetwork, Network.network);
+            pcs.firePropertyChange(PropertyNames.NETWORK,oldNetwork, Network.network);
         }
     }
     
@@ -250,8 +250,8 @@ public class NeuralContext {
      */
     public static class NetworkSettings {
 
-        private static int smallBarsWindowSize = 12;
-        private static int mediumBarsWindowSize = 50;
+        private static int smallBarsWindowSize = 15;
+        private static int mediumBarsWindowSize = 5;
         private static int largeBarsWindowSize = 5;
         private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
         private static int outputSize = 2;

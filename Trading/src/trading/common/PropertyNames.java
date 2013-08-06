@@ -9,6 +9,7 @@ package trading.common;
  * @author pdg
  */
 public class PropertyNames {
+    public static final String NETWORK  = "network";
     public static final String ERROR = "error";
     public static final String EPOCH = "epoch";
     public static final String TRAIN = "train";
