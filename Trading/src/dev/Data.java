@@ -12,33 +12,68 @@ import org.encog.ml.data.basic.BasicMLDataSet;
 public class Data {
 
     /**
-     * Arrays initialization
+     * Fill array with random dat
      */
-    public static void initRandomData() {
-        trainInput = new double[Context.samples][Context.inputSize];
-        trainIdealOutput = new double[Context.samples][Context.outputSize];
-        testInput = new double[Context.testSamples][Context.inputSize];
-        testIdealOutput = new double[Context.testSamples][Context.outputSize];
-
-        initRandomData(trainInput, trainIdealOutput, Context.samples);
-        initRandomData(testInput, testIdealOutput, Context.testSamples);
-    }
-
-    /**
-     * Data sets initialization
-     */
-    public static void initRandomData(double[][] input, double[][] output, int size) {
-
+    public static void initRandomData(double[][] array, int size, int samples) {
         // Init random data
         Random r = new Random();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < samples; i++) {
             double sum = 0;
-            for (int j = 0; j < Context.inputSize; j++) {
-                input[i][j] = r.nextDouble();
+            for (int j = 0; j < size; j++) {
+                array[i][j] = r.nextDouble();
+                sum += array[i][j];
+            }
+        }
+    }
+    /**
+     * Fill input and output arrays with random data
+     * @param input
+     * @param inputSize
+     * @param output
+     * @param outputSize
+     * @param trainSamples, int testSamples 
+     */
+    public static void initRandomData(int inputSize, int outputSize, int trainSamples, int testSamples){
+        trainInput = new double[trainSamples][inputSize];
+        trainIdealOutput = new double[trainSamples][outputSize];
+        testInput = new double[testSamples][inputSize];
+        testIdealOutput = new double[testSamples][outputSize];              
+        initRandomData(trainInput, inputSize, trainSamples);
+        initRandomData(trainIdealOutput, outputSize, trainSamples);
+       // trainIdealOutput = getOutput(trainInput);
+//        initRandomData(trainIdealOutput, outputSize, trainSamples);
+ 
+        
+        initRandomData(testInput, inputSize, testSamples);
+        initRandomData(testIdealOutput, outputSize, testSamples);
+        //testIdealOutput = getOutput(testInput);
+ //       initRandomData(testIdealOutput, outputSize, testSamples);      
+    }
+    /**
+     * Init output for input data
+     * @param input
+     * @param output
+     * @return 
+     */
+    public static double[][] getOutput(double[][]input, int outputSize){
+        double[][] output = new double[input.length][outputSize];
+        for(int i = 0; i < input.length; i++){
+            double sum = 0;
+            for(int j = 0; j < input[i].length; j++){
                 sum += input[i][j];
             }
-            output[i][0] = sum / Context.inputSize;
+            double avg = sum/input[i].length;
+            output[i][0] = avg;
         }
+        return output;
+    }
+    public static double getAverage(double[] data){
+       double sum = 0;
+       for(double val: data){
+           sum+=val;
+       }
+       double avg=sum/data.length;
+       return avg;
     }
 
     /**
@@ -51,37 +86,10 @@ public class Data {
     /**
      * Get random train data
      */
-    public static MLDataSet getTestMLDataSet(int samples) {
+    public static MLDataSet getTestMLDataSet() {
         return new BasicMLDataSet(testInput, testIdealOutput);
     }
 
-    /**
-     * MLDataSet creation
-     *
-     * @return
-     */
-    public static MLDataSet getTrainMLDataSet(int samples, double[][] input, double[][] idealOutput) {
-
-
-        Random r = new Random();
-        input = new double[samples][Context.inputSize];
-        idealOutput = new double[samples][Context.outputSize];
-
-        for (int i = 0; i < samples; i++) {
-            double sum = 0;
-            for (int j = 0; j < Context.inputSize; j++) {
-                input[i][j] = r.nextDouble();
-                sum += input[i][j];
-            }
-            idealOutput[i][0] = sum / Context.inputSize;
-        }
-
-        MLDataSet ds = new BasicMLDataSet(input, idealOutput);
-        return ds;
-
-        // Create output data
-
-    }
     /**
      * Input for train
      */
