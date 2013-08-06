@@ -111,15 +111,15 @@ public class MLBarDataConverter {
         int pos = 0;
         // insert small bars
         for (BarEntity bar : input.getSmallBars()) {
-            pos = insertBar(result, bar.getRelativeBar(), pos);
+            pos = insertRelativeBar(result, bar, pos);
         }
         // insert medium bars
         for (BarEntity bar : input.getMediumBars()) {
-            pos = insertBar(result, bar.getRelativeBar(), pos);
+            pos = insertRelativeBar(result, bar, pos);
         }
         // insert large bars
         for (BarEntity bar : input.getLargeBars()) {
-            pos = insertBar(result, bar.getRelativeBar(), pos);
+            pos = insertRelativeBar(result, bar, pos);
         }
         return result;
     }
@@ -128,14 +128,14 @@ public class MLBarDataConverter {
      * @param array
      * @param bar 
      */
-    private static int insertBar(double[] array, Bar bar, int pos){
+    private static int insertRelativeBar(double[] array, BarEntity entity, int pos){
             // Add bar to array. Use percentage instead of absolute values
-            array[pos++] = bar.getTime().getTimeInMillis();
-            array[pos++] = bar.getOpen();
-            array[pos++] = bar.getHigh();
-            array[pos++] = bar.getLow();
-            array[pos++] = bar.getClose();
-            array[pos++] = bar.getVolume();//bar.getVolume();
+            array[pos++] = entity.getRelativeBar().getTime().getTimeInMillis()/entity.getPreviousAbsoluteBar().getTime().getTimeInMillis();
+            array[pos++] = entity.getRelativeBar().getOpen();
+            array[pos++] = entity.getRelativeBar().getHigh();
+            array[pos++] = entity.getRelativeBar().getLow();
+            array[pos++] = entity.getRelativeBar().getClose();
+            array[pos++] = entity.getRelativeBar().getVolume();//bar.getVolume();
             return pos;
     }    
 }

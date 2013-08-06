@@ -68,6 +68,9 @@ public class MLBarDataLoader {
         // Transform bars to change percents
         List<DataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
         
+        int firstIndex = Math.max((dataPairs.size()-1 - NeuralContext.Training.getSamplesCount()), 0);
+        int lastIndex = Math.max(dataPairs.size()-1, 0);
+        List<DataPair> samplesPairs = dataPairs.subList(firstIndex, lastIndex);
         // Create dataset for machine learning
         MLDataSet ds = getMLDataSet(dataPairs);
         return ds;

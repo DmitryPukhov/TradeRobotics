@@ -130,7 +130,7 @@ public class NeuralService {
         watch.start();
         // Training dataset
         MLDataSet ds = MLBarDataLoader.getMLDataSet();
-
+        NeuralContext.Training.setSamplesCount(ds.size());
 
 
         watch.stop();

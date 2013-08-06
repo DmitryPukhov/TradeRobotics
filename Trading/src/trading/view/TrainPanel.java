@@ -52,7 +52,8 @@ public class TrainPanel extends javax.swing.JPanel {
         // Init progress bar
         learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());
         learnProgressBar.setStringPainted(true);
-        maxEpochCountSpinner.setValue(NeuralContext.Training.getMaxEpochCount());
+        epochCountSpinner.setValue(NeuralContext.Training.getMaxEpochCount());
+        
         
         // Epoch changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.EPOCH, new PropertyChangeListener() {
@@ -82,6 +83,14 @@ public class TrainPanel extends javax.swing.JPanel {
                 lastErrorLabel.setText(String.format("Error: %f%n %%", value));
                 errorXYSeries.add(errorXYSeries.getItemCount() + 1, value);
 
+            }
+        });
+        // Samples changed
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.SAMPLES_COUNT, new PropertyChangeListener(){
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                samplesLabel.setText("Samples: ".concat(evt.getNewValue().toString()));
             }
         });
 
@@ -126,8 +135,9 @@ public class TrainPanel extends javax.swing.JPanel {
         chartPanel = new ChartPanel(errorChart);
         trainButton = new javax.swing.JButton();
         epochLifetimeLabel = new javax.swing.JLabel();
-        maxEpochCountSpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
+        samplesLabel = new javax.swing.JLabel();
+        epochCountSpinner = new javax.swing.JSpinner();
 
         setPreferredSize(new java.awt.Dimension(1024, 768));
 
@@ -157,13 +167,15 @@ public class TrainPanel extends javax.swing.JPanel {
 
         epochLifetimeLabel.setText("Epoch lifetime:");
 
-        maxEpochCountSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+        jLabel1.setText("Epoch count max:");
+
+        samplesLabel.setText("Samples:");
+
+        epochCountSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                maxEpochCountSpinnerStateChanged(evt);
+                epochCountSpinnerStateChanged(evt);
             }
         });
-
-        jLabel1.setText("Epoch count max:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -174,20 +186,28 @@ public class TrainPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lastErrorLabel)
-                            .addComponent(epochLifetimeLabel))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(learnProgressLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(maxEpochCountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                        .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(27, 27, 27)
+                                .addComponent(epochCountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 21, Short.MAX_VALUE)
+                                .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(samplesLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lastErrorLabel)
+                            .addComponent(epochLifetimeLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -200,8 +220,9 @@ public class TrainPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(learnProgressLabel)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(maxEpochCountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel1)
+                        .addComponent(samplesLabel)
+                        .addComponent(epochCountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(trainButton)
@@ -237,9 +258,9 @@ public class TrainPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_trainButtonActionPerformed
 
-    private void maxEpochCountSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxEpochCountSpinnerStateChanged
-        // Update max epoch count in neural context
-        Object value = maxEpochCountSpinner.getValue() ;
+    private void epochCountSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_epochCountSpinnerStateChanged
+         // Update max epoch count in neural context
+        Object value = epochCountSpinner.getValue() ;
         if(value == null ){
             return;
         }
@@ -249,16 +270,17 @@ public class TrainPanel extends javax.swing.JPanel {
         }
 
         NeuralContext.Training.setMaxEpochCount(valueInt);
-    }//GEN-LAST:event_maxEpochCountSpinnerStateChanged
+    }//GEN-LAST:event_epochCountSpinnerStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel chartPanel;
+    private javax.swing.JSpinner epochCountSpinner;
     private javax.swing.JLabel epochLifetimeLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lastErrorLabel;
     private javax.swing.JProgressBar learnProgressBar;
     private javax.swing.JLabel learnProgressLabel;
-    private javax.swing.JSpinner maxEpochCountSpinner;
+    private javax.swing.JLabel samplesLabel;
     private javax.swing.JButton trainButton;
     // End of variables declaration//GEN-END:variables
 }

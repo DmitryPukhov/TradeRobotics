@@ -24,26 +24,38 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="learnProgressBar" min="-2" pref="867" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="learnProgressLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="epochCountSpinner" min="-2" pref="46" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
+                              <Component id="trainButton" min="-2" pref="107" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="samplesLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lastErrorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="epochLifetimeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="learnProgressLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="maxEpochCountSpinner" min="-2" pref="46" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="learnProgressBar" min="-2" pref="867" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="54" max="32767" attributes="0"/>
-                      <Component id="trainButton" min="-2" pref="79" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -61,8 +73,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="learnProgressLabel" min="-2" max="-2" attributes="0"/>
                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                      <Component id="maxEpochCountSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="samplesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="epochCountSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -128,15 +141,20 @@
         <Property name="text" type="java.lang.String" value="Epoch lifetime:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="maxEpochCountSpinner">
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="maxEpochCountSpinnerStateChanged"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Epoch count max:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="samplesLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Samples:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="epochCountSpinner">
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="epochCountSpinnerStateChanged"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

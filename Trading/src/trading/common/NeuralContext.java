@@ -126,6 +126,17 @@ public class NeuralContext {
         private static double error; 
         private static int maxEpochCount = 10;
         private static long epochMilliseconds = 0;
+        private static int samplesCount = 0;
+
+        public static int getSamplesCount() {
+            return samplesCount;
+        }
+
+        public static void setSamplesCount(int samplesCount) {
+            int prevValue = Training.samplesCount;
+            Training.samplesCount = samplesCount;
+            pcs.firePropertyChange(PropertyNames.SAMPLES_COUNT, prevValue, Training.samplesCount);
+        }
         
         /**
          * Gets last epoch milliseconds
@@ -250,9 +261,9 @@ public class NeuralContext {
      */
     public static class NetworkSettings {
 
-        private static int smallBarsWindowSize = 15;
-        private static int mediumBarsWindowSize = 5;
-        private static int largeBarsWindowSize = 5;
+        private static int smallBarsWindowSize = 1;
+        private static int mediumBarsWindowSize = 1;
+        private static int largeBarsWindowSize = 1;
         private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
         private static int outputSize = 2;
         private static int hidden1Count = getInputSize();
