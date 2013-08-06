@@ -34,14 +34,14 @@
                               <Component id="learnProgressLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                              <Component id="epochCountSpinner" min="-2" pref="46" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="epochCountSpinner" min="-2" pref="70" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
                               <Component id="trainButton" min="-2" pref="107" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -89,7 +89,7 @@
               <Component id="lastErrorLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="chartPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="500" max="32767" attributes="0"/>
+              <EmptySpace pref="508" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

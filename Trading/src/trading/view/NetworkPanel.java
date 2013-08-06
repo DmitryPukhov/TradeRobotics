@@ -44,7 +44,7 @@ public class NetworkPanel extends javax.swing.JPanel {
      * Neural network specific init
      */
     public final void init() {
-        neuronsInLayersText.setText(String.format("%s,%s,%s", NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getHidden1Count(), NeuralContext.NetworkSettings.getOutputSize()));
+        neuronsInLayersText.setText(String.format("%s,%s,%s,%s", NeuralContext.NetworkSettings.getInputSize(), NeuralContext.NetworkSettings.getHidden1Count(), NeuralContext.NetworkSettings.getHidden2Count(), NeuralContext.NetworkSettings.getOutputSize()));
         
         // Network property change
         NeuralContext.Network.addPropertyChangeListener(PropertyNames.NETWORK, new PropertyChangeListener() {
