@@ -266,7 +266,7 @@ public class NeuralContext {
         private static int largeBarsWindowSize = 7;
         private static long predictionIntervalMillis = 1000 * 60 * 15;// 15 minutes
         private static int outputSize = 2;
-        private static int hidden1Count = getInputSize();
+        private static int hidden1Count = 3*Bar.FIELD_COUNT;
         private static int hidden2Count = 0;
 
         /**
