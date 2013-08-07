@@ -36,9 +36,9 @@ public class MLBarDataLoader {
      */
     public static List<DataPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
         // Load from csv files to bar arrays
-        List<Bar> smallSimpleBars = BarFileLoader.load(NeuralContext.Files.getSmallBarsFilePath());
-        List<Bar> mediumSimpleBars = BarFileLoader.load(NeuralContext.Files.getMediumBarsFilePath());
-        List<Bar> largeSimpleBars = BarFileLoader.load(NeuralContext.Files.getLargeBarsFilePath());
+        List<Bar> smallSimpleBars = BarFileLoader.load(NeuralContext.Files.getSmallBarsTrainFilePath());
+        List<Bar> mediumSimpleBars = BarFileLoader.load(NeuralContext.Files.getMediumBarsTrainFilePath());
+        List<Bar> largeSimpleBars = BarFileLoader.load(NeuralContext.Files.getLargeBarsTrainFilePath());
 
         // Transform bars to relative bars
         List<BarEntity> smallBars = MLBarDataConverter.barsToEntities(smallSimpleBars);
@@ -67,7 +67,7 @@ public class MLBarDataLoader {
 
 
         // Transform bars to change percents
-        List<DataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsFilePath(), NeuralContext.Files.getMediumBarsFilePath(), NeuralContext.Files.getLargeBarsFilePath());
+        List<DataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsTrainFilePath(), NeuralContext.Files.getMediumBarsTrainFilePath(), NeuralContext.Files.getLargeBarsTrainFilePath());
         
         int firstIndex = Math.max((dataPairs.size()-1 - NeuralContext.Training.getSamplesCount()), 0);
         int lastIndex = Math.max(dataPairs.size()-1, 0);

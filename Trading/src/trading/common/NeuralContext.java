@@ -28,12 +28,12 @@ public class NeuralContext {
 
         private static final String dataDir = "data/";
         private static final String networkDir = "network/";
-        private static final String smallBarsFileName = "SPFB.RTS_130711_130711_M1.csv";
-        private static final String mediumBarsFileName = "SPFB.RTS_130611_130711_M15.csv";
-        private static final String largeBarsFileName = "SPFB.RTS_130611_130711_D1.csv";
-        private static final String futureSmallBarsFileName = "SPFB.RTS_130715_130715_M1_future.csv";
-        private static final String futureMediumBarsFileName = "SPFB.RTS_130614_130715_M15_future.csv";
-        private static final String futureLargeBarsFileName = "SPFB.RTS_130614_130715_D1_future.csv";
+        private static final String smallBarsTrainFileName = "SPFB.RTS_130711_130711_M1.csv";
+        private static final String mediumBarsTrainFileName = "SPFB.RTS_130611_130711_M15.csv";
+        private static final String largeBarsTrainFileName = "SPFB.RTS_130611_130711_D1.csv";
+        private static final String smallBarsTestFileName = "SPFB.RTS_130715_130715_M1_future.csv";
+        private static final String mediumBarsTestFileName = "SPFB.RTS_130614_130715_M15_future.csv";
+        private static final String largeBarsTestFileName = "SPFB.RTS_130614_130715_D1_future.csv";
 
         /**
          * Saved network files directory
@@ -57,8 +57,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getSmallBarsFilePath() {
-            return dataDir + smallBarsFileName;
+        public static String getSmallBarsTrainFilePath() {
+            return dataDir + smallBarsTrainFileName;
         }
 
         /**
@@ -66,8 +66,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getMediumBarsFilePath() {
-            return dataDir + mediumBarsFileName;
+        public static String getMediumBarsTrainFilePath() {
+            return dataDir + mediumBarsTrainFileName;
         }
 
         /**
@@ -75,8 +75,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getLargeBarsFilePath() {
-            return dataDir + largeBarsFileName;
+        public static String getLargeBarsTrainFilePath() {
+            return dataDir + largeBarsTrainFileName;
         }
 
         /**
@@ -84,8 +84,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getFutureSmallBarsFilePath() {
-            return dataDir + futureSmallBarsFileName;
+        public static String getSmallBarsTestFilePath() {
+            return dataDir + smallBarsTestFileName;
         }
 
         /**
@@ -93,8 +93,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getFutureMediumBarsFilePath() {
-            return dataDir + futureMediumBarsFileName;
+        public static String getMediumBarsTestFilePath() {
+            return dataDir + mediumBarsTestFileName;
         }
 
         /**
@@ -102,8 +102,8 @@ public class NeuralContext {
          *
          * @return
          */
-        public static String getFutureLargeBarsFilePath() {
-            return dataDir + futureLargeBarsFileName;
+        public static String getLargeBarsTestFilePath() {
+            return dataDir + largeBarsTestFileName;
         }
     }
 
