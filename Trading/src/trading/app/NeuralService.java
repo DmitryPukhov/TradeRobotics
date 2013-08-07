@@ -71,8 +71,8 @@ public class NeuralService {
         pattern.setOutputNeurons(output);
 
 //        // Activation functioni
-//        pattern.setActivationFunction(new ActivationTANH());
-        pattern.setActivationFunction(new ActivationLinear());
+        pattern.setActivationFunction(new ActivationTANH());
+//        pattern.setActivationFunction(new ActivationLinear());
 //        //pattern.setActivationFunction(new ActivationElliott()); 
 
         // Create network
@@ -135,7 +135,7 @@ public class NeuralService {
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
-        MLDataSet ds = MLBarDataLoader.getMLDataSet();
+        MLDataSet ds = MLBarDataLoader.getTrainMLDataSet();
         NeuralContext.Training.setSamplesCount(ds.size());
 
 
@@ -184,7 +184,7 @@ public class NeuralService {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         // Get entities from csv files
-        List<DataPair> pairs = MLBarDataLoader.getEntityPairs(NeuralContext.Files.getSmallBarsTestFilePath(), NeuralContext.Files.getMediumBarsTestFilePath(), NeuralContext.Files.getLargeBarsTestFilePath());
+        List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
         NeuralContext.Test.setMaxIterationCount(pairs.size());
 
         int iteration = 1;

@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import trading.common.NeuralContext;
 import trading.data.model.Bar;
 
 /**
@@ -21,7 +22,32 @@ public class BarFileLoader {
 
     private final static String CSV_DELIMITER = ",";
 
- 
+//    /**
+//     * Load small, medium large bars with train data
+//     * @param smallBars
+//     * @param mediumBars
+//     * @param largeBars
+//     * @throws FileNotFoundException
+//     * @throws IOException 
+//     */
+//    public static void loadTrainBars(List<Bar> smallBars, List<Bar> mediumBars, List<Bar> largeBars) throws FileNotFoundException, IOException{
+//        smallBars.addAll(load(NeuralContext.Files.getSmallBarsTrainFilePath()));
+//        mediumBars.addAll(load(NeuralContext.Files.getMediumBarsTrainFilePath())); 
+//        largeBars.addAll(load(NeuralContext.Files.getLargeBarsTestFilePath()));
+//    }
+//     /**
+//     * Load small, medium large bars with test data
+//     * @param smallBars
+//     * @param mediumBars
+//     * @param largeBars
+//     * @throws FileNotFoundException
+//     * @throws IOException 
+//     */
+//    public static void loadTestBars(List<Bar> smallBars, List<Bar> mediumBars, List<Bar> largeBars) throws FileNotFoundException, IOException{
+//        smallBars.addAll(load(NeuralContext.Files.getSmallBarsTestFilePath()));
+//        mediumBars.addAll(load(NeuralContext.Files.getMediumBarsTestFilePath())); 
+//        largeBars.addAll(load(NeuralContext.Files.getLargeBarsTestFilePath()));
+//    }
     /**
      * Read bars from *.csv file to bar data array
      *

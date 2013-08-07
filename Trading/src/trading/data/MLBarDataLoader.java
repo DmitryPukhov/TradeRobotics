@@ -29,17 +29,36 @@ import trading.data.model.BarEntity;
  * @author pdg
  */
 public class MLBarDataLoader {
-
+    /**
+     * Gets data pars with train data
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public static List<DataPair> getTrainEntityPairs() throws FileNotFoundException, IOException{
+        return getEntityPairs(NeuralContext.Files.getSmallBarsTrainFilePath(), NeuralContext.Files.getMediumBarsTrainFilePath(), NeuralContext.Files.getLargeBarsTrainFilePath());
+    }
+ 
+    /**
+     * Gets data pars with test data
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public static List<DataPair> getTestEntityPairs() throws FileNotFoundException, IOException{
+        return getEntityPairs(NeuralContext.Files.getSmallBarsTestFilePath(), NeuralContext.Files.getMediumBarsTestFilePath(), NeuralContext.Files.getLargeBarsTestFilePath());
+    }    
+    
     /**
      * Get entity pairs from csv file
      * @return 
      */
-    public static List<DataPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilepath, String largeBarsFilePath) throws FileNotFoundException, IOException{
+    public static List<DataPair> getEntityPairs(String smallBarsFilePath, String mediumBarsFilePath, String largeBarsFilePath) throws FileNotFoundException, IOException{
         // Load from csv files to bar arrays
-        List<Bar> smallSimpleBars = BarFileLoader.load(NeuralContext.Files.getSmallBarsTrainFilePath());
-        List<Bar> mediumSimpleBars = BarFileLoader.load(NeuralContext.Files.getMediumBarsTrainFilePath());
-        List<Bar> largeSimpleBars = BarFileLoader.load(NeuralContext.Files.getLargeBarsTrainFilePath());
-
+        List<Bar> smallSimpleBars = BarFileLoader.load(smallBarsFilePath);
+        List<Bar> mediumSimpleBars = BarFileLoader.load(mediumBarsFilePath);
+        List<Bar> largeSimpleBars = BarFileLoader.load(largeBarsFilePath);
+        
         // Transform bars to relative bars
         List<BarEntity> smallBars = MLBarDataConverter.barsToEntities(smallSimpleBars);
         List<BarEntity> mediumBars = MLBarDataConverter.barsToEntities(mediumSimpleBars);
@@ -63,11 +82,10 @@ public class MLBarDataLoader {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static MLDataSet getMLDataSet() throws FileNotFoundException, IOException {
-
+    public static MLDataSet getTrainMLDataSet() throws FileNotFoundException, IOException {
 
         // Transform bars to change percents
-        List<DataPair> dataPairs = getEntityPairs(NeuralContext.Files.getSmallBarsTrainFilePath(), NeuralContext.Files.getMediumBarsTrainFilePath(), NeuralContext.Files.getLargeBarsTrainFilePath());
+        List<DataPair> dataPairs = getTrainEntityPairs();
         
         int firstIndex = Math.max((dataPairs.size()-1 - NeuralContext.Training.getSamplesCount()), 0);
         int lastIndex = Math.max(dataPairs.size()-1, 0);
