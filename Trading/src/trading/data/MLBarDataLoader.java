@@ -108,24 +108,20 @@ public class MLBarDataLoader {
     public static List<DataPair> getEntityPairs(List<BarEntity> smallBars, List<BarEntity> mediumBars, List<BarEntity> largeBars){
         List<DataPair> pairs = new ArrayList<>();
 
-        int smallPos, mediumPos, largePos;
-        mediumPos = mediumBars.size() - 1;
-        largePos = largeBars.size() - 1;
+        // Start from prediction interval from the end (for prediction test)
+        int smallPos;
         int predictionInterval = (int)NeuralContext.NetworkSettings.getPredictionIntervalMillis();
         Calendar lastSmallTime = GregorianCalendar.getInstance();
         lastSmallTime.setTimeInMillis(smallBars.get(smallBars.size()-1).getTime().getTimeInMillis());
         lastSmallTime.add(Calendar.MILLISECOND, -predictionInterval);
-        int startSmallPos = getLastPosBeforeTime(smallBars,lastSmallTime, smallBars.size()-1);
+        int startSmallPos = getLastPosBeforeTime(smallBars,lastSmallTime);
  
 
         // Go through small pos
         for (smallPos = startSmallPos; smallPos > NeuralContext.NetworkSettings.getSmallBarsWindowSize(); smallPos--) {
             // Get window with last x small bars, last y medium bars, last z large bars
             BarEntity smallBar = smallBars.get(smallPos);
-            mediumPos = getLastPosBeforeTime(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
-            largePos = getLastPosBeforeTime(largeBars, smallBar.getTime(), largePos); // Large pos     
-            
-            InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, mediumPos, largeBars, largePos);
+            InputEntity input = getInputEntity(smallBars, smallPos, mediumBars, largeBars);
             IdealOutputEntity ideal = getOutputEntity(smallBars, smallBar);
 
             // Create input/ideal pair
@@ -145,7 +141,7 @@ public class MLBarDataLoader {
 
         for (BarEntity smallBar : smallBars) {
             // Medium bars validation
-            int lastMediumPos = getLastPosBeforeTime(mediumBars, smallBar.getTime(), mediumBars.size() - 1);
+            int lastMediumPos = getLastPosBeforeTime(mediumBars, smallBar.getTime());
             if (lastMediumPos == -1) {
                 throw new Error(String.format("Can't find medium bar for date %s", smallBar.getTime().getTime().toString()));
             }
@@ -154,7 +150,7 @@ public class MLBarDataLoader {
             }
 
             // Large bars validation
-            int lastLargePos = getLastPosBeforeTime(largeBars, smallBar.getTime(), largeBars.size() - 1);
+            int lastLargePos = getLastPosBeforeTime(largeBars, smallBar.getTime());
             if (lastLargePos == -1) {
                 throw new Error(String.format("Can't find large bar for date %s", smallBar.getTime().getTime().toString()));
             }
@@ -173,10 +169,10 @@ public class MLBarDataLoader {
      * @param smallPos position of small bar
      * @return
      */
-    private static InputEntity getInputEntity(List<BarEntity> smallBars, int smallPos, List<BarEntity> mediumBars, int mediumPos, List<BarEntity> largeBars, int largePos) {
+    private static InputEntity getInputEntity(List<BarEntity> smallBars, int smallPos, List<BarEntity> mediumBars, List<BarEntity> largeBars) {
         BarEntity smallBar = smallBars.get(smallPos);
-        mediumPos = getLastPosBeforeTime(mediumBars, smallBar.getTime(), mediumPos); // Medium pos
-        largePos = getLastPosBeforeTime(largeBars, smallBar.getTime(), largePos); // Large pos
+        int mediumPos = getLastPosBeforeTime(mediumBars, smallBar.getTime()); // Medium pos
+        int largePos = getLastPosBeforeTime(largeBars, smallBar.getTime()); // Large pos
         // Get data windows for small, medium, large bars
         List<BarEntity> smallWindow = getInputWindow(smallBars, smallPos, NeuralContext.NetworkSettings.getSmallBarsWindowSize());
         List<BarEntity> mediumWindow = getInputWindow(mediumBars, mediumPos, NeuralContext.NetworkSettings.getMediumBarsWindowSize());
@@ -245,6 +241,8 @@ public class MLBarDataLoader {
         return result;
     }
 
+    
+    
     /**
      * Get last position of a bar before the time
      *
@@ -253,12 +251,12 @@ public class MLBarDataLoader {
      * @param initialPos
      * @return
      */
-    private static int getLastPosBeforeTime(List<BarEntity> bars, Calendar time, int initialPos) {
+    private static int getLastPosBeforeTime(List<BarEntity> bars, Calendar time) {
         if (bars.isEmpty()) {
             return -1;
         }
         int pos = -1;
-        for (int i = initialPos; i >= 0; i--) {
+        for (int i = bars.size()-1; i >= 0; i--) {
             BarEntity bar = bars.get(i);
             // We found the bar closed before current time
             if (bar.getTime().getTimeInMillis() <= time.getTimeInMillis()) {

@@ -144,8 +144,8 @@ public class NeuralService {
         watch.reset();
 
         // Backpropagation training
-        ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
-
+        //ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
+        ResilientPropagation train = new ResilientPropagation(network, ds);
 
         //Backpropagation train = new Backpropagation(network, ds);
         //train.setThreadCount(10);
