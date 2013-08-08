@@ -99,51 +99,43 @@ public class NeuralService {
      * Train on specific dataset
      */
     public static void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
+        NeuralContext.Training.setError(0);
+        NeuralContext.Training.setSamplesCount(dataSet.size());      
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
-        Stopwatch watch = new Stopwatch();
-        watch.start();
-        // Training dataset
-
-        NeuralContext.Training.setSamplesCount(dataSet.size());
-
-
-        watch.stop();
-        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create dataset: %d sec.", watch.getElapsedMilliseconds() / 1000));
-        watch.reset();
-
-        // Backpropagation training
+       // Backpropagation training
         //ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
         ResilientPropagation train = new ResilientPropagation(network, dataSet);
-
         //Backpropagation train = new Backpropagation(network, ds);
-        //train.setThreadCount(10);
+        train.setThreadCount(10);
 
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
-
+        
+        // Create watches
+        Stopwatch trainWatch = new Stopwatch();
+        trainWatch.reset();
+        trainWatch.start();
+        
+        Stopwatch epochWatch = new Stopwatch();
+        epochWatch.reset();
+        epochWatch.start();
         for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount(); epoch++) {
-            // Print info
-            watch.reset();
-            watch.start();
-            // Iteration
+            epochWatch.reset();
+            // Do training iteration
             train.iteration();
-
-            // Print info
-            watch.stop();
             // Calculate error
             double error = train.getError();
-
-            //NeuralContext.Training.setError(error);
-            // Error change event
-            // Epoch change event
-
+            // Update view
             NeuralContext.Training.setEpoch(epoch);
-            NeuralContext.Training.setEpochMilliseconds(watch.getElapsedMilliseconds());
+            NeuralContext.Training.setEpochMilliseconds(epochWatch.getElapsedMilliseconds());
+            NeuralContext.Training.setTrainMilliseconds(trainWatch.getElapsedMilliseconds());
             NeuralContext.Training.setError(error);
-            Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, watch.getElapsedMilliseconds() / 1000, Double.toString(error)));
+            Logger.getLogger(NeuralService.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, epochWatch.getElapsedMilliseconds() / 1000, Double.toString(error)));
         }
+        trainWatch.stop();
+        epochWatch.stop();
+        Logger.getLogger(NeuralService.class.getName()).info(String.format("Training time  %d minutes",  trainWatch.getElapsedMilliseconds() / 1000/60, Double.toString(train.getError())));
         train.finishTraining();
-
     }
 
     /**

@@ -74,6 +74,14 @@ public class TrainPanel extends javax.swing.JPanel {
                epochLifetimeLabel.setText(String.format("Epoch lifetime: %d sec", (int)milliseconds/1000));
             }
         });
+        // Train lifetime in milliseconds
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.TRAIN_MILLISECONDS, new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                 long seconds = (long)evt.getNewValue()/1000;
+                 trainTimeLabel.setText(String.format("Training time: %d sec", seconds));
+            }
+        });
         // Error changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.ERROR, new PropertyChangeListener() {
             @Override
@@ -93,7 +101,7 @@ public class TrainPanel extends javax.swing.JPanel {
                 samplesLabel.setText("Samples: ".concat(evt.getNewValue().toString()));
             }
         });
-
+ 
 
     }
 
@@ -138,6 +146,7 @@ public class TrainPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         samplesLabel = new javax.swing.JLabel();
         epochCountSpinner = new javax.swing.JSpinner();
+        trainTimeLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1024, 768));
 
@@ -177,10 +186,15 @@ public class TrainPanel extends javax.swing.JPanel {
             }
         });
 
+        trainTimeLabel.setText("Training time:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(135, 135, 135))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +202,7 @@ public class TrainPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, Short.MAX_VALUE))
+                                .addGap(18, 22, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(learnProgressLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -198,7 +212,7 @@ public class TrainPanel extends javax.swing.JPanel {
                                 .addGap(9, 9, 9)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 8, Short.MAX_VALUE)
+                                .addGap(0, 4, Short.MAX_VALUE)
                                 .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(samplesLabel)
@@ -206,12 +220,10 @@ public class TrainPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lastErrorLabel)
-                            .addComponent(epochLifetimeLabel))
+                            .addComponent(epochLifetimeLabel)
+                            .addComponent(trainTimeLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(135, 135, 135))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,11 +241,13 @@ public class TrainPanel extends javax.swing.JPanel {
                     .addComponent(learnProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(epochLifetimeLabel)
-                .addGap(6, 6, 6)
-                .addComponent(lastErrorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(trainTimeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lastErrorLabel)
+                .addGap(29, 29, 29)
                 .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(508, Short.MAX_VALUE))
+                .addContainerGap(454, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -282,5 +296,6 @@ public class TrainPanel extends javax.swing.JPanel {
     private javax.swing.JLabel learnProgressLabel;
     private javax.swing.JLabel samplesLabel;
     private javax.swing.JButton trainButton;
+    private javax.swing.JLabel trainTimeLabel;
     // End of variables declaration//GEN-END:variables
 }

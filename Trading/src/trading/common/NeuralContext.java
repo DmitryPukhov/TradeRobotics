@@ -126,6 +126,39 @@ public class NeuralContext {
         private static int maxEpochCount = 10;
         private static long epochMilliseconds = 0;
         private static int samplesCount = 0;
+        private static long trainMilliseconds = 0;
+
+        public static long getTrainMilliseconds() {
+            return trainMilliseconds;
+        }
+        /**
+         * Set network training milliseconds, fire event
+         * @param trainMilliseconds 
+         */
+        public static void setTrainMilliseconds(long trainMilliseconds) {
+            long oldValue = Training.trainMilliseconds;
+            Training.trainMilliseconds = trainMilliseconds;
+            pcs.firePropertyChange(PropertyNames.TRAIN_MILLISECONDS, oldValue, Training.trainMilliseconds);
+        }
+        
+//        private static Training train;
+//        
+//        /**
+//         * Encog training object
+//         * @return 
+//         */
+//        public static Training getTrain() {
+//            return train;
+//        }
+//        /**
+//         * Set engoc training object, fire property changed event
+//         * @param train 
+//         */
+//        public static void setTrain(Training train) {
+//            Training oldValue = Training.train;
+//            Training.train = train;
+//            pcs.firePropertyChange(PropertyNames.TRAIN, oldValue, Training.train);
+//        }
 
         public static int getSamplesCount() {
             return samplesCount;
