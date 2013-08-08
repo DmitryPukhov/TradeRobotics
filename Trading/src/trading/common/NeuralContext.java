@@ -339,7 +339,7 @@ public class NeuralContext {
         private static int maxIterationCount;
         private static double error;
         private static OutputEntity idealEntity;
-        private static OutputEntity realEntity;
+        private static OutputEntity predictedEntity;
         
         /**
          * Test iterations count
@@ -397,18 +397,18 @@ public class NeuralContext {
          * Gets real entity of current iteration
          * @return 
          */
-        public static OutputEntity getRealEntity() {
-            return realEntity;
+        public static OutputEntity getPredictedEntity() {
+            return predictedEntity;
         }
         
         /**
          * Sets real entity of current test iteration, fires property change event
          * @param realEntity 
          */
-        public static void setRealEntity(OutputEntity realEntity) {
-            OutputEntity oldValue = Test.realEntity;
-            Test.realEntity = realEntity;
-            pcs.firePropertyChange(PropertyNames.REAL_OUTPUT_ENTITY, oldValue, Test.realEntity);
+        public static void setPredictedEntity(OutputEntity realEntity) {
+            OutputEntity oldValue = Test.predictedEntity;
+            Test.predictedEntity = realEntity;
+            pcs.firePropertyChange(PropertyNames.REAL_OUTPUT_ENTITY, oldValue, Test.predictedEntity);
         }
     }
 }

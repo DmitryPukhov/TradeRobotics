@@ -37,13 +37,13 @@ public class TestPanel extends javax.swing.JPanel {
     JFreeChart chartAbsolute;
     XYSeries idealHighSeriesAbsolute;
     XYSeries idealLowSeriesAbsolute;
-    XYSeries realHighSeriesAbsolute;
-    XYSeries realLowSeriesAbsolute;
+    XYSeries predictedHighSeriesAbsolute;
+    XYSeries predictedLowSeriesAbsolute;
     JFreeChart chartRelative;
     XYSeries idealHighSeriesRelative;
     XYSeries idealLowSeriesRelative;
-    XYSeries realHighSeriesRelative;
-    XYSeries realLowSeriesRelative;
+    XYSeries predictedHighSeriesRelative;
+    XYSeries predictedLowSeriesRelative;
     /**
      * Creates new form TestPanel
      */
@@ -67,12 +67,12 @@ public class TestPanel extends javax.swing.JPanel {
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
         idealHighSeriesRelative = new XYSeries("Ideal High");
         idealLowSeriesRelative = new XYSeries("Ideal Low");
-        realHighSeriesRelative = new XYSeries("Real High");
-        realLowSeriesRelative = new XYSeries("Real Low");
+        predictedHighSeriesRelative = new XYSeries("Predicted High");
+        predictedLowSeriesRelative = new XYSeries("Predicted Low");
         xySeriesCollection.addSeries(idealHighSeriesRelative);
         xySeriesCollection.addSeries(idealLowSeriesRelative);
-        xySeriesCollection.addSeries(realHighSeriesRelative);
-        xySeriesCollection.addSeries(realLowSeriesRelative);
+        xySeriesCollection.addSeries(predictedHighSeriesRelative);
+        xySeriesCollection.addSeries(predictedLowSeriesRelative);
         // Create chartAbsolute
         chartRelative = ChartFactory.createXYLineChart("Price change %", "Iteration", "Change %", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
         initChart(chartRelative);
@@ -104,12 +104,12 @@ public class TestPanel extends javax.swing.JPanel {
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
         idealHighSeriesAbsolute = new XYSeries("Ideal High");
         idealLowSeriesAbsolute = new XYSeries("Ideal Low");
-        realHighSeriesAbsolute = new XYSeries("Real High");
-        realLowSeriesAbsolute = new XYSeries("Real Low");
+        predictedHighSeriesAbsolute = new XYSeries("Predicted High");
+        predictedLowSeriesAbsolute = new XYSeries("Predicted Low");
         xySeriesCollection.addSeries(idealHighSeriesAbsolute);
         xySeriesCollection.addSeries(idealLowSeriesAbsolute);
-        xySeriesCollection.addSeries(realHighSeriesAbsolute);
-        xySeriesCollection.addSeries(realLowSeriesAbsolute);
+        xySeriesCollection.addSeries(predictedHighSeriesAbsolute);
+        xySeriesCollection.addSeries(predictedLowSeriesAbsolute);
         // Create chartAbsolute
         chartAbsolute = ChartFactory.createXYLineChart("Price values", "Iteration", "Price", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
         
@@ -150,13 +150,13 @@ public class TestPanel extends javax.swing.JPanel {
                 // Add values to absolute chart
                 idealHighSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getFutureAbsoluteHigh());
                 idealLowSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getFutureAbsoluteLow());
-                realHighSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getFutureAbsoluteHigh());
-                realLowSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getFutureAbsoluteLow());
+                predictedHighSeriesAbsolute.add(iteration, NeuralContext.Test.getPredictedEntity().getFutureAbsoluteHigh());
+                predictedLowSeriesAbsolute.add(iteration, NeuralContext.Test.getPredictedEntity().getFutureAbsoluteLow());
                 // Add values to relative chart
                 idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getFutureRelativeHigh()/0.01);
                 idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getFutureRelativeLow()/0.01);
-                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getFutureRelativeHigh()/0.01);
-                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getFutureRelativeLow()/0.01);
+                predictedHighSeriesRelative.add(iteration, NeuralContext.Test.getPredictedEntity().getFutureRelativeHigh()/0.01);
+                predictedLowSeriesRelative.add(iteration, NeuralContext.Test.getPredictedEntity().getFutureRelativeLow()/0.01);
             }
         });
     }
@@ -167,13 +167,13 @@ public class TestPanel extends javax.swing.JPanel {
     private void clearCharts(){
                 this.idealHighSeriesAbsolute.clear();
         this.idealLowSeriesAbsolute.clear();
-        this.realHighSeriesAbsolute.clear();
-        this.realLowSeriesAbsolute.clear();
+        this.predictedHighSeriesAbsolute.clear();
+        this.predictedLowSeriesAbsolute.clear();
         
         this.idealHighSeriesRelative.clear();
         this.idealLowSeriesRelative.clear();
-        this.realHighSeriesRelative.clear();
-        this.realLowSeriesRelative.clear();
+        this.predictedHighSeriesRelative.clear();
+        this.predictedLowSeriesRelative.clear();
     }
 
     /**

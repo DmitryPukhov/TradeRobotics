@@ -206,7 +206,7 @@ public class NeuralService {
             // Store values in context
             NeuralContext.Test.setIteration(iteration);
             NeuralContext.Test.setIdealEntity(idealEntity);
-            NeuralContext.Test.setRealEntity(realEntity);
+            NeuralContext.Test.setPredictedEntity(realEntity);
 
             iteration++;
         }
