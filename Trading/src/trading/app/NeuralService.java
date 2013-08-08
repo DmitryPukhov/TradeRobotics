@@ -86,46 +86,6 @@ public class NeuralService {
     }
 
     /**
-     * Creates and returns a trading network
-     */
-//    public static BasicNetwork createNetwork() {
-//        Stopwatch watch = new Stopwatch();
-//        final FeedForwardPattern pattern = new FeedForwardPattern();
-//        // Input layer
-//        pattern.setInputNeurons(NeuralContext.NetworkSettings.getInputSize());
-//
-//        // Hidden layer 1
-//        int hidden1Count = NeuralContext.NetworkSettings.getHidden1Count();
-//        if (hidden1Count > 0) {
-//            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden1Count());
-//        }
-//        // Hidden layer 2
-//        int hidden2Count = NeuralContext.NetworkSettings.getHidden2Count();
-//        if (hidden2Count > 0) {
-//            pattern.addHiddenLayer(NeuralContext.NetworkSettings.getHidden2Count());
-//        }
-//        // Output layer
-//        pattern.setOutputNeurons(NeuralContext.NetworkSettings.getOutputSize());
-//
-//
-//        // Activation functioni
-//        //pattern.setActivationFunction(new ActivationTANH());
-//        pattern.setActivationFunction(new ActivationLinear());
-//        //pattern.setActivationFunction(new ActivationElliott());
-//
-//        // Create network
-//        final BasicNetwork network = (BasicNetwork) pattern.generate();
-//        network.reset();
-//
-//        watch.stop();
-//        Logger.getLogger(NeuralService.class.getName()).info(String.format("Create network: %d sec.", watch.getElapsedMilliseconds() / 1000));
-//        watch.reset();
-//
-//        NeuralContext.Network.setNetwork(network);
-//
-//        return network;
-//    }
-    /**
      * NetworkSettings learning
      */
     public static void trainNetwork() throws FileNotFoundException, IOException {

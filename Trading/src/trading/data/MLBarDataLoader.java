@@ -36,6 +36,7 @@ public class MLBarDataLoader {
      * @throws IOException 
      */
     public static List<DataPair> getTrainEntityPairs() throws FileNotFoundException, IOException{
+        //return getTestEntityPairs();
         return getEntityPairs(NeuralContext.Files.getSmallBarsTrainFilePath(), NeuralContext.Files.getMediumBarsTrainFilePath(), NeuralContext.Files.getLargeBarsTrainFilePath());
     }
  
