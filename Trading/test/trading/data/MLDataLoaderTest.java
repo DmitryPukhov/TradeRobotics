@@ -19,7 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import trading.common.NeuralContext;
-import trading.data.model.IdealOutputEntity;
+import trading.data.model.OutputEntity;
 import trading.data.model.BarEntity;
 
 /**
@@ -67,12 +67,12 @@ public class MLDataLoaderTest {
     public void testGetOutputEntity() throws Exception{
         
         // Invoke private method using reflection
-        Method method = MLBarDataLoader.class.getDeclaredMethod("getOutputEntity", List.class, Integer.TYPE, Calendar.class); //(List<Bar> bars, int pos, Calendar currentTime 
+        Method method = MLBarDataLoader.class.getDeclaredMethod("getOutputEntity", List.class, Integer.TYPE); //(List<Bar> bars, int pos, Calendar currentTime 
         method.setAccessible(true);
-        IdealOutputEntity data = (IdealOutputEntity) method.invoke(null, barEntities, 0, barEntities.get(0).getTime());
+        OutputEntity data = (OutputEntity) method.invoke(null, barEntities, 0);
         // Check not null
         assertNotNull( data);
-        assertEquals(barEntities.get(1), data.getBarEntity());
+        assertEquals(barEntities.get(0), data.getCurrentBarEntity());
         
     }
     
@@ -109,10 +109,10 @@ public class MLDataLoaderTest {
     public void testGetLastPos() throws Exception{
         // Invoke method
         MLBarDataLoader dsl = new MLBarDataLoader();
-        Method method = MLBarDataLoader.class.getDeclaredMethod("getLastPos", List.class, Calendar.class, Integer.TYPE);
+        Method method = MLBarDataLoader.class.getDeclaredMethod("getLastPosNotLater", List.class, Calendar.class);
         method.setAccessible(true); 
-        int pos = (int)method.invoke(dsl,barEntities, barEntities.get(1).getTime(),1);
-        assertEquals(pos,1);
+        int pos = (int)method.invoke(dsl,barEntities, barEntities.get(1).getTime());
+        assertEquals(1,pos);
         
     }    
 }

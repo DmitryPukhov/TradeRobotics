@@ -59,7 +59,7 @@ public class TestUtilities {
         
         // 60 min
         time = GregorianCalendar.getInstance();
-        time.setTime(time0); time.add(Calendar.MINUTE, 45);
+        time.setTime(time0); time.add(Calendar.MINUTE, 60); 
         newBars.add(new Bar(time,32,31,34,33,310));   
         
         return newBars;

@@ -35,8 +35,7 @@ import trading.data.MLBarDataConverter;
 import trading.data.MLBarDataLoader;
 import trading.data.model.BarEntity;
 import trading.data.model.DataPair;
-import trading.data.model.IdealOutputEntity;
-import trading.data.model.RealOutputEntity;
+import trading.data.model.OutputEntity;
 
 /**
  * Neural network service
@@ -192,7 +191,7 @@ public class NeuralService {
         for (DataPair pair : pairs) {
             // Process every 15 min
 //            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
-//            if(lastSmallBar.getTime().get(Calendar.MINUTE)%15 != 0){
+//            if(lastSmallBar.getFutureTime().get(Calendar.MINUTE)%15 != 0){
 //                continue;
 //            }
                 
@@ -201,8 +200,8 @@ public class NeuralService {
             MLData output = network.compute(input);
 
             // Get network output
-            IdealOutputEntity idealEntity = pair.getOutputEntity();
-            RealOutputEntity realEntity = new RealOutputEntity(idealEntity.getBarEntity(), idealEntity.getBarEntity().getTime(), output.getData(0), output.getData(1));
+            OutputEntity idealEntity = pair.getOutputEntity();
+            OutputEntity realEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
 
             // Store values in context
             NeuralContext.Test.setIteration(iteration);

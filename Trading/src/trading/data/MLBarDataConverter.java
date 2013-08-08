@@ -16,8 +16,8 @@ import trading.common.NeuralContext;
 import trading.data.model.Bar;
 import trading.data.model.DataPair;
 import trading.data.model.InputEntity;
-import trading.data.model.IdealOutputEntity;
 import trading.data.model.BarEntity;
+import trading.data.model.OutputEntity;
 
 /**
  * Convert entities to MLData values
@@ -67,7 +67,7 @@ public class MLBarDataConverter {
      * @param output
      * @return 
      */
-    public static MLData outputEntityToMLData(IdealOutputEntity output){
+    public static MLData outputEntityToMLData(OutputEntity output){
         double[] values = outputEntityToArray(output);
         // Create ml data from values
         MLData result = new BasicMLData(values);
@@ -89,11 +89,11 @@ public class MLBarDataConverter {
      * @param output
      * @return 
      */
-    public static double[] outputEntityToArray(IdealOutputEntity output){
+    public static double[] outputEntityToArray(OutputEntity output){
       // Fill values array
         double[] values = new double[NeuralContext.NetworkSettings.getOutputSize()];
-        values[0] = output.getRelativeHigh();
-        values[1] = output.getRelativeLow();
+        values[0] = output.getFutureRelativeHigh();
+        values[1] = output.getFutureRelativeLow();
         return values;
     }
     

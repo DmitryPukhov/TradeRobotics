@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import trading.data.model.Bar;
 import trading.data.model.DataPair;
 import trading.data.model.BarEntity;
-import trading.data.model.IdealOutputEntity;
+import trading.data.model.OutputEntity;
 import trading.data.model.InputEntity;
 
 /**
@@ -148,11 +148,11 @@ public class MLBarDataConverterTest {
     private void assertInputEntityArray(InputEntity entity, double[] result){
         List<BarEntity> bars = entity.getSmallBars();
         for(int i = 0; i < bars.size(); i++){
-            assertEquals("open price", bars.get(i).getRelativeBar().getOpen(), result[i*Bar.FIELD_COUNT +1], 0.000000001);
-            assertEquals("high price", bars.get(i).getRelativeBar().getHigh(), result[i*Bar.FIELD_COUNT +2], 0.000000001);
-            assertEquals("low price", bars.get(i).getRelativeBar().getLow(), result[i*Bar.FIELD_COUNT +3], 0.000000001);
-            assertEquals("close price", bars.get(i).getRelativeBar().getClose(), result[i*Bar.FIELD_COUNT +4], 0.000000001);
-            assertEquals("volume", bars.get(i).getRelativeBar().getVolume(), result[i*Bar.FIELD_COUNT +5], 0.000000001);           
+            assertEquals("open price", bars.get(i).getRelativeBar().getOpen(), result[i*Bar.FIELD_COUNT +0], 0.000000001);
+            assertEquals("high price", bars.get(i).getRelativeBar().getHigh(), result[i*Bar.FIELD_COUNT +1], 0.000000001);
+            assertEquals("low price", bars.get(i).getRelativeBar().getLow(), result[i*Bar.FIELD_COUNT +2], 0.000000001);
+            assertEquals("close price", bars.get(i).getRelativeBar().getClose(), result[i*Bar.FIELD_COUNT +3], 0.000000001);
+            assertEquals("volume", bars.get(i).getRelativeBar().getVolume(), result[i*Bar.FIELD_COUNT +4], 0.000000001);           
         }        
     }
 }

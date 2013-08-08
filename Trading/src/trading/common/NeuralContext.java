@@ -11,8 +11,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import trading.app.NeuralService;
 import trading.data.model.Bar;
-import trading.data.model.IdealOutputEntity;
-import trading.data.model.RealOutputEntity;
+import trading.data.model.OutputEntity;
 
 /**
  * Neural network related current context
@@ -339,8 +338,8 @@ public class NeuralContext {
         private static int iteration;
         private static int maxIterationCount;
         private static double error;
-        private static IdealOutputEntity idealEntity;
-        private static RealOutputEntity realEntity;
+        private static OutputEntity idealEntity;
+        private static OutputEntity realEntity;
         
         /**
          * Test iterations count
@@ -382,15 +381,15 @@ public class NeuralContext {
          * Gets output entity
          * @return 
          */
-        public static IdealOutputEntity getIdealEntity() {
+        public static OutputEntity getIdealEntity() {
             return idealEntity;
         }
         /**
          * Sets ideal entity of current test iteration, fires property change event
          * @param idealEntity 
          */
-        public static void setIdealEntity(IdealOutputEntity idealEntity) {
-            IdealOutputEntity oldValue = Test.idealEntity;
+        public static void setIdealEntity(OutputEntity idealEntity) {
+            OutputEntity oldValue = Test.idealEntity;
             Test.idealEntity = idealEntity;
             pcs.firePropertyChange(PropertyNames.IDEAL_OUTPUT_ENTITY, oldValue, Test.idealEntity);
         }
@@ -398,7 +397,7 @@ public class NeuralContext {
          * Gets real entity of current iteration
          * @return 
          */
-        public static RealOutputEntity getRealEntity() {
+        public static OutputEntity getRealEntity() {
             return realEntity;
         }
         
@@ -406,8 +405,8 @@ public class NeuralContext {
          * Sets real entity of current test iteration, fires property change event
          * @param realEntity 
          */
-        public static void setRealEntity(RealOutputEntity realEntity) {
-            RealOutputEntity oldValue = Test.realEntity;
+        public static void setRealEntity(OutputEntity realEntity) {
+            OutputEntity oldValue = Test.realEntity;
             Test.realEntity = realEntity;
             pcs.firePropertyChange(PropertyNames.REAL_OUTPUT_ENTITY, oldValue, Test.realEntity);
         }

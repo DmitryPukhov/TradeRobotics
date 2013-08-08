@@ -148,15 +148,15 @@ public class TestPanel extends javax.swing.JPanel {
                 // Add values to the charat
                 int iteration = NeuralContext.Test.getIteration();
                 // Add values to absolute chart
-                idealHighSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteHigh());
-                idealLowSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getAbsoluteLow());
-                realHighSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteHigh());
-                realLowSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getAbsoluteLow());
+                idealHighSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getFutureAbsoluteHigh());
+                idealLowSeriesAbsolute.add(iteration, NeuralContext.Test.getIdealEntity().getFutureAbsoluteLow());
+                realHighSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getFutureAbsoluteHigh());
+                realLowSeriesAbsolute.add(iteration, NeuralContext.Test.getRealEntity().getFutureAbsoluteLow());
                 // Add values to relative chart
-                idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeHigh()/0.01);
-                idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getRelativeLow()/0.01);
-                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeHigh()/0.01);
-                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getRelativeLow()/0.01);
+                idealHighSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getFutureRelativeHigh()/0.01);
+                idealLowSeriesRelative.add(iteration, NeuralContext.Test.getIdealEntity().getFutureRelativeLow()/0.01);
+                realHighSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getFutureRelativeHigh()/0.01);
+                realLowSeriesRelative.add(iteration, NeuralContext.Test.getRealEntity().getFutureRelativeLow()/0.01);
             }
         });
     }
