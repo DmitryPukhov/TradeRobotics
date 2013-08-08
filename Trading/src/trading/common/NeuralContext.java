@@ -260,7 +260,7 @@ public class NeuralContext {
      */
     public static class NetworkSettings {
 
-        private static int smallBarsWindowSize = 12;
+        private static int smallBarsWindowSize = 60;
         private static int mediumBarsWindowSize = 40;
         private static int largeBarsWindowSize = 7;
         private static long predictionIntervalMillis = 1000 * 60 * 60;// 15 minutes
@@ -306,6 +306,30 @@ public class NeuralContext {
 
         public static long getPredictionIntervalMillis() {
             return predictionIntervalMillis;
+        }
+
+        public static void setSmallBarsWindowSize(int smallBarsWindowSize) {
+            NetworkSettings.smallBarsWindowSize = smallBarsWindowSize;
+        }
+
+        public static void setMediumBarsWindowSize(int mediumBarsWindowSize) {
+            NetworkSettings.mediumBarsWindowSize = mediumBarsWindowSize;
+        }
+
+        public static void setLargeBarsWindowSize(int largeBarsWindowSize) {
+            NetworkSettings.largeBarsWindowSize = largeBarsWindowSize;
+        }
+
+        public static void setPredictionIntervalMillis(long predictionIntervalMillis) {
+            NetworkSettings.predictionIntervalMillis = predictionIntervalMillis;
+        }
+
+        public static void setHidden1Count(int hidden1Count) {
+            NetworkSettings.hidden1Count = hidden1Count;
+        }
+
+        public static void setHidden2Count(int hidden2Count) {
+            NetworkSettings.hidden2Count = hidden2Count;
         }
 
         public static int getSmallBarsWindowSize() {

@@ -84,18 +84,28 @@ public class NeuralService {
 
 
     }
-
+    
     /**
-     * NetworkSettings learning
+     * Train with default train dataset
+     * @throws FileNotFoundException
+     * @throws IOException 
      */
-    public static void trainNetwork() throws FileNotFoundException, IOException {
+    public static void trainNetwork() throws FileNotFoundException, IOException{
+         MLDataSet ds = MLBarDataLoader.getTrainMLDataSet();
+         trainNetwork(ds);
+    }
+    
+    /**
+     * Train on specific dataset
+     */
+    public static void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
         BasicNetwork network = NeuralContext.Network.getNetwork();
 
         Stopwatch watch = new Stopwatch();
         watch.start();
         // Training dataset
-        MLDataSet ds = MLBarDataLoader.getTrainMLDataSet();
-        NeuralContext.Training.setSamplesCount(ds.size());
+
+        NeuralContext.Training.setSamplesCount(dataSet.size());
 
 
         watch.stop();
@@ -104,7 +114,7 @@ public class NeuralService {
 
         // Backpropagation training
         //ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
-        ResilientPropagation train = new ResilientPropagation(network, ds);
+        ResilientPropagation train = new ResilientPropagation(network, dataSet);
 
         //Backpropagation train = new Backpropagation(network, ds);
         //train.setThreadCount(10);
@@ -139,38 +149,38 @@ public class NeuralService {
     /**
      * Predict results
      */
-    public static void testNetwork() throws FileNotFoundException, IOException {
-        BasicNetwork network = NeuralContext.Network.getNetwork();
-
-        // Get entities from csv files
-        List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
-        NeuralContext.Test.setMaxIterationCount(pairs.size());
-
-        int iteration = 1;
-        // Go through every input/ideal pair
-        for (DataPair pair : pairs) {
-            // Process every 15 min
-//            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
-//            if(lastSmallBar.getFutureTime().get(Calendar.MINUTE)%15 != 0){
-//                continue;
-//            }
-                
-            MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
-            // Compute network prediction
-            MLData output = network.compute(input);
-
-            // Get network output
-            OutputEntity idealEntity = pair.getOutputEntity();
-            OutputEntity realEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
-
-            // Store values in context
-            NeuralContext.Test.setIteration(iteration);
-            NeuralContext.Test.setIdealEntity(idealEntity);
-            NeuralContext.Test.setPredictedEntity(realEntity);
-
-            iteration++;
-        }
-    }
+//    private static void testNetwork() throws FileNotFoundException, IOException {
+//        BasicNetwork network = NeuralContext.Network.getNetwork();
+//
+//        // Get entities from csv files
+//        List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
+//        NeuralContext.Test.setMaxIterationCount(pairs.size());
+//
+//        int iteration = 1;
+//        // Go through every input/ideal pair
+//        for (DataPair pair : pairs) {
+//            // Process every 15 min
+////            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
+////            if(lastSmallBar.getFutureTime().get(Calendar.MINUTE)%15 != 0){
+////                continue;
+////            }
+//                
+//            MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
+//            // Compute network prediction
+//            MLData output = network.compute(input);
+//
+//            // Get network output
+//            OutputEntity idealEntity = pair.getOutputEntity();
+//            OutputEntity realEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
+//
+//            // Store values in context
+//            NeuralContext.Test.setIteration(iteration);
+//            NeuralContext.Test.setIdealEntity(idealEntity);
+//            NeuralContext.Test.setPredictedEntity(realEntity);
+//
+//            iteration++;
+//        }
+//    }
 
     /**
      * Saves current network to file

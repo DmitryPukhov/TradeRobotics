@@ -26,6 +26,7 @@ import trading.common.PropertyNames;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.xy.XYDataItem;
+import trading.app.HistoryTestService;
 
 /**
  * Neural network testNetwork panel
@@ -280,7 +281,7 @@ public class TestPanel extends javax.swing.JPanel {
             public void run() {
                 try {
                     // Run testNetwork
-                    NeuralService.testNetwork();
+                    HistoryTestService.test();
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(TestPanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {

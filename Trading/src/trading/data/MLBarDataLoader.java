@@ -100,7 +100,7 @@ public class MLBarDataLoader {
      * Create BufferedMLDataSet from data entities
      * @param pairs 
      */
-    private static MLDataSet getMLDataSet(List<DataPair> pairs){
+    public static MLDataSet getMLDataSet(List<DataPair> pairs){
        // Create buffered ml data set
         String fileName = NeuralContext.Files.getDataDir() + MLBarDataLoader.class.getName() + ".egb";
         File file = new File(fileName);
