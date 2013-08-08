@@ -61,7 +61,7 @@ public class TrainPanel extends javax.swing.JPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 int epoch = (int) evt.getNewValue();
                 learnProgressLabel.setText(String.format("Epoch: %d of %d", epoch, NeuralContext.Training.getMaxEpochCount()));
-                learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());               
+                learnProgressBar.setMaximum(NeuralContext.Training.getMaxEpochCount());   
                 learnProgressBar.setValue(epoch);
             }
         });
@@ -72,6 +72,14 @@ public class TrainPanel extends javax.swing.JPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                long milliseconds = (long)evt.getNewValue();
                epochLifetimeLabel.setText(String.format("Epoch lifetime: %d sec", (int)milliseconds/1000));
+            }
+        });
+        // New training started
+        NeuralContext.Training.addPropertyChangeListener(PropertyNames.TRAIN, new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Clear chart of old training
+                errorXYSeries.clear();
             }
         });
         // Train lifetime in milliseconds

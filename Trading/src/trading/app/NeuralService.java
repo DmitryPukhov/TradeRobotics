@@ -108,7 +108,8 @@ public class NeuralService {
         ResilientPropagation train = new ResilientPropagation(network, dataSet);
         //Backpropagation train = new Backpropagation(network, ds);
         train.setThreadCount(10);
-
+        NeuralContext.Training.setTrain(train);
+        
         Logger.getLogger(NeuralService.class.getName()).info("Start training");
         
         // Create watches
@@ -119,12 +120,23 @@ public class NeuralService {
         Stopwatch epochWatch = new Stopwatch();
         epochWatch.reset();
         epochWatch.start();
-        for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount(); epoch++) {
+        double lastError = 0;
+        double sameErrorCount = 0;
+        final int maxErrorCount = 10; // If error does not change maxErrorCount loops, training completed
+        for (int epoch = 1; epoch <= NeuralContext.Training.getMaxEpochCount() && sameErrorCount <=maxErrorCount; epoch++) {
             epochWatch.reset();
             // Do training iteration
             train.iteration();
             // Calculate error
             double error = train.getError();
+            // Increase error coujnt
+            if(error==lastError)
+            {
+                sameErrorCount++;
+            }else{
+                sameErrorCount = 0;
+                lastError = error;
+            }
             // Update view
             NeuralContext.Training.setEpoch(epoch);
             NeuralContext.Training.setEpochMilliseconds(epochWatch.getElapsedMilliseconds());

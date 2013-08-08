@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Date;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
+import org.encog.neural.networks.training.propagation.Propagation;
 import trading.app.NeuralService;
 import trading.data.model.Bar;
 import trading.data.model.OutputEntity;
@@ -141,24 +142,24 @@ public class NeuralContext {
             pcs.firePropertyChange(PropertyNames.TRAIN_MILLISECONDS, oldValue, Training.trainMilliseconds);
         }
         
-//        private static Training train;
-//        
-//        /**
-//         * Encog training object
-//         * @return 
-//         */
-//        public static Training getTrain() {
-//            return train;
-//        }
-//        /**
-//         * Set engoc training object, fire property changed event
-//         * @param train 
-//         */
-//        public static void setTrain(Training train) {
-//            Training oldValue = Training.train;
-//            Training.train = train;
-//            pcs.firePropertyChange(PropertyNames.TRAIN, oldValue, Training.train);
-//        }
+        private static Propagation train;
+        
+        /**
+         * Encog training object
+         * @return 
+         */
+        public static Propagation getTrain() {
+            return train;
+        }
+        /**
+         * Set engoc training object, fire property changed event
+         * @param train 
+         */
+        public static void setTrain(Propagation train) {
+            Propagation oldValue = Training.train;
+            Training.train = train;
+            pcs.firePropertyChange(PropertyNames.TRAIN, oldValue, Training.train);
+        }
 
         public static int getSamplesCount() {
             return samplesCount;
