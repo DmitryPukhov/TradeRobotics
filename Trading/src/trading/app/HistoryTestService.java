@@ -78,34 +78,5 @@ public class HistoryTestService {
             // Increase iteration
             NeuralContext.Test.setIteration(iteration++);
         };
-//        
-//        // Go through every input/ideal pair
-//        for (DataPair pair : pairs) {
-//            // Process every 15 min
-////            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
-////            if(lastSmallBar.getFutureTime().get(Calendar.MINUTE)%15 != 0){
-////                continue;
-////            }
-//                
-//            MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
-//            // Compute network prediction
-//            MLData output = network.compute(input);
-//
-//            // Get network output
-//            OutputEntity idealEntity = pair.getOutputEntity();
-//            OutputEntity realEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
-//
-//            // Store values in context
-//            NeuralContext.Test.setIteration(iteration);
-//            NeuralContext.Test.setIdealEntity(idealEntity);
-//            NeuralContext.Test.setPredictedEntity(realEntity);
-//
-//            iteration++;
-//        }
-        //List<Bar> mediumBars = BarFileLoader.load(NeuralContext.Files.)
-    }
-    
-    public static void train(){
-        
     }
 }

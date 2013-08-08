@@ -27,7 +27,7 @@ import trading.common.NeuralContext;
 import trading.common.PropertyNames;
 
 /**
- *
+ * Train view
  * @author pdg
  */
 public class TrainPanel extends javax.swing.JPanel {
@@ -54,7 +54,6 @@ public class TrainPanel extends javax.swing.JPanel {
         learnProgressBar.setStringPainted(true);
         epochCountSpinner.setValue(NeuralContext.Training.getMaxEpochCount());
         
-        
         // Epoch changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.EPOCH, new PropertyChangeListener() {
             @Override
@@ -65,7 +64,6 @@ public class TrainPanel extends javax.swing.JPanel {
                 learnProgressBar.setValue(epoch);
             }
         });
-     
         // Epoch lifetime in milliseconds changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.EPOCH_MILLISECONDS, new PropertyChangeListener(){
             @Override
@@ -98,19 +96,15 @@ public class TrainPanel extends javax.swing.JPanel {
                 Double value = ((double) evt.getNewValue()) / 0.01;
                 lastErrorLabel.setText(String.format("Error: %f%n %%", value));
                 errorXYSeries.add(errorXYSeries.getItemCount() + 1, value);
-
             }
         });
         // Samples changed
         NeuralContext.Training.addPropertyChangeListener(PropertyNames.SAMPLES_COUNT, new PropertyChangeListener(){
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 samplesLabel.setText("Samples: ".concat(evt.getNewValue().toString()));
             }
         });
- 
-
     }
 
     /**
@@ -123,12 +117,6 @@ public class TrainPanel extends javax.swing.JPanel {
         errorXYSeries = new XYSeries("Error");
         xySeriesCollection.addSeries(errorXYSeries);
 
-        // final XYPlot plot = result.getXYPlot();
-//        ValueAxis domain = plot.getDomainAxis();
-//        domain.setAutoRange(true);
-//        ValueAxis range = plot.getRangeAxis();
-//        range.setRange(-MINMAX, MINMAX);
-//        return result;
         // Create chart
         errorChart = ChartFactory.createXYLineChart("Error value", "Epoch", "Error, %", xySeriesCollection, PlotOrientation.VERTICAL, true, true, true);
         XYPlot plot = (XYPlot) errorChart.getPlot();
@@ -276,8 +264,6 @@ public class TrainPanel extends javax.swing.JPanel {
                 }
             }
         }).start();
-
-
     }//GEN-LAST:event_trainButtonActionPerformed
 
     private void epochCountSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_epochCountSpinnerStateChanged
@@ -290,7 +276,6 @@ public class TrainPanel extends javax.swing.JPanel {
         if(valueInt == null){
             return;
         }
-
         NeuralContext.Training.setMaxEpochCount(valueInt);
     }//GEN-LAST:event_epochCountSpinnerStateChanged
 
