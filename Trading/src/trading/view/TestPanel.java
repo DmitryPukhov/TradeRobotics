@@ -146,10 +146,11 @@ public class TestPanel extends javax.swing.JPanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 // Set charts x range
-                XYPlot plot = (XYPlot) chartAbsolute.getPlot();
+                //XYPlot plot = (XYPlot) chartAbsolute.getPlot();
                 //plot.getDomainAxis().setRange(1, (double) NeuralContext.Test.getMaxIterationCount());
-                plot = (XYPlot) chartRelative.getPlot();
+                //plot = (XYPlot) chartRelative.getPlot();
                 //plot.getDomainAxis().setRange(1, (double) NeuralContext.Test.getMaxIterationCount());
+                iterationProgressBar.setMaximum((int)evt.getNewValue());
                 
             }
         });
