@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="trading.app"></context:component-scan>
+	
+	<bean id="realTimeProvider" name="realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
+	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
+	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
+		<property name="realTimeProvider" ref="realTimeProvider"></property>
+	</bean>
+	<bean id="realTimeEmulator" class="trading.app.history.HistoricalEmulator">
+		<constructor-arg ref="neuralContext"></constructor-arg>
+		<constructor-arg ref="historyProvider"></constructor-arg>
+	</bean>
+
+	<bean id="neuralContext" name="tradingApplicationContext, neuralContext" class="trading.app.neural.NeuralContext">
+	</bean>
+	<bean id="neuralDataManager" class="trading.app.neural.history.Level1DataManager" >
+		<constructor-arg ref="neuralContext"></constructor-arg>
+		<constructor-arg ref="historyProvider"></constructor-arg>
+	</bean>	
+	<bean id="neuralService" class="trading.app.neural.NeuralServiceImpl">
+		<constructor-arg name = "neuralContext" ref="neuralContext"></constructor-arg>
+		<constructor-arg name="neuralDataManager" ref="neuralDataManager"></constructor-arg>
+	</bean>
+
+	
+	<bean id="view" class="trading.view.swing.NeuralNetworkForm">
+		<constructor-arg ref="neuralContext"></constructor-arg>
+		<constructor-arg ref="neuralService"></constructor-arg>
+		<constructor-arg ref="historyProvider"></constructor-arg>
+		<constructor-arg ref="historyWriter"></constructor-arg>
+		<constructor-arg ref="realTimeProvider"></constructor-arg>
+		<constructor-arg ref="realTimeEmulator"></constructor-arg>
+	</bean>
+</beans>
+
