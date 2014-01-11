@@ -1,33 +1,20 @@
 package trading.view.swing;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
-import org.springframework.context.support.GenericXmlApplicationContext;
-
-
-
-
 
 //import trading.app.TradingApplication1;
 import trading.app.TradingApplicationContext;
@@ -38,14 +25,24 @@ import trading.app.realTime.RealTimeProvider;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
-import javax.swing.SpringLayout;
+/**
+ * Runtime data panel
+ * 
+ * @author dima
+ * 
+ */
+public class Level1RuntimePanel extends JPanel implements
+		MarketListener<Level1> {
 
-public class Level1RuntimePanel extends JPanel implements MarketListener<Level1> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	
 	/**
 	 * Capture real time data action
 	 */
+	@SuppressWarnings("serial")
 	private class CaptureAction extends AbstractAction {
 		public CaptureAction() {
 			putValue(NAME, "Listen");
@@ -62,23 +59,25 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 				level1Chart.clear();
 
 				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),
-						windowInstance);
+						Level1RuntimePanel.this);
 
 			} else {
 				Instrument selectedInstrument = (Instrument) instrumentComboBox
 						.getSelectedItem();
 				realTimeProvider.removeLevel1Listener(
-						selectedInstrument.getId(), windowInstance);
+						selectedInstrument.getId(), Level1RuntimePanel.this);
 				instrumentComboBox.setEnabled(true);
 				historyAction.setEnabled(true);
 			}
 		}
 	}
+
 	/**
-	 * Connect to data provider
+	 * Connect to data provider action
 	 * 
 	 * @author dimaString title
 	 */
+	@SuppressWarnings("serial")
 	private class ConnectAction extends AbstractAction {
 		public ConnectAction() {
 			putValue(NAME, "Connect");
@@ -91,16 +90,19 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 			if (source.isSelected()) {
 				realTimeProvider.start();
 			} else {
-				realTimeProvider.stop();;
+				realTimeProvider.stop();
+				;
 			}
 		}
 	}
+
 	/**
 	 * Load history from data provider
 	 * 
 	 * @author dima
 	 * 
 	 */
+	@SuppressWarnings("serial")
 	private class HistoryAction extends AbstractAction {
 		public HistoryAction() {
 			putValue(NAME, "Load history");
@@ -121,43 +123,76 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 	 * Application context to store instrument there
 	 */
 	private TradingApplicationContext tradingApplicationContext;
-	
+
 	/**
 	 * History data provider to get data for chart
 	 */
 	private HistoryProvider historyProvider;
-	
+
 	/**
-	 * History writer. If write history checkbox checked, use this writer to persist data
+	 * History writer. If write history checkbox checked, use this writer to
+	 * persist data
 	 */
 	private HistoryWriter historyWriter;
-	
+
 	/**
 	 * Realtime data provider
 	 */
 	private RealTimeProvider realTimeProvider;
-	
-	private Level1RuntimePanel windowInstance = this;
-	private Level1Chart level1Chart;
-	private JComboBox<Instrument> instrumentComboBox;
-	//private JPanel frame;
 
-	
-	
+	/**
+	 * Level1 ticks chart
+	 */
+	private Level1Chart level1Chart;
+
+	/**
+	 * Instrument selector compbo box
+	 */
+	private JComboBox<Instrument> instrumentComboBox;
+	// private JPanel frame;
+
+	/**
+	 * Connect to data provider swing action
+	 */
 	private final Action connectAction = new ConnectAction();
+
+	/**
+	 * Listen realTimeProvider swing action
+	 */
 	private final Action listenAction = new CaptureAction();
+
+	/**
+	 * Use history instead of real time data swing action
+	 */
 	private final Action historyAction = new HistoryAction();
+
+	/**
+	 * Enable/disable writing to history configuration settings
+	 */
 	private boolean isWriteEnabled = false;
-	private JCheckBox writeHistoryCheckBox; 
-	public Level1RuntimePanel(){
+
+	/**
+	 * Enable/disable writing to history check box
+	 */
+	private JCheckBox writeHistoryCheckBox;
+
+	/**
+	 * Empty constructor for window builder
+	 */
+	public Level1RuntimePanel() {
 		initialize();
 	}
-	
+
 	/**
 	 * Ctor
-	 * @param context Trading application context
+	 * 
+	 * @param context
+	 *            Trading application context
 	 */
-	public Level1RuntimePanel(TradingApplicationContext tradingApplicationContext, HistoryProvider historyProvider, HistoryWriter historyWriter, RealTimeProvider realTimeProvider) {
+	public Level1RuntimePanel(
+			TradingApplicationContext tradingApplicationContext,
+			HistoryProvider historyProvider, HistoryWriter historyWriter,
+			RealTimeProvider realTimeProvider) {
 		this.tradingApplicationContext = tradingApplicationContext;
 		this.historyProvider = historyProvider;
 		this.historyWriter = historyWriter;
@@ -189,43 +224,36 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-	
 
-
-		/*addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				List<Instrument> instruments = tradingApplicationContext.getHistoryProvider()
-						.findInstrumentAll();
-				ComboBoxModel<Instrument> model = new DefaultComboBoxModel(
-						instruments.toArray());
-				instrumentComboBox.setModel(model);
-				level1Chart.setTitle(instrumentComboBox.getSelectedItem()
-						.toString());
-			}
-		});*/
- 
 		setBounds(100, 100, 1024, 768);
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
-		
+
 		// Main chart
 		level1Chart = new Level1Chart("No instrument selected");
-		springLayout.putConstraint(SpringLayout.NORTH, level1Chart, 50, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, level1Chart, 0, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, level1Chart, 0, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, level1Chart, 0, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, level1Chart, 50,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, level1Chart, 0,
+				SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, level1Chart, 0,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, level1Chart, 0,
+				SpringLayout.EAST, this);
 		level1Chart.setTitle("");
 		add(level1Chart);
 
 		JPanel controlPanel = new JPanel();
-		springLayout.putConstraint(SpringLayout.NORTH, controlPanel, 0, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, controlPanel, 0, SpringLayout.WEST, level1Chart);
-		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, 50, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, controlPanel, 0, SpringLayout.EAST, level1Chart);
+		springLayout.putConstraint(SpringLayout.NORTH, controlPanel, 0,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, controlPanel, 0,
+				SpringLayout.WEST, level1Chart);
+		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, 50,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, controlPanel, 0,
+				SpringLayout.EAST, level1Chart);
 		add(controlPanel);
 
-		// Connect to provider button 
+		// Connect to provider button
 		JToggleButton connectButton = new JToggleButton("Connect");
 		connectButton.setToolTipText("Connect to data provider");
 		connectButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -238,9 +266,8 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Set caption to selected instrument
-				JComboBox<Instrument> source = (JComboBox<Instrument>) e
-						.getSource();
-				Instrument instrument = (Instrument) source.getSelectedItem();
+				Instrument instrument = (Instrument) instrumentComboBox
+						.getSelectedItem();
 				level1Chart.setTitle(instrument.toString());
 				// Add to history writer
 				historyWriter.getInstrumentIds().clear();
@@ -248,7 +275,7 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 						new Integer(instrument.getId()));
 				isWriteEnabled = false;
 				writeHistoryCheckBox.setSelected(isWriteEnabled);
-				
+
 			}
 		});
 		// Load history button
@@ -277,7 +304,7 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 				historyWriter.setEnabled(isWriteEnabled);
 			}
 		});
-		historyWriter.setEnabled(isWriteEnabled);		
+		historyWriter.setEnabled(isWriteEnabled);
 		writeHistoryCheckBox.setToolTipText("Write to database when listening");
 		writeHistoryCheckBox.setSelected(false);
 		controlPanel.add(writeHistoryCheckBox);

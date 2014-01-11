@@ -1,7 +1,19 @@
 package trading.view.swing;
 
-import org.jfree.chart.*;
-import org.jfree.chart.axis.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.ClusteredXYBarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -12,20 +24,19 @@ import org.jfree.data.xy.XYDataset;
 
 import trading.data.model.Level1;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-
-import javax.swing.JPanel;
-
-import java.awt.FlowLayout;
-import java.awt.Color;
-import java.awt.SystemColor;
-import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-
+/**
+ * Level1 ticks chart
+ * 
+ * @author dima
+ * 
+ */
 public class Level1Chart extends JPanel {
-	String title;
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Chart title
+	 */
+	private String title;
 
 	/**
 	 * @return the title
@@ -42,42 +53,75 @@ public class Level1Chart extends JPanel {
 		priceChart.setTitle(title);
 	}
 
-	// Data for price chart
+	/**
+	 * Price quote series for price chart
+	 */
 	TimeSeries priceSeries;
+
+	/**
+	 * Bid data series for price chart
+	 */
 	TimeSeries bidSeries;
+
+	/**
+	 * Ask data series for price chart
+	 */
 	TimeSeries askSeries;
-	// Data for volume chart
+
+	/**
+	 * For volume chart - volume series for price chart
+	 */
 	TimeSeries volumeSeries;
-	
+
+	/**
+	 * Price chart
+	 */
 	final JFreeChart priceChart;
+
+	/**
+	 * Volume chart
+	 */
 	final JFreeChart volumeChart;
 
+	/**
+	 * Volume series index in it's series collection
+	 */
 	final static int VOLUME_SERIES_INDEX = 0;
+
+	/**
+	 * Price series index in level1 data series collection
+	 */
 	final static int PRICE_SERIES_INDEX = 0;
+
+	/**
+	 * Bid series index in level1 data series collection
+	 */
 	final static int BID_SERIES_INDEX = 1;
+
+	/**
+	 * Ask series index in level1 data series collection
+	 */
 	final static int ASK_SERIES_INDEX = 2;
+
+	/**
+	 * Price color in price chart
+	 */
 	final static Color PRICE_SERIES_COLOR = Color.blue;
+
+	/**
+	 * Bid color in price chart
+	 */
 	final static Color BID_SERIES_COLOR = Color.cyan;
+
+	/**
+	 * Ask color in price chart
+	 */
 	final static Color ASK_SERIES_COLOR = Color.cyan;
+
+	/**
+	 * Volume color in volume chart
+	 */
 	final static Color VOLUME_SERIES_COLOR = Color.red;
-	
-//	// Max items in charts
-//	//int maxItemCount = 100;
-//
-//	/**
-//	 * @return the maxItemCount
-//	 */
-//	public int getMaxItemCount() {
-//		return maxItemCount;
-//	}
-//
-//	/**
-//	 * @param maxItemCount
-//	 *            the maxItemCount to set
-//	 */
-//	public void setMaxItemCount(int maxItemCount) {
-//		this.maxItemCount = maxItemCount;
-//	}
 
 	/**
 	 * Ctor, jfreechart init
@@ -87,29 +131,36 @@ public class Level1Chart extends JPanel {
 	public Level1Chart(String title) {
 		this.title = title;
 		setBackground(SystemColor.control);
-		final XYDataset priceDataSet = createPriceDataSet();
-		priceChart = createPriceChart(priceDataSet);
-		setLayout(new GridLayout(0, 1, 0, 0));
 
-		final XYDataset volumeDataSet = createVolumeDataSet();
-		volumeChart = createVolumeChart(volumeDataSet);
-		setLayout(new GridLayout(0, 1, 0, 0));
-		
+		// Split pane with price and volume charts
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.7);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		add(splitPane);
+
+		// Price chart
+		final XYDataset priceDataSet = createPriceDataSet();
+		priceChart = createPriceChart(priceDataSet);
+		setLayout(new GridLayout(0, 1, 0, 0));
+
+		// Panel for price chart
 		final ChartPanel priceChartPanel = new ChartPanel(priceChart);
 		splitPane.setLeftComponent(priceChartPanel);
 		FlowLayout flowLayout_1 = (FlowLayout) priceChartPanel.getLayout();
 		flowLayout_1.setAlignOnBaseline(true);
 		priceChartPanel.setPreferredSize(new java.awt.Dimension(500, 370));
+
+		// Volume chart
+		final XYDataset volumeDataSet = createVolumeDataSet();
+		volumeChart = createVolumeChart(volumeDataSet);
+		setLayout(new GridLayout(0, 1, 0, 0));
+
+		// Panel for volume chart
 		final ChartPanel volumeChartPanel = new ChartPanel(volumeChart);
 		splitPane.setRightComponent(volumeChartPanel);
 		FlowLayout flowLayout_2 = (FlowLayout) volumeChartPanel.getLayout();
 		flowLayout_2.setAlignOnBaseline(true);
 		volumeChartPanel.setPreferredSize(new java.awt.Dimension(500, 100));
-
 	}
 
 	/**
@@ -253,5 +304,4 @@ public class Level1Chart extends JPanel {
 		plot.setRenderer(renderer);
 		return chart;
 	}
-
 }

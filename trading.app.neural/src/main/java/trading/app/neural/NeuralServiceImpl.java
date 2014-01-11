@@ -1,22 +1,10 @@
 package trading.app.neural;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
-import org.encog.Encog;
-import org.encog.engine.network.activation.ActivationElliott;
-import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.ml.data.MLData;
@@ -26,16 +14,10 @@ import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
-import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
-import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
-import org.encog.util.simple.EncogUtility;
 
-import com.google.common.eventbus.EventBus;
-
-import trading.app.neural.NeuralContext;
 import trading.app.neural.events.TestCompletedEvent;
 import trading.app.neural.events.TestIterationCompletedEvent;
 import trading.app.neural.events.TestStartedEvent;
@@ -76,7 +58,8 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	/**
 	 * Ctor
 	 */
-	public NeuralServiceImpl(NeuralContext neuralContext, NeuralDataManager neuralDataManager) {
+	public NeuralServiceImpl(NeuralContext neuralContext,
+			NeuralDataManager neuralDataManager) {
 		super(neuralContext, neuralDataManager);
 	}
 
@@ -135,21 +118,22 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
+	 * Reset training continuation data. Will start new training, not continue
+	 * previous one
+	 */
+	@Override
+	public void resetTraining() {
+		trainStopFlag = true;
+		trainContinuation = null;
+	}
+
+	/**
 	 * @see NeuralServiceBase#stop()
 	 */
 	@Override
 	public void stop() {
 		trainStopFlag = true;
 		testStopFlag = true;
-	}
-	
-	/**
-	 * Reset training continuation data. Will start new training, not continue previous one
-	 */
-	@Override
-	public void resetTraining(){
-		trainStopFlag = true;
-		trainContinuation = null;
 	}
 
 	/**
@@ -166,24 +150,21 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 
 		// ??? ToDo: rework, predict
 		int startIndex = neuralContext.getLevel1WindowSize();
-				//+ neuralContext.getPredictionSize();
+		// + neuralContext.getPredictionSize();
 		int step = 1;
 		// Go through all prediction window
 		int i = 0, iteration = 0;
 		;
 		for (testStopFlag = false, i = startIndex, iteration = 1; i < startIndex
-				+ neuralContext.getPredictionSamples()
-				* step
+				+ neuralContext.getPredictionSamples() * step
 				&& !testStopFlag; i += step, iteration++) {
 			// Get input - ideal data pair
-			MLData input = neuralDataManager.getInputData(
-					data, i);
+			MLData input = neuralDataManager.getInputData(data, i);
 			// Predict
 			MLData output = network.compute(input);
 
 			// Get ideal data
-			MLData ideal = neuralDataManager.getOutputData(
-					data, i);
+			MLData ideal = neuralDataManager.getOutputData(data, i);
 			// Calculate error
 			MLDataPair pair = new BasicMLDataPair(input, ideal);
 			MLDataSet dataSet = new BasicMLDataSet(
@@ -219,7 +200,8 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	 */
 	@Override
 	public void trainNetwork(Date trainEndDateTime) {
-		MLDataSet dataSet = neuralDataManager.loadTrainMLDataSet(trainEndDateTime);
+		MLDataSet dataSet = neuralDataManager
+				.loadTrainMLDataSet(trainEndDateTime);
 		trainNetwork(dataSet);
 	}
 
@@ -228,7 +210,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	 */
 	void trainNetwork(MLDataSet dataSet) {
 		eventBus.post(new TrainStartedEvent());
-		//neuralContext.getTrainingContext().setLastError(0);
+		// neuralContext.getTrainingContext().setLastError(0);
 		// neuralContext.getTrainingContext().setSamplesCount(dataSet.size());
 		BasicNetwork network = neuralContext.getNetwork();
 
@@ -258,8 +240,10 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		final int maxErrorCount = 100; // If error does not change maxErrorCount
 										// loops, training completed
 		int epoch = 1;
-		for (trainStopFlag = false, epoch = 1; epoch <= neuralContext.getMaxEpochCount()
-				&& sameErrorCount <= maxErrorCount && !trainStopFlag; epoch++) {
+		for (trainStopFlag = false, epoch = 1; epoch <= neuralContext
+				.getMaxEpochCount()
+				&& sameErrorCount <= maxErrorCount
+				&& !trainStopFlag; epoch++) {
 			epochWatch.reset();
 			// Do training iteration
 			train.iteration();
@@ -274,8 +258,8 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 			}
 			// Raise event
 			TrainIterationCompletedEvent event = new TrainIterationCompletedEvent(
-					epoch, epochWatch.getElapsedMilliseconds(), trainWatch.getElapsedMilliseconds(),
-					lastError);
+					epoch, epochWatch.getElapsedMilliseconds(),
+					trainWatch.getElapsedMilliseconds(), lastError);
 			eventBus.post(event);
 
 			// Log

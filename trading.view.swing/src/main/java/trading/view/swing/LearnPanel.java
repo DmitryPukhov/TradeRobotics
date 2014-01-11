@@ -9,13 +9,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -42,8 +41,6 @@ import trading.data.model.Instrument;
 
 import com.google.common.eventbus.Subscribe;
 
-import javax.swing.JButton;
-
 /**
  * NN learning panel with error chart and start/stop functionality
  * 
@@ -51,36 +48,88 @@ import javax.swing.JButton;
  * 
  */
 public class LearnPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Neural context with training settings: input size, prediction size...
 	 */
 	private final NeuralContext neuralContext;
-	
+
 	/**
 	 * Neural service to train network
 	 */
 	private final NeuralService neuralService;
-	
+
 	/**
 	 * History provider to load instruments for instrument combo box
 	 */
 	private final HistoryProvider historyProvider;
-	
+
+	/**
+	 * Learning progrress bar control
+	 */
 	private final JProgressBar learnProgressBar;
+
+	/**
+	 * Epoch x of y label
+	 */
 	private final JLabel lblEpoch;
+
+	/**
+	 * Last epoch duration label
+	 */
 	private final JLabel lblLastEpochTime;
+
+	/**
+	 * Whole learning time label
+	 */
 	private final JLabel lblTotalTime;
+
+	/**
+	 * Instrument selector combo box
+	 */
 	private final JComboBox<Instrument> instrumentComboBox;
+
+	/**
+	 * Start learning button
+	 */
 	JToggleButton learnButton;
+
+	/**
+	 * TextField to set max epoch count
+	 */
 	private final JFormattedTextField maxEpochCountText;
+
+	/**
+	 * Calculated last iteration error label
+	 */
 	private JLabel lblLastError;
+
+	/**
+	 * Error after iterations chart
+	 */
 	private JFreeChart errorChart;
+
+	/**
+	 * Data series for error chart
+	 */
 	private XYSeries errorXYSeries;
+
+	/**
+	 * TextField to set training last bound
+	 */
 	private final JFormattedTextField trainingEndDateTime;
+
+	/**
+	 * Format of date displayed on charts
+	 */
 	private final static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+
+	/**
+	 * DateFormat object for charts
+	 */
+	private final static DateFormat dateFormat = new SimpleDateFormat(
+			DATE_FORMAT);
 
 	/**
 	 * Create the panel.
@@ -88,15 +137,19 @@ public class LearnPanel extends JPanel {
 	 * @param context
 	 *            Neural network context to work with
 	 */
-	public LearnPanel(NeuralContext context, final NeuralService neuralService, HistoryProvider historyProvider) {
+	public LearnPanel(NeuralContext context, final NeuralService neuralService,
+			HistoryProvider historyProvider) {
+		// Store services objects
 		this.neuralService = neuralService;
 		this.neuralContext = context;
 		this.historyProvider = historyProvider;
 		this.neuralService.getEventBus().register(this);
 
+		// Set up form layout
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 
+		// Learn progress bar
 		learnProgressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, learnProgressBar, 75,
 				SpringLayout.NORTH, this);
@@ -106,6 +159,7 @@ public class LearnPanel extends JPanel {
 				SpringLayout.EAST, this);
 		add(learnProgressBar);
 
+		// Start learning button
 		learnButton = new JToggleButton("Learn");
 		springLayout.putConstraint(SpringLayout.NORTH, learnButton, 70,
 				SpringLayout.NORTH, this);
@@ -126,6 +180,7 @@ public class LearnPanel extends JPanel {
 		});
 		add(learnButton);
 
+		// Epoch information label
 		lblEpoch = new JLabel("Epoch 0 of 0");
 		springLayout.putConstraint(SpringLayout.NORTH, lblEpoch, 29,
 				SpringLayout.SOUTH, learnProgressBar);
@@ -133,6 +188,7 @@ public class LearnPanel extends JPanel {
 				SpringLayout.WEST, this);
 		add(lblEpoch);
 
+		// Last epoch duration label
 		lblLastEpochTime = new JLabel("Last epoch: 0 ms");
 		springLayout.putConstraint(SpringLayout.NORTH, lblLastEpochTime, 0,
 				SpringLayout.NORTH, lblEpoch);
@@ -140,6 +196,7 @@ public class LearnPanel extends JPanel {
 				SpringLayout.EAST, lblEpoch);
 		add(lblLastEpochTime);
 
+		// Total learning time info label
 		lblTotalTime = new JLabel("Total time: 0 sec");
 		springLayout.putConstraint(SpringLayout.NORTH, lblTotalTime, 6,
 				SpringLayout.SOUTH, lblEpoch);
@@ -147,6 +204,7 @@ public class LearnPanel extends JPanel {
 				SpringLayout.WEST, lblEpoch);
 		add(lblTotalTime);
 
+		// Instrument selector combo box with label
 		instrumentComboBox = new JComboBox<Instrument>();
 		springLayout.putConstraint(SpringLayout.NORTH, instrumentComboBox, 7,
 				SpringLayout.NORTH, this);
@@ -169,6 +227,7 @@ public class LearnPanel extends JPanel {
 				SpringLayout.WEST, instrumentComboBox);
 		add(lblInstrument);
 
+		// Max epoch count
 		maxEpochCountText = new JFormattedTextField();
 		springLayout.putConstraint(SpringLayout.EAST, maxEpochCountText, -187,
 				SpringLayout.EAST, this);
@@ -186,26 +245,15 @@ public class LearnPanel extends JPanel {
 				SpringLayout.WEST, maxEpochCountText);
 		add(lblEpochCount);
 
+		// Last error label
 		lblLastError = new JLabel("Last error: 0");
 		springLayout.putConstraint(SpringLayout.NORTH, lblLastError, 6,
 				SpringLayout.SOUTH, lblTotalTime);
 		springLayout.putConstraint(SpringLayout.WEST, lblLastError, 10,
 				SpringLayout.WEST, this);
 		add(lblLastError);
-		// Chart creation
-		createChart();
-		// ChartPanel
-		ChartPanel chartPanel = new ChartPanel(errorChart);
-		springLayout.putConstraint(SpringLayout.NORTH, chartPanel, 200,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, chartPanel, 0,
-				SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, chartPanel, 0,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, chartPanel, 0,
-				SpringLayout.EAST, this);
-		add(chartPanel);
 
+		// Training end time
 		trainingEndDateTime = new JFormattedTextField();
 		springLayout.putConstraint(SpringLayout.EAST, trainingEndDateTime,
 				-471, SpringLayout.EAST, this);
@@ -231,7 +279,8 @@ public class LearnPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, lblLastDatetime, 0,
 				SpringLayout.WEST, learnProgressBar);
 		add(lblLastDatetime);
-		
+
+		// Reset network button
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -239,11 +288,28 @@ public class LearnPanel extends JPanel {
 			}
 		});
 		resetButton.setToolTipText("Reset training. ");
-		springLayout.putConstraint(SpringLayout.NORTH, resetButton, 18, SpringLayout.SOUTH, learnButton);
-		springLayout.putConstraint(SpringLayout.WEST, resetButton, 0, SpringLayout.WEST, learnButton);
-		springLayout.putConstraint(SpringLayout.EAST, resetButton, 0, SpringLayout.EAST, learnButton);
+		springLayout.putConstraint(SpringLayout.NORTH, resetButton, 18,
+				SpringLayout.SOUTH, learnButton);
+		springLayout.putConstraint(SpringLayout.WEST, resetButton, 0,
+				SpringLayout.WEST, learnButton);
+		springLayout.putConstraint(SpringLayout.EAST, resetButton, 0,
+				SpringLayout.EAST, learnButton);
 		add(resetButton);
 		initInstrumentComboBox();
+
+		// Chart creation
+		createChart();
+		// ChartPanel
+		ChartPanel chartPanel = new ChartPanel(errorChart);
+		springLayout.putConstraint(SpringLayout.NORTH, chartPanel, 200,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, chartPanel, 0,
+				SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, chartPanel, 0,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, chartPanel, 0,
+				SpringLayout.EAST, this);
+		add(chartPanel);
 
 		// Update view
 		updateView();
@@ -337,7 +403,6 @@ public class LearnPanel extends JPanel {
 		maxEpochCountText.setEnabled(true);
 	}
 
-	
 	/**
 	 * Do neural network training
 	 * 
@@ -355,9 +420,10 @@ public class LearnPanel extends JPanel {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-					// Run training thread
-					resetTrainingContext();
-					neuralService.trainNetwork(neuralContext.getTrainingEndDateTime());
+				// Run training thread
+				resetTrainingContext();
+				neuralService.trainNetwork(neuralContext
+						.getTrainingEndDateTime());
 
 			}
 		}).start();
@@ -387,21 +453,25 @@ public class LearnPanel extends JPanel {
 
 	/**
 	 * Update controls related to train iteration
-	 * @param e {@link TrainIterationCompletedEvent} event data with last iteration info: duration, error...
+	 * 
+	 * @param e
+	 *            {@link TrainIterationCompletedEvent} event data with last
+	 *            iteration info: duration, error...
 	 */
-	private void updateView(TrainIterationCompletedEvent e){
+	private void updateView(TrainIterationCompletedEvent e) {
 		learnProgressBar.setValue(e.getLastEpoch());
 		// Labels
-		lblEpoch.setText(String.format("Epoch %d of %d",
-				e.getLastEpoch(), neuralContext.getMaxEpochCount()));
+		lblEpoch.setText(String.format("Epoch %d of %d", e.getLastEpoch(),
+				neuralContext.getMaxEpochCount()));
 		lblLastEpochTime.setText(String.format("Last epoch: %f sec ", new Long(
 				e.getLastEpochMilliseconds()).doubleValue() / 1000));
-		lblTotalTime.setText(String.format("Total time: %f sec", new Long(
-				e.getTrainMilliseconds()).doubleValue()));
+		lblTotalTime.setText(String.format("Total time: %f sec",
+				new Long(e.getTrainMilliseconds()).doubleValue()));
 
-		lblLastError.setText(String.format("Last error: %f %%", new Double(
-				e.getLastError() / 0.01)));		
+		lblLastError.setText(String.format("Last error: %f %%",
+				new Double(e.getLastError() / 0.01)));
 	}
+
 	/**
 	 * Update view from context
 	 */
@@ -410,16 +480,15 @@ public class LearnPanel extends JPanel {
 			return;
 		}
 		// Last datetime of last input window in training
-		String endDateString = dateFormat.format(neuralContext.getTrainingEndDateTime());
-		trainingEndDateTime
-				.setText(endDateString);
+		String endDateString = dateFormat.format(neuralContext
+				.getTrainingEndDateTime());
+		trainingEndDateTime.setText(endDateString);
 		// Train epoches
 		maxEpochCountText.setText(new Integer(neuralContext.getMaxEpochCount())
 				.toString());
 
 		// Update progress bar
 		learnProgressBar.setMaximum(neuralContext.getMaxEpochCount());
-
 
 		// Enable learn button if instrument is set
 		learnButton.setEnabled(neuralContext.getInstrument() != null);

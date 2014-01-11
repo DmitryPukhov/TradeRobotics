@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import com.google.common.eventbus.*;
-
 import org.encog.neural.networks.BasicNetwork;
 
-import trading.data.model.Level1;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Neural service interface

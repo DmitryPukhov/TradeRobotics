@@ -4,7 +4,8 @@
 
 package trading.app.neural.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,10 +29,8 @@ import trading.app.history.HistoryProvider;
 import trading.app.neural.NeuralContext;
 import trading.app.neural.history.Level1DataManager;
 import trading.app.neural.history.NeuralDataManager;
-import trading.app.neural.test.Constants;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
-import static org.mockito.Mockito.when;
 
 /**
  * @author dima
@@ -322,6 +321,7 @@ public class Level1DataManagerTest extends AbstractTest {
 	/**
 	 * Init mock instrument, context
 	 */
+	@SuppressWarnings("serial")
 	@BeforeClass
 	public static void initMockContext() {
 		// Instrument

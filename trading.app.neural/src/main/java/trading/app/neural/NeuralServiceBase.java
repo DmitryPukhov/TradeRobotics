@@ -1,24 +1,15 @@
 package trading.app.neural;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataPair;
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
 
-import trading.app.neural.events.TestIterationCompletedEvent;
 import trading.app.neural.history.NeuralDataManager;
-import trading.data.model.Level1;
 
-import com.google.common.eventbus.*;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Base class for all neural services
@@ -142,7 +133,6 @@ public abstract class NeuralServiceBase implements NeuralService {
 	 */
 	@Override
 	public abstract void trainNetwork(Date trainEndDateTime);
-
 
 	/**
 	 * @see NeuralService#testNetwork()

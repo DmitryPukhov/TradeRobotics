@@ -1,26 +1,15 @@
 package trading.view.swing;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import javax.swing.JFormattedTextField;
-import javax.swing.SwingConstants;
-
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
-import javax.swing.JLabel;
-
-import java.awt.Font;
-
 import javax.swing.SpringLayout;
-import javax.swing.Box;
-import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -28,49 +17,43 @@ import trading.app.history.HistoryProvider;
 import trading.app.history.HistoryWriter;
 import trading.app.neural.NeuralContext;
 import trading.app.neural.NeuralService;
-import trading.app.neural.history.NeuralDataManager;
 import trading.app.realTime.RealTimeEmulator;
 import trading.app.realTime.RealTimeProvider;
 
-import java.awt.Color;
-
-import javax.swing.JButton;
-
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-
+/**
+ * Main application form
+ * 
+ * @author dima
+ * 
+ */
 public class NeuralNetworkForm extends JFrame {
-	// Spring application context
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Spring context
+	 */
 	static GenericXmlApplicationContext ctx;
-//
-//	/**
-//	 * Neural context. Contains network and training configuration as well as general app settings
-//	 * To be injected using constructor
-//	 */
-//	private NeuralContext neuralContext;
-//	
-//	/**
-//	 * Service for network manipulations
-//	 * To be injected using constructor
-//	 */
-//	private NeuralService neuralService;
-//	
-//	/**
-//	 * Loads MLData for network training
-//	 * to be injected using constructor
-//	 */
-//	private HistoryProvider historyProvider;
-	
-	
-	
+
+	/**
+	 * Main content panel
+	 */
 	private JPanel contentPane;
+
+	/**
+	 * Network settings panel in network tab.
+	 */
 	private NetworkPanel networkPanel;
+
+	/**
+	 * Network training panel in Train tab
+	 */
 	private LearnPanel learnPanel;
+
+	/**
+	 * Network testing panel in Test tab
+	 */
 	private TestPanel testPanel;
-	
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -79,14 +62,14 @@ public class NeuralNetworkForm extends JFrame {
 		ctx = new GenericXmlApplicationContext();
 		ctx.load("classpath:META-INF/spring/application-context.xml");
 		ctx.registerShutdownHook();
-		ctx.refresh();	
-		
+		ctx.refresh();
+
+		// Create and run main application form - this form
 		final NeuralNetworkForm frame = ctx.getBean(NeuralNetworkForm.class);
-		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//NeuralNetworkForm frame = new NeuralNetworkForm();
+					// NeuralNetworkForm frame = new NeuralNetworkForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,14 +83,10 @@ public class NeuralNetworkForm extends JFrame {
 	 */
 	public NeuralNetworkForm(NeuralContext neuralContext,
 			NeuralService neuralService, HistoryProvider historyProvider,
-			HistoryWriter historyWriter, RealTimeProvider realTimeProvider, RealTimeEmulator realTimeEmulator) {
-		//		this.neuralContext = neuralContext;
-//		this.neuralService = neuralService;
-//		this.historyProvider = historyProvider;
-		
+			HistoryWriter historyWriter, RealTimeProvider realTimeProvider,
+			RealTimeEmulator realTimeEmulator) {
+		// This form init
 		setTitle("Neural Network  Trading");
-
-		
 		setMinimumSize(new Dimension(800, 600));
 		setPreferredSize(new Dimension(1024, 768));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -117,19 +96,24 @@ public class NeuralNetworkForm extends JFrame {
 		setContentPane(contentPane);
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
-		
+
+		// Tabbed pane init
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, tabbedPane, 0, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, tabbedPane, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, tabbedPane, 0, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, tabbedPane, 0,
+				SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, tabbedPane, 0,
+				SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, tabbedPane, 0,
+				SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, tabbedPane, 0,
+				SpringLayout.EAST, contentPane);
 		contentPane.add(tabbedPane);
 
 		// Add runtime tab
-		Level1RuntimePanel runtimePanel = new Level1RuntimePanel(neuralContext, historyProvider, historyWriter, realTimeProvider);
+		Level1RuntimePanel runtimePanel = new Level1RuntimePanel(neuralContext,
+				historyProvider, historyWriter, realTimeProvider);
 		tabbedPane.addTab("Runtime", null, runtimePanel, null);
 
-		
 		// Add network tab
 		networkPanel = new NetworkPanel(neuralContext, neuralService);
 		networkPanel.updateView();
@@ -139,6 +123,7 @@ public class NeuralNetworkForm extends JFrame {
 				// Save from ui to context
 				networkPanel.updateContext();
 			}
+
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// Load from context to UI
@@ -146,13 +131,14 @@ public class NeuralNetworkForm extends JFrame {
 			}
 		});
 		tabbedPane.addTab("Network", null, networkPanel, null);
-		
+
 		// Add learn tab
-		learnPanel = new LearnPanel(neuralContext, neuralService, historyProvider);
+		learnPanel = new LearnPanel(neuralContext, neuralService,
+				historyProvider);
 		tabbedPane.addTab("Learn", null, learnPanel, null);
 
 		testPanel = new TestPanel(neuralContext, neuralService);
 		tabbedPane.addTab("Test", null, testPanel, null);
-		
+
 	}
 }
