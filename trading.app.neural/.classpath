@@ -27,7 +27,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/encog-core-3.1.0.jar" sourcepath="C:/Users/pdg/.m2/repository/org/encog/encog-core/3.1.0/encog-core-3.1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/encog-core-3.1.0.jar" sourcepath="/home/dima/.m2/repository/org/encog/encog-core/3.1.0/encog-core-3.1.0-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.data"/>
 	<classpathentry kind="output" path="target/classes"/>
