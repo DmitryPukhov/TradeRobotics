@@ -43,7 +43,7 @@ public class Plaza2Client {
 	 */
 	public void run() {
 		exitFlag = false;
-		cleanedUp=false;
+		cleanedUp = false;
 		connectionAttempts = 0;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -52,8 +52,8 @@ public class Plaza2Client {
 		});
 
 		try {
-			 CGate.open("key=11111111");
-			//CGate.open("ini=ini/jsend.ini;key=11111111");
+			CGate.open("key=11111111");
+			// CGate.open("ini=ini/jsend.ini;key=11111111");
 			connection = new Connection(
 					"p2tcp://127.0.0.1:4001;app_name=plaza2_client");
 
@@ -126,10 +126,12 @@ public class Plaza2Client {
 					try {
 						listener.close();
 					} catch (CGateException cgex) {
+						cgex.printStackTrace();
 					}
 					try {
 						listener.dispose();
 					} catch (CGateException cgex) {
+						cgex.printStackTrace();
 					}
 				}
 			}
@@ -138,10 +140,12 @@ public class Plaza2Client {
 				try {
 					connection.close();
 				} catch (CGateException cgex) {
+					cgex.printStackTrace();
 				}
 				try {
 					connection.dispose();
 				} catch (CGateException cgex) {
+					cgex.printStackTrace();
 				}
 			}
 			// Close cgate
@@ -150,6 +154,7 @@ public class Plaza2Client {
 				// Close plaza gate
 				CGate.close();
 			} catch (CGateException cgex) {
+				cgex.printStackTrace();
 
 			}
 			cleanedUp = true;
@@ -166,7 +171,7 @@ public class Plaza2Client {
 				this_.run();
 
 			}
-		}).start();
+		}, "plaza2Client").start();
 	}
 
 	/**
@@ -174,8 +179,13 @@ public class Plaza2Client {
 	 */
 	public void disconnect() {
 		exitFlag = true;
-		while (!cleanedUp)
-			;		
+		try {
+			while (!cleanedUp) {
+				wait(100);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

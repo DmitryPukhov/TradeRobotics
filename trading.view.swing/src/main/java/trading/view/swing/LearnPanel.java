@@ -426,7 +426,7 @@ public class LearnPanel extends JPanel {
 						.getTrainingEndDateTime());
 
 			}
-		}).start();
+		}, "trainNetwork").start();
 	}
 
 	/**
@@ -484,8 +484,8 @@ public class LearnPanel extends JPanel {
 				.getTrainingEndDateTime());
 		trainingEndDateTime.setText(endDateString);
 		// Train epoches
-		maxEpochCountText.setText(new Integer(neuralContext.getMaxEpochCount())
-				.toString());
+		maxEpochCountText.setText(String.valueOf(
+				neuralContext.getMaxEpochCount()).toString());
 
 		// Update progress bar
 		learnProgressBar.setMaximum(neuralContext.getMaxEpochCount());

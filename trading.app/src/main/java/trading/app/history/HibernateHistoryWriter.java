@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import trading.app.history.HistoryWriter;
 import trading.app.realTime.MarketListener;
 import trading.app.realTime.RealTimeProvider;
 import trading.data.HibernateUtil;
@@ -20,12 +19,12 @@ import trading.data.model.Level1;
  */
 public class HibernateHistoryWriter implements HistoryWriter {
 
-	private  RealTimeProvider realTimeProvider = null;
+	private RealTimeProvider realTimeProvider = null;
 	private Session hibernateSession = null;
 	private List<Integer> instrumentIds = new ArrayList<Integer>();
-	
+
 	private boolean enabled = true;
-	
+
 	/**
 	 * @see HistoryWriter#isEnabled()
 	 */
@@ -40,9 +39,9 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	@Override
 	public void setEnabled(boolean isEnabled) {
 		this.enabled = isEnabled;
-		if(enabled){
+		if (enabled) {
 			startListening();
-		} else{
+		} else {
 			stopListening();
 		}
 	}
@@ -51,11 +50,11 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	 * @see HistoryWriter#getInstrumentIds()
 	 */
 	@Override
-	public  List<Integer> getInstrumentIds(){
+	public List<Integer> getInstrumentIds() {
 		return instrumentIds;
 	}
 
-	/** 
+	/**
 	 * @see trading.app.HistoryWriter#getProvider()
 	 */
 	@Override
@@ -82,31 +81,29 @@ public class HibernateHistoryWriter implements HistoryWriter {
 		startListening();
 	}
 
-	
 	/**
 	 * Start market listening
 	 */
-	private void startListening(){
+	private void startListening() {
 		// Add instrument listener
 		realTimeProvider.addInstrumentListener(instrumentListener);
 		// Listen level1 for all instruments
-		for(int instrumentId : instrumentIds){
+		for (int instrumentId : instrumentIds) {
 			realTimeProvider.addLevel1Listener(instrumentId, level1Listener);
 		}
 	}
-	
+
 	/**
 	 * Stop market listening
 	 */
-	private void stopListening(){
+	private void stopListening() {
 		// Do not listen data for instruments in list
-		for(int instrumentId : instrumentIds){
-			realTimeProvider.removeLevel1Listener(instrumentId,level1Listener);
+		for (int instrumentId : instrumentIds) {
+			realTimeProvider.removeLevel1Listener(instrumentId, level1Listener);
 		}
 		// Do not listen instrument infos
 		realTimeProvider.removeInstrumentListener(instrumentListener);
 	}
-	
 
 	/**
 	 * Instrument update received
@@ -139,7 +136,8 @@ public class HibernateHistoryWriter implements HistoryWriter {
 			}
 			Instrument instrument = (Instrument) session.get(Instrument.class,
 					level1.getInstrument().getId());
-			// If instrument does not exist, save it to be updated later from instrument adapter
+			// If instrument does not exist, save it to be updated later from
+			// instrument adapter
 			if (instrument == null) {
 				session.save(level1.getInstrument());
 				// session.merge(level1.getInstrument());
@@ -164,7 +162,7 @@ public class HibernateHistoryWriter implements HistoryWriter {
 			hibernateSession.close();
 		}
 	}
-	
+
 	/**
 	 * Listener to instrument data
 	 */
@@ -184,5 +182,5 @@ public class HibernateHistoryWriter implements HistoryWriter {
 			onLevel1(entity);
 		}
 	};
-	
+
 }

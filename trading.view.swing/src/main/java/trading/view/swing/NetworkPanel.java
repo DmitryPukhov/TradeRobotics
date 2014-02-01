@@ -497,7 +497,7 @@ public class NetworkPanel extends JPanel {
 		try {
 			this.txtPredictionSize.commitEdit();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		updateContext();
@@ -534,7 +534,7 @@ public class NetworkPanel extends JPanel {
 			for (int i = 0; i < neuralContext.getNetwork().getLayerCount(); i++) {
 				int neurons = neuralContext.getNetwork().getLayerNeuronCount(i);
 				sb.append(neurons);
-				sb.append(",");
+				sb.append(',');
 			}
 			layersString = sb.toString().replaceAll(",$", "");
 		}
@@ -568,10 +568,10 @@ public class NetworkPanel extends JPanel {
 		String[] layersArray = layersString.split(",");
 
 		// Replace first and last items
-		layersArray[0] = new Integer(
-				neuralService.getFirstLayerSize(windowSize)).toString();
-		layersArray[layersArray.length - 1] = new Integer(
-				neuralService.getLastLayerSize()).toString();
+		layersArray[0] = String.valueOf(neuralService
+				.getFirstLayerSize(windowSize));
+		layersArray[layersArray.length - 1] = String.valueOf(neuralService
+				.getLastLayerSize());
 
 		// Convert back to string
 		layersString = Arrays.toString(layersArray);

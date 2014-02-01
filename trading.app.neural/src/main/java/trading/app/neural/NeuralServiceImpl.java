@@ -154,7 +154,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		int step = 1;
 		// Go through all prediction window
 		int i = 0, iteration = 0;
-		;
+
 		for (testStopFlag = false, i = startIndex, iteration = 1; i < startIndex
 				+ neuralContext.getPredictionSamples() * step
 				&& !testStopFlag; i += step, iteration++) {
@@ -250,7 +250,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 			// Calculate error
 			double error = train.getError();
 			// Increase error coujnt
-			if (error == lastError) {
+			if (Double.compare(error, lastError) == 0) {
 				sameErrorCount++;
 			} else {
 				sameErrorCount = 0;

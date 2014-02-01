@@ -227,7 +227,7 @@ public class TestPanel extends JPanel {
 		// Price (absolute) chart clear
 		idealHighSeriesAbsolute.clear();
 		idealLowSeriesAbsolute.clear();
-		;
+
 		predictedHighSeriesAbsolute.clear();
 		predictedLowSeriesAbsolute.clear();
 
@@ -433,7 +433,7 @@ public class TestPanel extends JPanel {
 			public void run() {
 				neuralService.testNetwork();
 			}
-		}).start();
+		}, "testNetwork").start();
 	}
 
 	/**

@@ -91,7 +91,7 @@ public class Level1RuntimePanel extends JPanel implements
 				realTimeProvider.start();
 			} else {
 				realTimeProvider.stop();
-				;
+
 			}
 		}
 	}

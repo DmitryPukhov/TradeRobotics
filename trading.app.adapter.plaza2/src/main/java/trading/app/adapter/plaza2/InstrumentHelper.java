@@ -1,14 +1,8 @@
 package trading.app.adapter.plaza2;
 
-import ru.micexrts.cgate.Connection;
-import ru.micexrts.cgate.ErrorCode;
-import ru.micexrts.cgate.ISubscriber;
-import ru.micexrts.cgate.Listener;
 import ru.micexrts.cgate.messages.Message;
 import trading.app.adapter.plaza2.scheme.FutInfo;
 import trading.data.model.Instrument;
-import trading.app.realTime.*;
-
 
 /**
  * Instrument util
@@ -27,7 +21,7 @@ class InstrumentHelper {
 	 * @return
 	 */
 	private static Instrument convert(FutInfo.fut_instruments schemeEntity) {
-	
+
 		Instrument entity = new Instrument();
 
 		entity.setId(schemeEntity.get_isin_id());

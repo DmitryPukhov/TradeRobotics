@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import trading.app.TradingApplicationContext;
-import trading.app.history.HistoryProvider;
 import trading.app.realTime.RealTimeEmulator;
 import trading.app.realTime.RealTimeProviderBase;
 import trading.data.model.Level1;
@@ -28,7 +27,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 	 * Number of items to store in data window. If after having been added new
 	 * item the size is above, first item will be removed.
 	 */
-	private int dataWindowSize=0;
+	private int dataWindowSize = 0;
 
 	/**
 	 * Size of buffer. Emulator loads BUFFER_SIZE items, generates events
@@ -144,7 +143,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 
 				// Add to data window
 				dataWindow.add(level1);
-				if(dataWindow.size() > dataWindowSize){
+				if (dataWindow.size() > dataWindowSize) {
 					dataWindow.remove(0);
 				}
 				// Emulate real time tick
