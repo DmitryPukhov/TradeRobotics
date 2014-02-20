@@ -402,9 +402,50 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PZtFVJo_EeO5qPESEN8vPg"/>
       </children>
       <element xmi:type="uml:Interface" href="model.uml#_PZpa8Jo_EeO5qPESEN8vPg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PZrQIZo_EeO5qPESEN8vPg" x="463" y="239"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PZrQIZo_EeO5qPESEN8vPg" x="468" y="252"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_Nry1MJpDEeO5qPESEN8vPg" type="2004" fontName="Segoe UI" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NrzcQJpDEeO5qPESEN8vPg" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NrzcQZpDEeO5qPESEN8vPg" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NrzcQppDEeO5qPESEN8vPg" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NrzcQ5pDEeO5qPESEN8vPg" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NrzcRJpDEeO5qPESEN8vPg" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NrzcRZpDEeO5qPESEN8vPg" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_Nr0DUJpDEeO5qPESEN8vPg" type="5011"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_Nr0DUZpDEeO5qPESEN8vPg" type="7006">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_Nr0DUppDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_Nr0DU5pDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_Nr0DVJpDEeO5qPESEN8vPg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Nr0DVZpDEeO5qPESEN8vPg"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_Nr0DVppDEeO5qPESEN8vPg" type="7007">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_Nr0DV5pDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_Nr0DWJpDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_Nr0DWZpDEeO5qPESEN8vPg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Nr0DWppDEeO5qPESEN8vPg"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_Nr0DW5pDEeO5qPESEN8vPg" type="7008">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_Nr0DXJpDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_Nr0DXZpDEeO5qPESEN8vPg"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_Nr0DXppDEeO5qPESEN8vPg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Nr0DX5pDEeO5qPESEN8vPg"/>
+      </children>
+      <element xmi:type="uml:Interface" href="model.uml#_NrxAAJpDEeO5qPESEN8vPg"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Nry1MZpDEeO5qPESEN8vPg" x="636" y="246"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_iDIJcZo9EeO5qPESEN8vPg"/>
     <element xmi:type="uml:Model" href="model.uml#_uT07gJo8EeO5qPESEN8vPg"/>
+    <edges xmi:type="notation:Connector" xmi:id="_SbgFkJpDEeO5qPESEN8vPg" type="4002" source="_Nry1MJpDEeO5qPESEN8vPg" target="_PZrQIJo_EeO5qPESEN8vPg" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_SbgsoJpDEeO5qPESEN8vPg" type="6007">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_SbgsoZpDEeO5qPESEN8vPg" y="40"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_SbgFkZpDEeO5qPESEN8vPg" fontName="Segoe UI"/>
+      <element xmi:type="uml:Generalization" href="model.uml#_SbcbMJpDEeO5qPESEN8vPg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_SbgFkppDEeO5qPESEN8vPg" points="[6, 57, -12, -105]$[16, 154, -2, -8]"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_SbuIAJpDEeO5qPESEN8vPg" id="(0.4152542372881356,0.07079646017699115)"/>
+    </edges>
   </notation:Diagram>
 </xmi:XMI>

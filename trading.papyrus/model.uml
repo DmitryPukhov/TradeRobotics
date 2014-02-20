@@ -77,4 +77,7 @@
   <packagedElement xmi:type="uml:Interface" xmi:id="_Gw3nQJo_EeO5qPESEN8vPg" name="HistoryProvider"/>
   <packagedElement xmi:type="uml:Interface" xmi:id="_KU2EUJo_EeO5qPESEN8vPg" name="HistoryWriter"/>
   <packagedElement xmi:type="uml:Interface" xmi:id="_PZpa8Jo_EeO5qPESEN8vPg" name="RealTimeProvider"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_NrxAAJpDEeO5qPESEN8vPg" name="RealTimeEmulator">
+    <generalization xmi:type="uml:Generalization" xmi:id="_SbcbMJpDEeO5qPESEN8vPg" general="_PZpa8Jo_EeO5qPESEN8vPg"/>
+  </packagedElement>
 </uml:Model>
