@@ -12,10 +12,10 @@
     <windows>
       <children xsi:type="di:TabFolder">
         <children>
-          <emfPageIdentifier href="model.notation#_Y9v5UJo9EeO5qPESEN8vPg"/>
+          <emfPageIdentifier href="model.notation#_iDIJcJo9EeO5qPESEN8vPg"/>
         </children>
         <children>
-          <emfPageIdentifier href="model.notation#_iDIJcJo9EeO5qPESEN8vPg"/>
+          <emfPageIdentifier href="model.notation#_Y9v5UJo9EeO5qPESEN8vPg"/>
         </children>
       </children>
     </windows>

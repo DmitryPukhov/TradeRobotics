@@ -80,4 +80,7 @@
   <packagedElement xmi:type="uml:Interface" xmi:id="_NrxAAJpDEeO5qPESEN8vPg" name="RealTimeEmulator">
     <generalization xmi:type="uml:Generalization" xmi:id="_SbcbMJpDEeO5qPESEN8vPg" general="_PZpa8Jo_EeO5qPESEN8vPg"/>
   </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_f2VugJpNEeOv_cOAGXE_Rw" name="MarketListener"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_a-VjIJpgEeOv_cOAGXE_Rw" name="NeuralService"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_o2IZYJpgEeOv_cOAGXE_Rw" name="NeuralDataManager"/>
 </uml:Model>
