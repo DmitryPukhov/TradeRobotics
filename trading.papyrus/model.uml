@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_uT07gJo8EeO5qPESEN8vPg" name="Model">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_uT07gZo8EeO5qPESEN8vPg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_kkIGkJo9EeO5qPESEN8vPg" name="Trader"/>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_nCSLEJo9EeO5qPESEN8vPg" name="Robot"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_qEibIJo9EeO5qPESEN8vPg" name="Configure Neural Network"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_szVjsJo9EeO5qPESEN8vPg" name="Learn Neural Network"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_uZzLMJo9EeO5qPESEN8vPg" name="Test Neural Network"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_vyAUQJo9EeO5qPESEN8vPg" name="Run Robots"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_w8jb0Jo9EeO5qPESEN8vPg" name="A_trader_configure neural network" memberEnd="_w8jb0Zo9EeO5qPESEN8vPg _w8jb1Jo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_w8jb0Zo9EeO5qPESEN8vPg" name="trader" type="_kkIGkJo9EeO5qPESEN8vPg" association="_w8jb0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_w8jb0po9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_w8jb05o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_w8jb1Jo9EeO5qPESEN8vPg" name="configure neural network" type="_qEibIJo9EeO5qPESEN8vPg" association="_w8jb0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_w8jb1Zo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_w8jb1po9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_xt_f0Jo9EeO5qPESEN8vPg" name="A_trader_learn neural network" memberEnd="_xt_f0Zo9EeO5qPESEN8vPg _xt_f1Jo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_xt_f0Zo9EeO5qPESEN8vPg" name="trader" type="_kkIGkJo9EeO5qPESEN8vPg" association="_xt_f0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xt_f0po9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xt_f05o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_xt_f1Jo9EeO5qPESEN8vPg" name="learn neural network" type="_szVjsJo9EeO5qPESEN8vPg" association="_xt_f0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xt_f1Zo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xt_f1po9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_yIFa0Jo9EeO5qPESEN8vPg" name="A_trader_test neural network" memberEnd="_yIFa0Zo9EeO5qPESEN8vPg _yIFa1Jo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_yIFa0Zo9EeO5qPESEN8vPg" name="trader" type="_kkIGkJo9EeO5qPESEN8vPg" association="_yIFa0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yIFa0po9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yIFa05o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_yIFa1Jo9EeO5qPESEN8vPg" name="test neural network" type="_uZzLMJo9EeO5qPESEN8vPg" association="_yIFa0Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yIFa1Zo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yIFa1po9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_yiQOUJo9EeO5qPESEN8vPg" name="A_trader_run robots" memberEnd="_yiQOUZo9EeO5qPESEN8vPg _yiQOVJo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_yiQOUZo9EeO5qPESEN8vPg" name="trader" type="_kkIGkJo9EeO5qPESEN8vPg" association="_yiQOUJo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yiQOUpo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yiQOU5o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_yiQOVJo9EeO5qPESEN8vPg" name="run robots" type="_vyAUQJo9EeO5qPESEN8vPg" association="_yiQOUJo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yiQOVZo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yiQOVpo9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_1PvvUJo9EeO5qPESEN8vPg" name="Get market data"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_42w5UJo9EeO5qPESEN8vPg" name="Trade"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_7cHK8Jo9EeO5qPESEN8vPg" name="A_robot_get market data" memberEnd="_7cHK8Zo9EeO5qPESEN8vPg _7cHK9Jo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_7cHK8Zo9EeO5qPESEN8vPg" name="robot" type="_nCSLEJo9EeO5qPESEN8vPg" association="_7cHK8Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7cHK8po9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7cHK85o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_7cHK9Jo9EeO5qPESEN8vPg" name="get market data" type="_1PvvUJo9EeO5qPESEN8vPg" association="_7cHK8Jo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7cHK9Zo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7cHK9po9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_8BvAgJo9EeO5qPESEN8vPg" name="A_robot_trade" memberEnd="_8BvAgZo9EeO5qPESEN8vPg _8BvAhJo9EeO5qPESEN8vPg">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_8BvAgZo9EeO5qPESEN8vPg" name="robot" type="_nCSLEJo9EeO5qPESEN8vPg" association="_8BvAgJo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8BvAgpo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8BvAg5o9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_8BvAhJo9EeO5qPESEN8vPg" name="trade" type="_42w5UJo9EeO5qPESEN8vPg" association="_8BvAgJo9EeO5qPESEN8vPg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8BvAhZo9EeO5qPESEN8vPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8BvAhpo9EeO5qPESEN8vPg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_pSRbQJo-EeO5qPESEN8vPg" name="Level1"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_vcpS0Jo-EeO5qPESEN8vPg" name="Instrument"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_wM8uYJo-EeO5qPESEN8vPg" name="Bar"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Gw3nQJo_EeO5qPESEN8vPg" name="HistoryProvider"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KU2EUJo_EeO5qPESEN8vPg" name="HistoryWriter"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_PZpa8Jo_EeO5qPESEN8vPg" name="RealTimeProvider"/>
+</uml:Model>
