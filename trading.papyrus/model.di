@@ -7,6 +7,9 @@
     <availablePage>
       <emfPageIdentifier href="model.notation#_iDIJcJo9EeO5qPESEN8vPg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="model.notation#_jMVigJpkEeOv_cOAGXE_Rw"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -16,6 +19,9 @@
         </children>
         <children>
           <emfPageIdentifier href="model.notation#_Y9v5UJo9EeO5qPESEN8vPg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="model.notation#_jMVigJpkEeOv_cOAGXE_Rw"/>
         </children>
       </children>
     </windows>

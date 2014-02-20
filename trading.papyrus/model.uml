@@ -71,16 +71,26 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8BvAhpo9EeO5qPESEN8vPg" value="1"/>
     </ownedEnd>
   </packagedElement>
-  <packagedElement xmi:type="uml:DataType" xmi:id="_pSRbQJo-EeO5qPESEN8vPg" name="Level1"/>
-  <packagedElement xmi:type="uml:DataType" xmi:id="_vcpS0Jo-EeO5qPESEN8vPg" name="Instrument"/>
-  <packagedElement xmi:type="uml:DataType" xmi:id="_wM8uYJo-EeO5qPESEN8vPg" name="Bar"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_Gw3nQJo_EeO5qPESEN8vPg" name="HistoryProvider"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_KU2EUJo_EeO5qPESEN8vPg" name="HistoryWriter"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_PZpa8Jo_EeO5qPESEN8vPg" name="RealTimeProvider"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_NrxAAJpDEeO5qPESEN8vPg" name="RealTimeEmulator">
-    <generalization xmi:type="uml:Generalization" xmi:id="_SbcbMJpDEeO5qPESEN8vPg" general="_PZpa8Jo_EeO5qPESEN8vPg"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_keBM0JpkEeOv_cOAGXE_Rw" name="trading.data.model">
+    <packagedElement xmi:type="uml:DataType" xmi:id="_pSRbQJo-EeO5qPESEN8vPg" name="Level1"/>
+    <packagedElement xmi:type="uml:DataType" xmi:id="_wM8uYJo-EeO5qPESEN8vPg" name="Bar"/>
+    <packagedElement xmi:type="uml:DataType" xmi:id="_vcpS0Jo-EeO5qPESEN8vPg" name="Instrument"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_f2VugJpNEeOv_cOAGXE_Rw" name="MarketListener"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_a-VjIJpgEeOv_cOAGXE_Rw" name="NeuralService"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_o2IZYJpgEeOv_cOAGXE_Rw" name="NeuralDataManager"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_7ToSoJpkEeOv_cOAGXE_Rw" name="trading.app.history">
+    <packagedElement xmi:type="uml:Interface" xmi:id="_Gw3nQJo_EeO5qPESEN8vPg" name="HistoryProvider"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_KU2EUJo_EeO5qPESEN8vPg" name="HistoryWriter"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_BsDNQJplEeOv_cOAGXE_Rw" name="trading.app.realtime">
+    <packagedElement xmi:type="uml:Interface" xmi:id="_NrxAAJpDEeO5qPESEN8vPg" name="RealTimeEmulator">
+      <generalization xmi:type="uml:Generalization" xmi:id="_SbcbMJpDEeO5qPESEN8vPg" general="_PZpa8Jo_EeO5qPESEN8vPg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_PZpa8Jo_EeO5qPESEN8vPg" name="RealTimeProvider"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_f2VugJpNEeOv_cOAGXE_Rw" name="MarketListener"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_O3Ww8JplEeOv_cOAGXE_Rw" name="trading.app.neural">
+    <packagedElement xmi:type="uml:Interface" xmi:id="_a-VjIJpgEeOv_cOAGXE_Rw" name="NeuralService"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_U7yYkJplEeOv_cOAGXE_Rw" name="trading.app.neural.history">
+    <packagedElement xmi:type="uml:Interface" xmi:id="_o2IZYJpgEeOv_cOAGXE_Rw" name="NeuralDataManager"/>
+  </packagedElement>
 </uml:Model>
