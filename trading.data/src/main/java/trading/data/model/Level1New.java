@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,9 +34,32 @@ public class Level1New implements Serializable {
 	private BigDecimal lastPriceDelta;
 	private Integer lastSize;
 	private Date lastTime;
-	private Instrument instrument;
+	private String instrumentCode;
 
 	public Level1New() {
+	}
+
+	public BigDecimal getAsk() {
+		return this.ask;
+	}
+
+	@Column(name = "ask_size")
+	public Integer getAskSize() {
+		return this.askSize;
+	}
+
+	public BigDecimal getBid() {
+		return this.bid;
+	}
+
+	@Column(name = "bid_size")
+	public Integer getBidSize() {
+		return this.bidSize;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDate() {
+		return date;
 	}
 
 	@Id
@@ -47,51 +68,15 @@ public class Level1New implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public BigDecimal getAsk() {
-		return this.ask;
-	}
-
-	public void setAsk(BigDecimal ask) {
-		this.ask = ask;
-	}
-
-	@Column(name = "ask_size")
-	public Integer getAskSize() {
-		return this.askSize;
-	}
-
-	public void setAskSize(Integer askSize) {
-		this.askSize = askSize;
-	}
-
-	public BigDecimal getBid() {
-		return this.bid;
-	}
-
-	public void setBid(BigDecimal bid) {
-		this.bid = bid;
-	}
-
-	@Column(name = "bid_size")
-	public Integer getBidSize() {
-		return this.bidSize;
-	}
-
-	public void setBidSize(Integer bidSize) {
-		this.bidSize = bidSize;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+	/**
+	 * Quik does not know about our instrument id and uses string instrument
+	 * code.
+	 * 
+	 * @return the instrumentCode
+	 */
+	@Column(name = "instrument_code")
+	public String getInstrumentCode() {
+		return instrumentCode;
 	}
 
 	@Column(name = "last_price")
@@ -99,26 +84,14 @@ public class Level1New implements Serializable {
 		return this.lastPrice;
 	}
 
-	public void setLastPrice(BigDecimal lastPrice) {
-		this.lastPrice = lastPrice;
-	}
-
 	@Column(name = "last_price_delta")
 	public BigDecimal getLastPriceDelta() {
 		return this.lastPriceDelta;
 	}
 
-	public void setLastPriceDelta(BigDecimal lastPriceDelta) {
-		this.lastPriceDelta = lastPriceDelta;
-	}
-
 	@Column(name = "last_size")
 	public Integer getLastSize() {
 		return this.lastSize;
-	}
-
-	public void setLastSize(Integer lastSize) {
-		this.lastSize = lastSize;
 	}
 
 	@Column(name = "last_time")
@@ -127,19 +100,52 @@ public class Level1New implements Serializable {
 		return this.lastTime;
 	}
 
+	public void setAsk(BigDecimal ask) {
+		this.ask = ask;
+	}
+
+	public void setAskSize(Integer askSize) {
+		this.askSize = askSize;
+	}
+
+	public void setBid(BigDecimal bid) {
+		this.bid = bid;
+	}
+
+	public void setBidSize(Integer bidSize) {
+		this.bidSize = bidSize;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param instrumentCode
+	 *            the instrumentCode to set
+	 */
+	public void setInstrumentCode(String instrumentCode) {
+		this.instrumentCode = instrumentCode;
+	}
+
+	public void setLastPrice(BigDecimal lastPrice) {
+		this.lastPrice = lastPrice;
+	}
+
+	public void setLastPriceDelta(BigDecimal lastPriceDelta) {
+		this.lastPriceDelta = lastPriceDelta;
+	}
+
+	public void setLastSize(Integer lastSize) {
+		this.lastSize = lastSize;
+	}
+
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
-	}
-
-	// bi-directional many-to-one association to Instrument
-	@ManyToOne()
-	@JoinColumn(name = "instrument_id", nullable = false)
-	public Instrument getInstrument() {
-		return this.instrument;
-	}
-
-	public void setInstrument(Instrument instrument) {
-		this.instrument = instrument;
 	}
 
 	@Override
