@@ -64,7 +64,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * @see NeuralServiceBase#createNetwork(List)
+	* {@inheritDoc}
 	 */
 	@Override
 	public BasicNetwork createNetwork(List<Integer> layers) {
@@ -103,7 +103,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * @see NeuralServiceBase#getFirstLayerSize(int)
+	* {@inheritDoc}
 	 */
 	@Override
 	public int getFirstLayerSize(int entityListSize) {
@@ -111,15 +111,15 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * @see NeuralServiceBase#getLastLayerSize()
+	* {@inheritDoc}
 	 */
+	@Override
 	public int getLastLayerSize() {
 		return Level1DataManager.OUTPUT_SIZE;
 	}
 
 	/**
-	 * Reset training continuation data. Will start new training, not continue
-	 * previous one
+	* {@inheritDoc}
 	 */
 	@Override
 	public void resetTraining() {
@@ -128,7 +128,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * @see NeuralServiceBase#stop()
+	* {@inheritDoc}
 	 */
 	@Override
 	public void stop() {
@@ -137,9 +137,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * Test and learn every iteration
-	 * 
-	 * @see NeuralServiceBase#testNetwork()
+	* {@inheritDoc}
 	 */
 	@Override
 	public void testNetwork() {
@@ -195,8 +193,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	}
 
 	/**
-	 * 
-	 * @see NeuralServiceBase#trainNetwork()
+	* {@inheritDoc}
 	 */
 	@Override
 	public void trainNetwork(Date trainEndDateTime) {

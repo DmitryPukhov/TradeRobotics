@@ -81,7 +81,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 	}
 
 	/**
-	 * @see trading.app.realtime.HistoricalEmulator#getStartDate()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Date getStartDate() {
@@ -105,7 +105,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 	}
 
 	/**
-	 * @see trading.app.realtime.HistoricalEmulator#setStartDate(java.util.Date)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setStartDate(Date startDate) {
@@ -113,7 +113,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 	}
 
 	/**
-	 * Goes along data and generates ticks for every level1
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void start() {
@@ -153,7 +153,7 @@ public class HistoricalEmulator extends RealTimeProviderBase implements
 	}
 
 	/**
-	 * @see trading.app.realTime.RealTimeProviderBase#stop()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void stop() {

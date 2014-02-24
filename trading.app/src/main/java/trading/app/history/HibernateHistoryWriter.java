@@ -18,36 +18,50 @@ import trading.data.model.Level1;
  * 
  */
 public class HibernateHistoryWriter implements HistoryWriter {
-
+	/** Real time provider to get data from */
 	private RealTimeProvider realTimeProvider = null;
+
+	/** Hibernate session where to write data */
 	private Session hibernateSession = null;
+
+	/** Instruments */
 	private List<Integer> instrumentIds = new ArrayList<Integer>();
 
+	/** If enabled, write data, received from realTimeProvider */
 	private boolean enabled = true;
 
 	/**
-	 * @see HistoryWriter#isEnabled()
+	 * Listener to instrument data
 	 */
-	@Override
-	public boolean isEnabled() {
-		return enabled;
-	}
+	MarketListener<Instrument> instrumentListener = new MarketListener<Instrument>() {
+		@Override
+		public void OnMarketDataChanged(Instrument entity) {
+			onInstrument(entity);
+
+		}
+	};
 
 	/**
-	 * @see HistoryWriter#setEnabled(boolean)
+	 * Listener to level1 data
 	 */
-	@Override
-	public void setEnabled(boolean isEnabled) {
-		this.enabled = isEnabled;
-		if (enabled) {
-			startListening();
-		} else {
-			stopListening();
+	MarketListener<Level1> level1Listener = new MarketListener<Level1>() {
+		@Override
+		public void OnMarketDataChanged(Level1 entity) {
+			onLevel1(entity);
+		}
+	};
+
+	/**
+	 * Close session when being finalized
+	 */
+	public void finalize() {
+		if (hibernateSession != null && hibernateSession.isOpen()) {
+			hibernateSession.close();
 		}
 	}
 
 	/**
-	 * @see HistoryWriter#getInstrumentIds()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Integer> getInstrumentIds() {
@@ -55,7 +69,7 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	}
 
 	/**
-	 * @see trading.app.HistoryWriter#getProvider()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public RealTimeProvider getRealTimeProvider() {
@@ -63,15 +77,7 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	}
 
 	/**
-	 * @see trading.app.HistoryWriter#setProvider(trading.app.provider.DynamicProvider)
-	 */
-	@Override
-	public void setRealTimeProvider(RealTimeProvider provider) {
-		this.realTimeProvider = provider;
-	}
-
-	/**
-	 * @see trading.app.HistoryWriter#init(trading.app.provider.DynamicProvider)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void init() {
@@ -82,27 +88,11 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	}
 
 	/**
-	 * Start market listening
+	 * {@inheritDoc}
 	 */
-	private void startListening() {
-		// Add instrument listener
-		realTimeProvider.addInstrumentListener(instrumentListener);
-		// Listen level1 for all instruments
-		for (int instrumentId : instrumentIds) {
-			realTimeProvider.addLevel1Listener(instrumentId, level1Listener);
-		}
-	}
-
-	/**
-	 * Stop market listening
-	 */
-	private void stopListening() {
-		// Do not listen data for instruments in list
-		for (int instrumentId : instrumentIds) {
-			realTimeProvider.removeLevel1Listener(instrumentId, level1Listener);
-		}
-		// Do not listen instrument infos
-		realTimeProvider.removeInstrumentListener(instrumentListener);
+	@Override
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 	/**
@@ -155,32 +145,48 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	}
 
 	/**
-	 * Close session when being finalized
+	 * {@inheritDoc}
 	 */
-	public void finalize() {
-		if (hibernateSession != null && hibernateSession.isOpen()) {
-			hibernateSession.close();
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		this.enabled = isEnabled;
+		if (enabled) {
+			startListening();
+		} else {
+			stopListening();
 		}
 	}
 
 	/**
-	 * Listener to instrument data
+	 * {@inheritDoc}
 	 */
-	MarketListener<Instrument> instrumentListener = new MarketListener<Instrument>() {
-		@Override
-		public void OnMarketDataChanged(Instrument entity) {
-			onInstrument(entity);
+	@Override
+	public void setRealTimeProvider(RealTimeProvider provider) {
+		this.realTimeProvider = provider;
+	}
 
-		}
-	};
 	/**
-	 * Listener to level1 data
+	 * Start market listening
 	 */
-	MarketListener<Level1> level1Listener = new MarketListener<Level1>() {
-		@Override
-		public void OnMarketDataChanged(Level1 entity) {
-			onLevel1(entity);
+	private void startListening() {
+		// Add instrument listener
+		realTimeProvider.addInstrumentListener(instrumentListener);
+		// Listen level1 for all instruments
+		for (int instrumentId : instrumentIds) {
+			realTimeProvider.addLevel1Listener(instrumentId, level1Listener);
 		}
-	};
+	}
+
+	/**
+	 * Stop market listening
+	 */
+	private void stopListening() {
+		// Do not listen data for instruments in list
+		for (int instrumentId : instrumentIds) {
+			realTimeProvider.removeLevel1Listener(instrumentId, level1Listener);
+		}
+		// Do not listen instrument infos
+		realTimeProvider.removeInstrumentListener(instrumentListener);
+	}
 
 }

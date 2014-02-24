@@ -7,7 +7,6 @@ import ru.micexrts.cgate.Listener;
 import ru.micexrts.cgate.MessageType;
 import ru.micexrts.cgate.messages.AbstractDataMessage;
 import ru.micexrts.cgate.messages.Message;
-import trading.app.realTime.RealTimeProvider;
 import trading.app.realTime.RealTimeProviderBase;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
@@ -89,7 +88,7 @@ public class Plaza2Adapter extends RealTimeProviderBase implements ISubscriber {
 	}
 
 	/**
-	 * @see RealTimeProvider#start()
+	 * {@inheritDoc}
 	 */
 	public void start() {
 		this.plaza2Client = new Plaza2Client(this);
@@ -97,7 +96,7 @@ public class Plaza2Adapter extends RealTimeProviderBase implements ISubscriber {
 	}
 
 	/**
-	 * @see RealTimeProvider#stop()
+	 * {@inheritDoc}
 	 */
 	public void stop() {
 		this.plaza2Client.disconnect();

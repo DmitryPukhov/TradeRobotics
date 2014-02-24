@@ -118,7 +118,7 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * @see NeuralDataManager#getInputData(List, int)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public MLData getInputData(List<Level1> data, int index) {
@@ -130,12 +130,7 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * Get MLDataPair to train for prediction
-	 * 
-	 * @param data
-	 * @param index
-	 *            Current item index. Prediction window starts next item after
-	 *            index
+	 * {@inheritDoc}
 	 */
 	@Override
 	public MLDataPair getMLDataPair(List<Level1> data, int index) {
@@ -188,7 +183,7 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * @see NeuralDataManager#getOutputData(List, int)a
+	 * {@inheritDoc}
 	 */
 	@Override
 	public MLData getOutputData(List<Level1> data, int index) {
@@ -220,9 +215,7 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * Load list of items for neural network test
-	 * 
-	 * @return
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Level1> loadTestData(Date endTime) {
@@ -258,7 +251,7 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * @see NeuralDataManager#loadTrainData(Date)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public MLDataSet loadTrainMLDataSet(Date endDate) {

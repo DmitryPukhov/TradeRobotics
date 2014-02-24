@@ -46,19 +46,19 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * Stop training or testing process
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract void stop();
 
 	/**
-	 * @see trading.app.neural.NeuralService#createNetwork(java.util.List)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract BasicNetwork createNetwork(List<Integer> layers);
 
 	/**
-	 * {@link NeuralService#getEventBus()}
+	 * {@inheritDoc}
 	 */
 	@Override
 	public EventBus getEventBus() {
@@ -66,18 +66,19 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * @see NeuralService#getFirstLayerSize(int)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract int getFirstLayerSize(int entityListSize);
 
 	/**
-	 * @see NeuralService#getLastLayerSize()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public abstract int getLastLayerSize();
 
 	/**
-	 * @see trading.app.neural.NeuralService#getNeuralContext()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public NeuralContext getNeuralContext() {
@@ -85,7 +86,7 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * @see trading.app.neural.NeuralService#loadNetwork(java.io.File)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void loadNetwork(File file) {
@@ -95,7 +96,7 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * @see trading.app.neural.NeuralService#resetNetwork()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void resetNetwork() {
@@ -103,25 +104,21 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * @see NeuralService#resetTraining()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract void resetTraining();
 
 	/**
-	 * @see trading.app.neural.NeuralService#saveNetwork(java.io.File)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void saveNetwork(File file) {
 		EncogDirectoryPersistence.saveObject(file, neuralContext.getNetwork());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * trading.app.neural.NeuralService#setNeuralContext(trading.app.neural.
-	 * NeuralContext)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setNeuralContext(NeuralContext neuralContext) {
@@ -129,13 +126,13 @@ public abstract class NeuralServiceBase implements NeuralService {
 	}
 
 	/**
-	 * General train of network
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract void trainNetwork(Date trainEndDateTime);
 
 	/**
-	 * @see NeuralService#testNetwork()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract void testNetwork();
