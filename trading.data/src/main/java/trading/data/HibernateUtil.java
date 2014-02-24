@@ -16,12 +16,20 @@ import trading.data.model.Level1New;
  * 
  */
 public class HibernateUtil {
+	/** Hibernate session factory */
 	private static SessionFactory sessionFactory = buildSessionFactory();
+	/** Hibernate session registry */
 	private static ServiceRegistry serviceRegistry;
-
+	/** Hibernate configuration */
+	private static Configuration configuration;
+	
+	/**
+	 * Initialization when static object created
+	 * @return
+	 */
 	private static SessionFactory buildSessionFactory() {
 
-		Configuration configuration = new Configuration().configure()
+		configuration = new Configuration().configure()
 				.addAnnotatedClass(Instrument.class)
 				.addAnnotatedClass(Level1.class)
 				.addAnnotatedClass(Level1New.class);
@@ -32,11 +40,27 @@ public class HibernateUtil {
 
 		return sessionFactory;
 	}
-
+	
+	/**
+	 * Get hibernate session factory
+	 * @return
+	 */
 	public static SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
+	/**
+	 * Get connection string from configuration
+	 * @return
+	 */
+	public static String getConnectionString(){
+		String connectionString = configuration.getProperty("hibernate.connection.url");
+		return connectionString;
+	}
+	
+	/**
+	 * Close hibernate session
+	 */
 	public static void shutdown() {
 		getSessionFactory().close();
 	}

@@ -8,7 +8,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="trading.app"></context:component-scan>
 	
-	<bean id="realTimeProvider" name="realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
+	<bean id="realTimeProvider" name="realTimeProvider" class="trading.app.adapter.quik.QuikAdapter"/>
 	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
 	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
 		<property name="realTimeProvider" ref="realTimeProvider"></property>

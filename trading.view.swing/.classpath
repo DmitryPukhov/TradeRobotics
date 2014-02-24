@@ -30,5 +30,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.neural"/>
 	<classpathentry kind="lib" path="/trading.app.neural/lib/encog-core-3.1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.adapter.quik"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
