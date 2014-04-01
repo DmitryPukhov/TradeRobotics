@@ -7,7 +7,6 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
-import trading.data.model.Level1New;
 
 /**
  * Hibernate session helper
@@ -31,8 +30,7 @@ public class HibernateUtil {
 
 		configuration = new Configuration().configure()
 				.addAnnotatedClass(Instrument.class)
-				.addAnnotatedClass(Level1.class)
-				.addAnnotatedClass(Level1New.class);
+				.addAnnotatedClass(Level1.class);
 
 		serviceRegistry = new ServiceRegistryBuilder().applySettings(
 				configuration.getProperties()).buildServiceRegistry();
