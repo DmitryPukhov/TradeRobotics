@@ -3,6 +3,8 @@
  */
 package trading.app.realTime;
 
+import java.util.List;
+
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
@@ -26,12 +28,12 @@ public interface RealTimeProvider {
 	 * Subscribe to level1 data for specific instrument
 	 * @param marketlistener
 	 */
-	public void addLevel1Listener(int instrumentId, MarketListener<Level1> listener);
+	public void addLevel1Listener(int instrumentId, MarketListener<List<Level1>> listener);
 	/**
 	 * Unsubscribe from level1 data for specific instrument
 	 * @param Level1 listener class
 	 */
-	public void removeLevel1Listener(int instrumentId, MarketListener<Level1> listener);
+	public void removeLevel1Listener(int instrumentId, MarketListener<List<Level1>> listener);
 	
 	/**
 	 * Subscribe to instrument events

@@ -32,7 +32,7 @@ import trading.data.model.Level1;
  * 
  */
 public class Level1RuntimePanel extends JPanel implements
-		MarketListener<Level1> {
+		MarketListener<List<Level1>> {
 
 	/**
 	 * 
@@ -314,9 +314,11 @@ public class Level1RuntimePanel extends JPanel implements
 	 * Level1 changed event
 	 */
 	@Override
-	public void OnMarketDataChanged(Level1 level1) {
-		// Add prices to chart
-		level1Chart.addLevel1(level1);
+	public void OnMarketDataChanged(List<Level1> level1s) {
+		for (Level1 level1 : level1s) {
+			// Add prices to chart
+			level1Chart.addLevel1(level1);
+		}
 	}
 
 }

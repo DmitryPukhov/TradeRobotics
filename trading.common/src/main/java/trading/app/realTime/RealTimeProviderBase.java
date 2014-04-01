@@ -1,23 +1,25 @@
 package trading.app.realTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
 /**
  * Base class for realtime providers
+ * 
  * @author dima
  *
  */
 public abstract class RealTimeProviderBase implements RealTimeProvider {
 	/**
-	 * Level1 listeners list
+	 * Level1 listeners list. Can receive only one level1 item
 	 */
-	private Map<Integer, List<MarketListener<Level1>>> level1Listeners = new HashMap<Integer, List<MarketListener<Level1>>>();
+	private Map<Integer, List<MarketListener<List<Level1>>>> level1Listeners = new HashMap<Integer, List<MarketListener<List<Level1>>>>();
 
 	/**
 	 * Instrument event listeners list
@@ -26,10 +28,11 @@ public abstract class RealTimeProviderBase implements RealTimeProvider {
 
 	/**
 	 * Add listener
+	 * 
 	 * @param marketlistener
 	 */
 	@Override
-	public void addInstrumentListener(MarketListener<Instrument> listener){
+	public void addInstrumentListener(MarketListener<Instrument> listener) {
 		instrumentListeners.add(listener);
 	}
 
@@ -38,23 +41,24 @@ public abstract class RealTimeProviderBase implements RealTimeProvider {
 	 */
 	@Override
 	public void addLevel1Listener(int instrumentId,
-			MarketListener<Level1> listener) {
+			MarketListener<List<Level1>> listener) {
 		// Create record for this parent entity if empty
 		if (!level1Listeners.containsKey(instrumentId)) {
 			level1Listeners.put(instrumentId,
-					new ArrayList<MarketListener<Level1>>());
+					new ArrayList<MarketListener<List<Level1>>>());
 		}
 		// Now we can add the listener
 		level1Listeners.get(instrumentId).add(listener);
-		
+
 	}
 
 	/**
 	 * Notify all listeners
+	 * 
 	 * @param entity
 	 */
-	protected void fireInstrumentChangedEvent(Instrument entity){
-		for(MarketListener<Instrument> listener: instrumentListeners){
+	protected void fireInstrumentChangedEvent(Instrument entity) {
+		for (MarketListener<Instrument> listener : instrumentListeners) {
 			listener.OnMarketDataChanged(entity);
 		}
 	}
@@ -62,47 +66,58 @@ public abstract class RealTimeProviderBase implements RealTimeProvider {
 	/**
 	 * Fire level1 event
 	 */
-	protected void fireLevel1ChangedEvent(int parentEntityId, Level1 entity) {
-		List<MarketListener<Level1>> entityListeners = level1Listeners
+	protected void fireLevel1ChangedEvent(int parentEntityId,
+			List<Level1> entities) {
+		List<MarketListener<List<Level1>>> entityListeners = level1Listeners
 				.get(parentEntityId);
 		if (entityListeners != null) {
-			for (MarketListener<Level1> listener : entityListeners) {
+			for (MarketListener<List<Level1>> listener : entityListeners) {
 				// Fire event for one listener
-				listener.OnMarketDataChanged(entity);
+				listener.OnMarketDataChanged(entities);
 			}
 		}
 
 	}
 
 	/**
+	 * Fire level1 event for single level1 entity
+	 */
+	protected void fireLevel1ChangedEvent(int parentEntityId, Level1 entity) {
+		fireLevel1ChangedEvent(parentEntityId,
+				new ArrayList<Level1>(Arrays.asList(entity)));
+	}
+
+	/**
 	 * Remove listener
+	 * 
 	 * @param listener
 	 */
 	@Override
-	public void removeInstrumentListener(MarketListener<Instrument> listener){
+	public void removeInstrumentListener(MarketListener<Instrument> listener) {
 		instrumentListeners.remove(listener);
 	}
-	
+
 	/**
 	 * @see RealTimeProvider#removeLevel1Listener(int, MarketListener)
 	 */
 	@Override
 	public void removeLevel1Listener(int instrumentId,
-			MarketListener<Level1> listener) {
+			MarketListener<List<Level1>> listener) {
 		if (level1Listeners.containsKey(instrumentId)) {
-			List<MarketListener<Level1>> entityListeners = level1Listeners
+			List<MarketListener<List<Level1>>> entityListeners = level1Listeners
 					.get(instrumentId);
 			// Remove listener
 			entityListeners.remove(listener);
 		}
-		
+
 	}
+
 	/**
 	 * Begin data providing and data events generation
 	 */
 	@Override
 	public abstract void start();
-	
+
 	/**
 	 * Do not provide data, don't fire events
 	 */

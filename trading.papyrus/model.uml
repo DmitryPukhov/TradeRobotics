@@ -93,9 +93,13 @@
   <packagedElement xmi:type="uml:Package" xmi:id="_U7yYkJplEeOv_cOAGXE_Rw" name="trading.app.neural.history">
     <packagedElement xmi:type="uml:Interface" xmi:id="_o2IZYJpgEeOv_cOAGXE_Rw" name="NeuralDataManager"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_o8xRoJ05EeOyG6vPoObkyg" clientDependency="_zuypwJ05EeOyG6vPoObkyg" name="QuikAdapter"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_o8xRoJ05EeOyG6vPoObkyg" name="QuikAdapter">
+    <generalization xmi:type="uml:Generalization" xmi:id="_G_n1YLmCEeO98_gfcGWZAw" general="_rJPwQJ05EeOyG6vPoObkyg"/>
+  </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_rJPwQJ05EeOyG6vPoObkyg" clientDependency="_yYch4J05EeOyG6vPoObkyg" name="RealTimeProviderBase">
     <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_yYch4J05EeOyG6vPoObkyg" name="InterfaceRealization1" client="_rJPwQJ05EeOyG6vPoObkyg" supplier="_PZpa8Jo_EeO5qPESEN8vPg" contract="_PZpa8Jo_EeO5qPESEN8vPg"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Realization" xmi:id="_zuypwJ05EeOyG6vPoObkyg" name="Realization1" client="_o8xRoJ05EeOyG6vPoObkyg" supplier="_rJPwQJ05EeOyG6vPoObkyg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_7DQxELmBEeO98_gfcGWZAw" name="HistoricalEmulator">
+    <generalization xmi:type="uml:Generalization" xmi:id="_A7PRELmCEeO98_gfcGWZAw" general="_rJPwQJ05EeOyG6vPoObkyg"/>
+  </packagedElement>
 </uml:Model>

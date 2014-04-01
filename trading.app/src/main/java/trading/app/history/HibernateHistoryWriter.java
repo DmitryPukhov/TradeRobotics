@@ -44,10 +44,10 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	/**
 	 * Listener to level1 data
 	 */
-	MarketListener<Level1> level1Listener = new MarketListener<Level1>() {
+	MarketListener<List<Level1>> level1Listener = new MarketListener<List<Level1>>() {
 		@Override
-		public void OnMarketDataChanged(Level1 entity) {
-			onLevel1(entity);
+		public void OnMarketDataChanged(List<Level1> entities) {
+			onLevel1(entities);
 		}
 	};
 
@@ -116,7 +116,7 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	 * 
 	 * @param level1
 	 */
-	protected void onLevel1(Level1 level1) {
+	protected void onLevel1(List<Level1> level1s) {
 		try {
 			// Write to database
 			Session session = hibernateSession;
@@ -124,18 +124,22 @@ public class HibernateHistoryWriter implements HistoryWriter {
 			if (!session.getTransaction().isActive()) {
 				session.getTransaction().begin();
 			}
-			Instrument instrument = (Instrument) session.get(Instrument.class,
-					level1.getInstrument().getId());
-			// If instrument does not exist, save it to be updated later from
-			// instrument adapter
-			if (instrument == null) {
-				session.save(level1.getInstrument());
-				// session.merge(level1.getInstrument());
-			} else {
-				level1.setInstrument(instrument);
+			// Save level1s
+			for (Level1 level1 : level1s) {
+				Instrument instrument = (Instrument) session.get(
+						Instrument.class, level1.getInstrument().getId());
+				// If instrument does not exist, save it to be updated later
+				// from
+				// instrument adapter
+				if (instrument == null) {
+					session.save(level1.getInstrument());
+					// session.merge(level1.getInstrument());
+				} else {
+					level1.setInstrument(instrument);
+				}
+				// Save level1
+				session.merge(level1);
 			}
-			// Save level1
-			session.merge(level1);
 			// Commit
 			session.getTransaction().commit();
 		} catch (org.hibernate.ObjectNotFoundException ex) {

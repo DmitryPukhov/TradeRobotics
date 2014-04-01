@@ -7,10 +7,15 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<context:annotation-config />
 	<context:component-scan base-package="trading.app"></context:component-scan>
-	
-	<bean id="realTimeProvider" name="realTimeProvider" class="trading.app.adapter.quik.QuikAdapter"/>
-	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
-	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
+
+	<bean id="realTimeProvider" name="realTimeProvider"
+		class="trading.app.adapter.quik.QuikAdapter">
+		<constructor-arg ref="neuralContext"></constructor-arg>
+		<constructor-arg ref="historyProvider"></constructor-arg>
+	</bean>
+	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider" />
+	<bean id="historyWriter" class="trading.app.history.HibernateHistoryWriter"
+		init-method="init">
 		<property name="realTimeProvider" ref="realTimeProvider"></property>
 	</bean>
 	<bean id="realTimeEmulator" class="trading.app.history.HistoricalEmulator">
@@ -18,18 +23,19 @@
 		<constructor-arg ref="historyProvider"></constructor-arg>
 	</bean>
 
-	<bean id="neuralContext" name="tradingApplicationContext, neuralContext" class="trading.app.neural.NeuralContext">
+	<bean id="neuralContext" name="tradingApplicationContext, neuralContext"
+		class="trading.app.neural.NeuralContext">
 	</bean>
-	<bean id="neuralDataManager" class="trading.app.neural.history.Level1DataManager" >
+	<bean id="neuralDataManager" class="trading.app.neural.history.Level1DataManager">
 		<constructor-arg ref="neuralContext"></constructor-arg>
 		<constructor-arg ref="historyProvider"></constructor-arg>
-	</bean>	
+	</bean>
 	<bean id="neuralService" class="trading.app.neural.NeuralServiceImpl">
-		<constructor-arg name = "neuralContext" ref="neuralContext"></constructor-arg>
+		<constructor-arg name="neuralContext" ref="neuralContext"></constructor-arg>
 		<constructor-arg name="neuralDataManager" ref="neuralDataManager"></constructor-arg>
 	</bean>
 
-	
+
 	<bean id="view" class="trading.view.swing.NeuralNetworkForm">
 		<constructor-arg ref="neuralContext"></constructor-arg>
 		<constructor-arg ref="neuralService"></constructor-arg>
