@@ -1,4 +1,4 @@
-	package trading.data.model;
+package trading.data.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,24 +20,51 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 /**
  * The persistent class for the level1 database table.
  * 
  */
 @Entity
-@NamedQueries(value = { 
-		@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE l.instrument.id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " AND l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME + " ORDER BY l.date")
-})
-@NamedNativeQueries(value={
+@NamedQueries(value = { @NamedQuery(name = trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query = "SELECT l FROM Level1 l WHERE l.instrument.id = :"
+		+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
+		+ " AND l.date  BETWEEN :"
+		+ trading.data.Constants.QueryParamName.START_TIME
+		+ " AND :"
+		+ trading.data.Constants.QueryParamName.END_TIME + " ORDER BY l.date") })
+@NamedNativeQueries(value = {
 		// Find last n items in whole history
-		@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " ORDER BY date DESC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
+		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
+				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
+				+ " ORDER BY date DESC LIMIT :"
+				+ trading.data.Constants.QueryParamName.COUNT
+				+ ") AS level1 ORDER BY level1.date ASC")
 		// Find last n items not after end date
-		,@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_NOT_AFTER, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID +  " AND date  <= :" + trading.data.Constants.QueryParamName.END_TIME +" ORDER BY date DESC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
+		,
+		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_NOT_AFTER, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
+				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
+				+ " AND date  <= :"
+				+ trading.data.Constants.QueryParamName.END_TIME
+				+ " ORDER BY date DESC LIMIT :"
+				+ trading.data.Constants.QueryParamName.COUNT
+				+ ") AS level1 ORDER BY level1.date ASC")
 		// Find first n items after end date
-		,@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_AFTER, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID +  " AND date > :" + trading.data.Constants.QueryParamName.START_TIME +" ORDER BY date ASC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
+		,
+		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_AFTER, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
+				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
+				+ " AND date > :"
+				+ trading.data.Constants.QueryParamName.START_TIME
+				+ " ORDER BY date ASC LIMIT :"
+				+ trading.data.Constants.QueryParamName.COUNT
+				+ ") AS level1 ORDER BY level1.date ASC")
 		// Find first n items after end date
-		,@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_FROM, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID +  " AND date >= :" + trading.data.Constants.QueryParamName.START_TIME +" ORDER BY date ASC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
+		,
+		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_FROM, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
+				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
+				+ " AND date >= :"
+				+ trading.data.Constants.QueryParamName.START_TIME
+				+ " ORDER BY date ASC LIMIT :"
+				+ trading.data.Constants.QueryParamName.COUNT
+				+ ") AS level1 ORDER BY level1.date ASC")
 
 })
 public class Level1 implements Serializable {
@@ -56,8 +83,10 @@ public class Level1 implements Serializable {
 
 	public Level1() {
 	}
+
 	/**
 	 * Construct level1 from price and size values
+	 * 
 	 * @param date
 	 * @param price
 	 * @param size
@@ -66,19 +95,20 @@ public class Level1 implements Serializable {
 	 * @param ask
 	 * @param askSize
 	 */
-	public Level1(Date date, BigDecimal price, Integer size, BigDecimal bid, Integer bidSize, BigDecimal ask, Integer askSize){
+	public Level1(Date date, BigDecimal price, Integer size, BigDecimal bid,
+			Integer bidSize, BigDecimal ask, Integer askSize) {
 		// Today's day date and time
-		Calendar dayCal = GregorianCalendar.getInstance(); 
+		Calendar dayCal = GregorianCalendar.getInstance();
 		dayCal.setTimeInMillis(date.getTime());
 		this.date = dayCal.getTime();
-		
+
 		// Time inside day
 		Calendar timeOfDayCal = GregorianCalendar.getInstance();
 		timeOfDayCal.setTimeInMillis(date.getTime());
 		timeOfDayCal.set(Calendar.DAY_OF_YEAR, 1);
 		timeOfDayCal.set(Calendar.YEAR, 0);
 		this.lastTime = timeOfDayCal.getTime();
-		
+
 		this.lastPrice = price;
 		this.lastSize = size;
 		this.bid = bid;
@@ -87,9 +117,8 @@ public class Level1 implements Serializable {
 		this.askSize = askSize;
 	}
 
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getId() {
 		return this.id;
 	}
@@ -97,7 +126,6 @@ public class Level1 implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public BigDecimal getAsk() {
 		return this.ask;
@@ -107,8 +135,7 @@ public class Level1 implements Serializable {
 		this.ask = ask;
 	}
 
-
-	@Column(name="ask_size")
+	@Column(name = "ask_size")
 	public Integer getAskSize() {
 		return this.askSize;
 	}
@@ -116,7 +143,6 @@ public class Level1 implements Serializable {
 	public void setAskSize(Integer askSize) {
 		this.askSize = askSize;
 	}
-
 
 	public BigDecimal getBid() {
 		return this.bid;
@@ -126,8 +152,7 @@ public class Level1 implements Serializable {
 		this.bid = bid;
 	}
 
-
-	@Column(name="bid_size")
+	@Column(name = "bid_size")
 	public Integer getBidSize() {
 		return this.bidSize;
 	}
@@ -145,8 +170,7 @@ public class Level1 implements Serializable {
 		this.date = date;
 	}
 
-
-	@Column(name="last_price")
+	@Column(name = "last_price")
 	public BigDecimal getLastPrice() {
 		return this.lastPrice;
 	}
@@ -155,8 +179,7 @@ public class Level1 implements Serializable {
 		this.lastPrice = lastPrice;
 	}
 
-
-	@Column(name="last_price_delta")
+	@Column(name = "last_price_delta")
 	public BigDecimal getLastPriceDelta() {
 		return this.lastPriceDelta;
 	}
@@ -165,8 +188,7 @@ public class Level1 implements Serializable {
 		this.lastPriceDelta = lastPriceDelta;
 	}
 
-
-	@Column(name="last_size")
+	@Column(name = "last_size")
 	public Integer getLastSize() {
 		return this.lastSize;
 	}
@@ -175,9 +197,8 @@ public class Level1 implements Serializable {
 		this.lastSize = lastSize;
 	}
 
-
-	@Column(name="last_time")
-	@Temporal(TemporalType.TIME)	
+	@Column(name = "last_time")
+	@Temporal(TemporalType.TIME)
 	public Date getLastTime() {
 		return this.lastTime;
 	}
@@ -186,10 +207,9 @@ public class Level1 implements Serializable {
 		this.lastTime = lastTime;
 	}
 
-
-	//bi-directional many-to-one association to Instrument
+	// bi-directional many-to-one association to Instrument
 	@ManyToOne()
-	@JoinColumn(name="instrument_id", nullable=false)
+	@JoinColumn(name = "instrument_id", nullable = false)
 	public Instrument getInstrument() {
 		return this.instrument;
 	}
@@ -197,10 +217,11 @@ public class Level1 implements Serializable {
 	public void setInstrument(Instrument instrument) {
 		this.instrument = instrument;
 	}
-	
+
 	@Override
-	public String toString(){
-		return String.format("Level1 data: date=%s, price=%s, volume=%s...", date, lastPrice, lastSize);
+	public String toString() {
+		return String.format("Level1 data: date=%s, price=%s, volume=%s...",
+				date, lastPrice, lastSize);
 	}
 
 }

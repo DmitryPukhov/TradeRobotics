@@ -2,10 +2,12 @@ package trading.app.adapter.quik;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import trading.app.TradingApplicationContext;
 import trading.app.history.HistoryProvider;
 import trading.app.realTime.RealTimeProviderBase;
+import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
 /**
@@ -16,6 +18,9 @@ import trading.data.model.Level1;
  * 
  */
 public class QuikAdapter extends RealTimeProviderBase {
+	/** Flag to interrupt database capture cycle */
+	private boolean stopFlag = false;
+
 	/** Application context. Contains instrument to listen to */
 	private TradingApplicationContext context;
 
@@ -23,7 +28,8 @@ public class QuikAdapter extends RealTimeProviderBase {
 	private HistoryProvider historyProvider;
 
 	/** Last data received time */
-	private Date lastDateTime = new Date();
+	private AtomicReference<Date> lastDateTime = new AtomicReference<Date>(
+			new Date());
 
 	/**
 	 * Constructor for quik adapter
@@ -38,17 +44,50 @@ public class QuikAdapter extends RealTimeProviderBase {
 
 	}
 
-	/** {@InheritDoc} */
+	/** Start database capture cycle */
 	@Override
 	public void start() {
-		List<Level1> level1s = historyProvider.findLevel1After(context.getInstrument().getId(), lastDateTime, Integer.MAX_VALUE);
-		fireLevel1ChangedEvent(context.getInstrument().getId(), level1s);
+		Thread thread = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				stopFlag = false;
+				// Load instruments, fire event
+				loadInstruments();
+
+				// Load data for instrument
+				for (; !stopFlag;) {
+					Instrument instrument = context.getInstrument();
+					if (instrument == null) {
+						continue;
+					}
+					// Get last prices
+					Date lastDateTime = QuikAdapter.this.lastDateTime.getAndSet(new Date());
+					List<Level1> level1s = historyProvider.findLevel1After(
+							instrument.getId(), lastDateTime, Integer.MAX_VALUE);
+					// Fire event
+					fireLevel1ChangedEvent(instrument.getId(), level1s);
+				}
+				
+			}});
+		
+		thread.start();
+	
+	}
+
+	/**
+	 * Get instruments from database, fire event
+	 */
+	private void loadInstruments() {
+		for (Instrument instrument : historyProvider.findInstrumentAll()) {
+			fireInstrumentChangedEvent(instrument);
+		}
 	}
 
 	/** {@InheritDoc} */
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		stopFlag = true;
 
 	}
 
