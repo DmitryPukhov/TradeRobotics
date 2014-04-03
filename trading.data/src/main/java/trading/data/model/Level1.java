@@ -35,36 +35,42 @@ import javax.persistence.TemporalType;
 		// Find last n items in whole history
 		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
 				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
-				+ " ORDER BY date DESC LIMIT :"
+				+ " ORDER BY date DESC, last_time DESC LIMIT :"
 				+ trading.data.Constants.QueryParamName.COUNT
-				+ ") AS level1 ORDER BY level1.date ASC")
+				+ ") AS level1 ORDER BY level1.date, level1.last_time ASC")
 		// Find last n items not after end date
 		,
 		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_NOT_AFTER, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
 				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
-				+ " AND date  <= :"
-				+ trading.data.Constants.QueryParamName.END_TIME
-				+ " ORDER BY date DESC LIMIT :"
+//				+ " AND date  <= :"
+//				+ trading.data.Constants.QueryParamName.END_TIME
+				+ " AND last_time <= :"
+				+ trading.data.Constants.QueryParamName.START_TIME					
+				+ " ORDER BY date DESC, last_time DESC LIMIT :"
 				+ trading.data.Constants.QueryParamName.COUNT
-				+ ") AS level1 ORDER BY level1.date ASC")
+				+ ") AS level1 ORDER BY level1.date, level1.last_time ASC")
 		// Find first n items after end date
 		,
 		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_AFTER, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
 				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
-				+ " AND date > :"
-				+ trading.data.Constants.QueryParamName.START_TIME
-				+ " ORDER BY date ASC LIMIT :"
+//				+ " AND date >= :"
+//				+ trading.data.Constants.QueryParamName.START_TIME
+				+ " AND last_time > :"
+				+ trading.data.Constants.QueryParamName.START_TIME				
+				+ " ORDER BY date ASC, last_time ASC LIMIT :"
 				+ trading.data.Constants.QueryParamName.COUNT
-				+ ") AS level1 ORDER BY level1.date ASC")
+				+ ") AS level1 ORDER BY level1.date, level1.last_time ASC")
 		// Find first n items after end date
 		,
 		@NamedNativeQuery(resultClass = Level1.class, name = trading.data.Constants.QueryName.LEVEL1_FIND_FROM, query = "SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :"
 				+ trading.data.Constants.QueryParamName.INSTRUMENT_ID
-				+ " AND date >= :"
-				+ trading.data.Constants.QueryParamName.START_TIME
-				+ " ORDER BY date ASC LIMIT :"
+//				+ " AND date >= :"
+//				+ trading.data.Constants.QueryParamName.START_TIME
+				+ " AND last_time >= :"
+				+ trading.data.Constants.QueryParamName.START_TIME					
+				+ " ORDER BY date ASC, last_time ASC LIMIT :"
 				+ trading.data.Constants.QueryParamName.COUNT
-				+ ") AS level1 ORDER BY level1.date ASC")
+				+ ") AS level1 ORDER BY level1.date, level1.last_time ASC")
 
 })
 public class Level1 implements Serializable {

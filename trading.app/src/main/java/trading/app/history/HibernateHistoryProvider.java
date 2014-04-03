@@ -1,5 +1,6 @@
 package trading.app.history;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		query.setParameter(trading.data.Constants.QueryParamName.INSTRUMENT_ID,
 				instrumentId);
 		query.setParameter(trading.data.Constants.QueryParamName.START_TIME,
-				startDate);
+				new Timestamp(startDate.getTime()));
 		query.setParameter(trading.data.Constants.QueryParamName.COUNT, count);
 
 		@SuppressWarnings("unchecked")

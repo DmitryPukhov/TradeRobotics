@@ -2,7 +2,6 @@ package trading.app.adapter.quik;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import trading.app.TradingApplicationContext;
 import trading.app.history.HistoryProvider;
@@ -28,8 +27,7 @@ public class QuikAdapter extends RealTimeProviderBase {
 	private HistoryProvider historyProvider;
 
 	/** Last data received time */
-	private AtomicReference<Date> lastDateTime = new AtomicReference<Date>(
-			new Date());
+	private Date lastDateTime = new Date();
 
 	/**
 	 * Constructor for quik adapter
@@ -41,13 +39,12 @@ public class QuikAdapter extends RealTimeProviderBase {
 			HistoryProvider historyProvider) {
 		this.context = context;
 		this.historyProvider = historyProvider;
-
 	}
 
 	/** Start database capture cycle */
 	@Override
 	public void start() {
-		Thread thread = new Thread(new Runnable(){
+		Thread thread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -61,18 +58,33 @@ public class QuikAdapter extends RealTimeProviderBase {
 					if (instrument == null) {
 						continue;
 					}
+					
+		
+
+
+					// 4 test only end
+					
 					// Get last prices
-					Date lastDateTime = QuikAdapter.this.lastDateTime.getAndSet(new Date());
+					Date lastDateTime = QuikAdapter.this.lastDateTime;
+					
+					System.out.println("lastDateTime=: " + lastDateTime);
 					List<Level1> level1s = historyProvider.findLevel1After(
-							instrument.getId(), lastDateTime, Integer.MAX_VALUE);
+							instrument.getId(), lastDateTime, context.getLevel1WindowSize());
+					if(level1s.isEmpty()){
+						continue;
+					}
+					// Update last received time
+					Level1 lastLevel1 = level1s.get(level1s.size()-1);
+					QuikAdapter.this.lastDateTime = new Date(lastLevel1.getDate().getTime() + lastLevel1.getLastTime().getTime());
+					
+					String strLastDateTime = QuikAdapter.this.lastDateTime.toString();
+					System.out.println("new lastDateTime=" + strLastDateTime);					
 					// Fire event
 					fireLevel1ChangedEvent(instrument.getId(), level1s);
 				}
-				
-			}});
-		
+			}
+		});
 		thread.start();
-	
 	}
 
 	/**

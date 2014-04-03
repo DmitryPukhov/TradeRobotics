@@ -7,6 +7,7 @@ import java.util.List;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
 
+import trading.app.TradingApplicationContext;
 import trading.app.neural.history.NeuralDataManager;
 
 import com.google.common.eventbus.EventBus;
@@ -81,7 +82,7 @@ public abstract class NeuralServiceBase implements NeuralService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public NeuralContext getNeuralContext() {
+	public TradingApplicationContext getNeuralContext() {
 		return neuralContext;
 	}
 

@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.encog.neural.networks.BasicNetwork;
 
+import trading.app.TradingApplicationContext;
+
 import com.google.common.eventbus.EventBus;
 
 /**
@@ -54,7 +56,7 @@ public interface NeuralService {
 	 * 
 	 * @return
 	 */
-	public abstract NeuralContext getNeuralContext();
+	public abstract TradingApplicationContext getNeuralContext();
 
 	/**
 	 * Load network from file

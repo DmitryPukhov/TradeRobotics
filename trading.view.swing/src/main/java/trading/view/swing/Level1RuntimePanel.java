@@ -280,9 +280,12 @@ public class Level1RuntimePanel extends JPanel implements
 		instrumentComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Set caption to selected instrument
+				// Get selected instrument
 				Instrument instrument = (Instrument) instrumentComboBox
 						.getSelectedItem();
+				// Set selected instrument in context
+				tradingApplicationContext.setInstrument(instrument);
+				// Set chart caption
 				level1Chart.setTitle(instrument.toString());
 				// Add to history writer
 				historyWriter.getInstrumentIds().clear();

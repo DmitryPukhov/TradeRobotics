@@ -18,7 +18,6 @@ public class NeuralContext extends TradingApplicationContext {
 	 */
 	private BasicNetwork network;
 	private int predictionSize = 60;
-	private int level1WindowSize = 100;
 	private int maxEpochCount = 10;
 	private int trainSamples = 10;
 	private int predictionSamples = 10;
@@ -26,15 +25,6 @@ public class NeuralContext extends TradingApplicationContext {
 	private Date trainingEndDateTime = new Date();
 	private boolean continuousTraining = false;
 	private Train train;
-
-	/**
-	 * Get level1 item count in data window
-	 * 
-	 * @return the level1WindowSize
-	 */
-	public Integer getLevel1WindowSize() {
-		return level1WindowSize;
-	}
 
 	/**
 	 * @return the maxEpochCount
@@ -111,16 +101,6 @@ public class NeuralContext extends TradingApplicationContext {
 	 */
 	public void setContinuousTraining(boolean continuousTraining) {
 		this.continuousTraining = continuousTraining;
-	}
-
-	/**
-	 * Set level1 item count in data window
-	 * 
-	 * @param level1WindowSize
-	 *            the level1WindowSize to set
-	 */
-	public void setLevel1WindowSize(Integer level1WindowSize) {
-		this.level1WindowSize = level1WindowSize;
 	}
 
 	/**
