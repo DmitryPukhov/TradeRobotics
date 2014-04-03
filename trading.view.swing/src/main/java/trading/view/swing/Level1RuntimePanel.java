@@ -197,14 +197,29 @@ public class Level1RuntimePanel extends JPanel implements
 		this.historyProvider = historyProvider;
 		this.historyWriter = historyWriter;
 		this.realTimeProvider = realTimeProvider;
+
 		// Listen instrument info
 		realTimeProvider
 				.addInstrumentListener(new MarketListener<Instrument>() {
 					@Override
 					public void OnMarketDataChanged(Instrument entity) {
-						instrumentComboBox.addItem(entity);
+						Instrument existing = null;
+
+						// Try to select existing item first
+						for (int i = 0; i < instrumentComboBox.getItemCount(); i++) {
+							Instrument current = instrumentComboBox
+									.getItemAt(i);
+							if (current.equals(entity)) {
+								existing = current;
+								break;
+							}
+						}
+						if (existing == null) {
+							instrumentComboBox.addItem(entity);
+						}
 					}
 				});
+
 		// Standard initialization call
 		initialize();
 	}

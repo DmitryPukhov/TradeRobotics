@@ -1,20 +1,22 @@
 package trading.data.model;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import trading.data.Constants;
-
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
+import trading.data.Constants;
 
 /**
  * The persistent class for the instrument database table.
  * 
  */
 @Entity
-@NamedQuery(name=Constants.QueryName.INSTRUMENT_FIND_ALL, query="SELECT i from Instrument i")
+@NamedQuery(name = Constants.QueryName.INSTRUMENT_FIND_ALL, query = "SELECT i from Instrument i")
 public class Instrument implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -26,9 +28,16 @@ public class Instrument implements Serializable {
 	public Instrument() {
 	}
 
+	@Override
+	public boolean equals(Object instrument) {
+		if ((instrument == null) || !(instrument instanceof Instrument)) {
+			return false;
+		}
+		return this.getId().equals(((Instrument) instrument).getId());
+	}
 
 	@Id
-	/*@GeneratedValue(strategy=GenerationType.AUTO)*/
+	/* @GeneratedValue(strategy=GenerationType.AUTO) */
 	public Integer getId() {
 		return this.id;
 	}
@@ -37,16 +46,14 @@ public class Instrument implements Serializable {
 		this.id = id;
 	}
 
-
-
 	public String getShortCode() {
 		return shortCode;
 	}
-	@Column(name="short_code")
+
+	@Column(name = "short_code")
 	public void setShortCode(String shortCode) {
 		this.shortCode = shortCode;
 	}
-
 
 	public String getCode() {
 		return this.code;
@@ -56,7 +63,6 @@ public class Instrument implements Serializable {
 		this.code = code;
 	}
 
-
 	public String getName() {
 		return this.name;
 	}
@@ -65,9 +71,8 @@ public class Instrument implements Serializable {
 		this.name = name;
 	}
 
-
-	//bi-directional many-to-one association to Level1
-	@OneToMany(mappedBy="instrument")
+	// bi-directional many-to-one association to Level1
+	@OneToMany(mappedBy = "instrument")
 	public List<Level1> getLevel1s() {
 		return this.level1s;
 	}
@@ -89,9 +94,10 @@ public class Instrument implements Serializable {
 
 		return level1;
 	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return getCode();
 	}
-	
+
 }
