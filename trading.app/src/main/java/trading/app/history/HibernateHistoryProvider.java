@@ -52,6 +52,8 @@ public class HibernateHistoryProvider implements HistoryProvider {
 				.getNamedQuery(trading.data.Constants.QueryName.LEVEL1_FIND_AFTER);
 		query.setParameter(trading.data.Constants.QueryParamName.INSTRUMENT_ID,
 				instrumentId);
+		query.setParameter(trading.data.Constants.QueryParamName.START_DATE,
+				new Timestamp(startDate.getTime()));
 		query.setParameter(trading.data.Constants.QueryParamName.START_TIME,
 				new Timestamp(startDate.getTime()));
 		query.setParameter(trading.data.Constants.QueryParamName.COUNT, count);

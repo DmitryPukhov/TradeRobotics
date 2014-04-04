@@ -26,6 +26,7 @@ public class Constants {
 	 */
 	public static class QueryParamName{
 		public final static String START_TIME = "START_TIME";
+		public final static String START_DATE = "START_DATE";
 		public final static String END_TIME = "END_TIME";
 		public final static String COUNT = "COUNT";
 		public final static String INSTRUMENT_ID = "INSTRUMENT_ID";
