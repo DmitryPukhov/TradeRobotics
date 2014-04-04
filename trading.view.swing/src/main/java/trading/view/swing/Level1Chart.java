@@ -169,7 +169,7 @@ public class Level1Chart extends JPanel {
 	 * @param level1
 	 */
 	public void addLevel1(Level1 level1) {
-		FixedMillisecond fm = new FixedMillisecond(level1.getDate());
+		FixedMillisecond fm = new FixedMillisecond(level1.getLastTime());
 		priceSeries.addOrUpdate(fm, level1.getLastPrice());
 		bidSeries.addOrUpdate(fm, level1.getBid());
 		askSeries.addOrUpdate(fm, level1.getAsk());
