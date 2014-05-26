@@ -5,6 +5,8 @@
 	<persistence-unit name="trading.data"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>trading.data.model.Instrument</class>
+		<class>trading.data.model.Level1</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:postgresql://localhost:5432/market" />
