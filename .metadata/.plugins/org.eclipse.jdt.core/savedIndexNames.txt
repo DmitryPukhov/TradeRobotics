@@ -1,0 +1,13 @@
+INDEX VERSION 1.127+/home/dima/My Projects/TradeRobotics/.metadata/.plugins/org.eclipse.jdt.core
+3830581765.index
+1817127251.index
+79452701.index
+2365083431.index
+3655238069.index
+4117597013.index
+1921201574.index
+3280891909.index
+3464490956.index
+1635843536.index
+3595057357.index
+637170600.index

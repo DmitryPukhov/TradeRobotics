@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>trading-view-swing</artifactId>
+
+	<parent>
+		<groupId>trading</groupId>
+		<artifactId>trading-pom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../trading.pom</relativePath>		
+	</parent>
+
+	
+	<dependencies>
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-data</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-app-adapter-quik</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-app-neural</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-app</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>trading</groupId>
+			<artifactId>trading-app</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+	</dependencies>
+	
+</project>
