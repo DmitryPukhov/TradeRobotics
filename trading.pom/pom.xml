@@ -57,13 +57,8 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
 	
+
 		<!-- Common -->
 		<dependency>
 			<groupId>joda-time</groupId>
