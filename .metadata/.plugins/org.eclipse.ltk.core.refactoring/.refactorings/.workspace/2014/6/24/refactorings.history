@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;trading-pom&apos; to &apos;trading.pom&apos;" description="Rename resource &apos;trading-pom&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/trading-pom" name="trading.pom" stamp="1402611693129" updateReferences="true"/>
-</session>
