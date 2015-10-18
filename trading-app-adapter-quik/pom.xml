@@ -5,7 +5,7 @@
 	<artifactId>trading-app-adapter-quik</artifactId>
 	<parent>
 		<groupId>trading</groupId>
-		<artifactId>trading-</artifactId>
+		<artifactId>trading</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>

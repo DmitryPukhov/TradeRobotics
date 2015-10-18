@@ -4,7 +4,7 @@
 	<artifactId>trading-app-neural</artifactId>
 	<parent>
 		<groupId>trading</groupId>
-		<artifactId>trading-</artifactId>
+		<artifactId>trading</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
@@ -19,5 +19,12 @@
 			<artifactId>trading-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.encog</groupId>
+			<artifactId>encog-core</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+
 	</dependencies>
 </project>
